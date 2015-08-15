@@ -13,6 +13,7 @@ http://stackoverflow.com/questions/25602876/javassist-source-code-and-empty-line
 asm - visit source
 http://asm.ow2.org/asm40/javadoc/user/org/objectweb/asm/ClassVisitor.html#visitSource(java.lang.String, java.lang.String)
 
+http://www.geekyarticles.com/2011/10/manipulating-java-class-files-with-asm.html
 
 http://docs.oracle.com/javase/7/docs/technotes/guides/jar/jar.html
  */
@@ -43,8 +44,7 @@ public class MyAgent {
     - how can one augment the detailed error messages?
     - is it possible to load the source of the test only at failure-time, not for every test?
     
-
-
-
+  - It seems that Junit does not provide infrastructure for this kind of job, so Im gona use a static helper class 
+    to store the collected data, and a run listener to process it
  */
 
