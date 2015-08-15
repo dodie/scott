@@ -1,4 +1,4 @@
-package testagent;
+package testagent.instrumentation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,7 +63,7 @@ public class MyMethodVisitor extends MethodVisitor {
 		if (isTestCase) {
 			super.visitVarInsn(variables.get(var).loadOpcode, var);
 			super.visitLdcInsn(lineNumber);
-	        super.visitMethodInsn(Opcodes.INVOKESTATIC, "testagent/MyHelper", "track", "(" + variables.get(var).signature + "I)V", false);
+	        super.visitMethodInsn(Opcodes.INVOKESTATIC, "runlistener/EventRepository", "track", "(" + variables.get(var).signature + "I)V", false);
 		}	
 	}
 
