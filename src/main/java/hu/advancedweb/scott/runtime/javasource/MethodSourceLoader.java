@@ -6,10 +6,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
+import java.util.List;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -17,26 +17,21 @@ import com.github.javaparser.ast.CompilationUnit;
 // TODO: clean exception handling
 public class MethodSourceLoader {
 	
-	public MethodSource loadTestMethodSource(String path, String methodName) {
+	public MethodSource loadMethodSource(String path, String methodName) {
 		CompilationUnit cu = getCompilationUnit(path);
 		
 		MethodBoundaryExtractor visitor = new MethodBoundaryExtractor(methodName);
 		final Bounderies boundary = new Bounderies();
 		visitor.visit(cu, boundary);
+		final MethodSource testMethodSource = new MethodSource(boundary.beginLine);
 		
-		final MethodSource testMethodSource = new MethodSource();
-		try (Stream<String> lines = Files.lines(Paths.get(path))) { // TODO: remove hackery
-			lines.skip(boundary.beginLine - 1).forEach(new Consumer<String>() {
-				@Override
-				public void accept(String sourceLine) {
-					if (boundary.beginLine <= boundary.endLine)
-						testMethodSource.addLine(boundary.beginLine, sourceLine);
-					boundary.beginLine++;
-				}
-			});
-			
+		try {
+			List<String> lines = Files.readAllLines(Paths.get(path),StandardCharsets.UTF_8);
+			for (int i = boundary.beginLine - 1; i < boundary.endLine; i++) {
+				testMethodSource.addLine(lines.get(i));
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO: later this printStackTrace should be removed, as it is valid scenario to not find the source code
 			e.printStackTrace();
 		}
 		
@@ -50,14 +45,13 @@ public class MethodSourceLoader {
 			in = new FileInputStream(new File(testSourcePath));
 			cu = JavaParser.parse(in);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			// TODO: later this printStackTrace should be removed, as it is valid scenario to not find the source code
 			e.printStackTrace();
 		} finally {
 			try {
 				in.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// Ignore.
 			}
 		}
 		

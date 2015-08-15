@@ -29,18 +29,21 @@ public class ScottRunListener extends RunListener {
 	
 	@Override
 	public void testFailure(Failure failure) throws Exception {
-		MethodSource testMethodSource = new MethodSourceLoader().loadTestMethodSource(TEST_SOURCE_PATH, TEST_METHOD_NAME);
+		MethodSource testMethodSource = new MethodSourceLoader().loadMethodSource(TEST_SOURCE_PATH, TEST_METHOD_NAME);
 		
 		for (Event event : EventStore.getEvents()) {
 			testMethodSource.commentLine(event.lineNumber, event.value);
 		}
-
-		System.out.println(failure.getTestHeader() + " FAILED!");
-		System.out.println(renderTestMethodSource(testMethodSource));
 		
+		renderFailure(failure, testMethodSource);
 		super.testFailure(failure);
 	}
 	
+	private void renderFailure(Failure failure, MethodSource testMethodSource) {
+		System.out.println(failure.getTestHeader() + " FAILED!");
+		System.out.println(renderTestMethodSource(testMethodSource));
+	}
+
 	public String renderTestMethodSource(MethodSource testMethodSource) {
 		StringBuilder sb = new StringBuilder();
 		for (Map.Entry<Integer, String> line : testMethodSource.getSourceLines().entrySet()) {

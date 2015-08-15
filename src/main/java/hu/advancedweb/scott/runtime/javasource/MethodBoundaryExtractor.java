@@ -13,10 +13,10 @@ class MethodBoundaryExtractor extends VoidVisitorAdapter<Bounderies> {
 		this.methodName = methodName;
 	}
 
-	public void visit(MethodDeclaration n, Bounderies boundaries) {
-		if (n.getName().equals(methodName)) {
-			boundaries.beginLine = n.getBeginLine();
-			boundaries.endLine = n.getEndLine();
+	public void visit(MethodDeclaration methodDeclaration, Bounderies boundaries) {
+		if (methodDeclaration.getName().equals(methodName)) {
+			boundaries.beginLine = methodDeclaration.getBeginLine();
+			boundaries.endLine = methodDeclaration.getEndLine();
 		}
 	}
 	

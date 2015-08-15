@@ -7,9 +7,15 @@ import java.util.TreeMap;
 public class MethodSource {
 	
 	private Map<Integer, String> sourceLines = new TreeMap<Integer, String>();
+	private int beginLine;
 	
-	public void addLine(int lineNumber, String source) {
-		sourceLines.put(lineNumber, source);
+	public MethodSource(int beginLine) {
+		this.beginLine = beginLine;
+	}
+
+	public void addLine(String source) {
+		sourceLines.put(beginLine, source);
+		beginLine++;
 	}
 	
 	public void commentLine(int lineNumber, String comment) {
