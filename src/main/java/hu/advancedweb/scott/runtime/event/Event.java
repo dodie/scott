@@ -1,8 +1,8 @@
-package runlistener;
+package hu.advancedweb.scott.runtime.event;
 
 public class Event {
-	final int lineNumber;
-	final String value;
+	public final int lineNumber;
+	public final String value;
 	
 	public Event(int lineNumber, String value) {
 		this.lineNumber = lineNumber;

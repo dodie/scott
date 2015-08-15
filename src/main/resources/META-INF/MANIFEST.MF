@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Premain-Class: testagent.MyAgent
+Premain-Class: hu.advancedweb.scott.instrumentation.ScottAgent
 Can-Redefine-Classes: true
 Can-Retransform-Classes: true
 Can-Set-Native-Method-Prefix: true

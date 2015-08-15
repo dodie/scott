@@ -1,4 +1,6 @@
-package runlistener.sourceparser;
+package hu.advancedweb.scott.runtime.javasource;
+
+import hu.advancedweb.scott.runtime.javasource.MethodBoundaryExtractor.Bounderies;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,22 +11,20 @@ import java.nio.file.Paths;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import runlistener.sourceparser.MethodBoundaryExtractor.Bounderies;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 
 // TODO: clean exception handling
-public class SourceParser {
+public class MethodSourceLoader {
 	
-	public TestMethodSource loadTestMethodSource(String path, String methodName) {
+	public MethodSource loadTestMethodSource(String path, String methodName) {
 		CompilationUnit cu = getCompilationUnit(path);
 		
 		MethodBoundaryExtractor visitor = new MethodBoundaryExtractor(methodName);
 		final Bounderies boundary = new Bounderies();
 		visitor.visit(cu, boundary);
 		
-		final TestMethodSource testMethodSource = new TestMethodSource();
+		final MethodSource testMethodSource = new MethodSource();
 		try (Stream<String> lines = Files.lines(Paths.get(path))) { // TODO: remove hackery
 			lines.skip(boundary.beginLine - 1).forEach(new Consumer<String>() {
 				@Override

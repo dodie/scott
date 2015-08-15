@@ -1,6 +1,6 @@
-package runlistener.sourceparser;
+package hu.advancedweb.scott.runtime.javasource;
 
-import runlistener.sourceparser.MethodBoundaryExtractor.Bounderies;
+import hu.advancedweb.scott.runtime.javasource.MethodBoundaryExtractor.Bounderies;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;

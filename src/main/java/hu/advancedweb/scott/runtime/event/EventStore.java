@@ -1,10 +1,10 @@
-package runlistener;
+package hu.advancedweb.scott.runtime.event;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class EventRepository {
+public class EventStore {
 	private static List<Event> EVENTS = new ArrayList<Event>();
 
 	public static void clear() {

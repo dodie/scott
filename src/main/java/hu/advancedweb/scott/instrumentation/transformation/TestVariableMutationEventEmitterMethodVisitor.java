@@ -1,4 +1,4 @@
-package testagent.instrumentation;
+package hu.advancedweb.scott.instrumentation.transformation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,13 +12,13 @@ import org.objectweb.asm.Opcodes;
  * Instrument the method if it is a test-case.
  * @author David Csakvari
  */
-public class MyMethodVisitor extends MethodVisitor {
+public class TestVariableMutationEventEmitterMethodVisitor extends MethodVisitor {
 
 	boolean isTestCase;
 	int lineNumber;
 	Map<Integer, VariableType> variables = new HashMap<Integer, VariableType>();
 
-	public MyMethodVisitor(MethodVisitor mv) {
+	public TestVariableMutationEventEmitterMethodVisitor(MethodVisitor mv) {
 		super(Opcodes.ASM5, mv);
 	}
 
@@ -63,7 +63,7 @@ public class MyMethodVisitor extends MethodVisitor {
 		if (isTestCase) {
 			super.visitVarInsn(variables.get(var).loadOpcode, var);
 			super.visitLdcInsn(lineNumber);
-	        super.visitMethodInsn(Opcodes.INVOKESTATIC, "runlistener/EventRepository", "track", "(" + variables.get(var).signature + "I)V", false);
+	        super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/event/EventStore", "track", "(" + variables.get(var).signature + "I)V", false);
 		}	
 	}
 

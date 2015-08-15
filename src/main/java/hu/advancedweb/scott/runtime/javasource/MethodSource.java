@@ -1,10 +1,10 @@
-package runlistener.sourceparser;
+package hu.advancedweb.scott.runtime.javasource;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class TestMethodSource {
+public class MethodSource {
 	
 	private Map<Integer, String> sourceLines = new TreeMap<Integer, String>();
 	
