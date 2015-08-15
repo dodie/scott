@@ -46,5 +46,9 @@ public class MyAgent {
     
   - It seems that Junit does not provide infrastructure for this kind of job, so Im gona use a static helper class 
     to store the collected data, and a run listener to process it
+    
+  For now, we are going to igonre before and after metods, augment just pure junit test methods
+
+    
  */
 

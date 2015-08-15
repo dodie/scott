@@ -14,9 +14,6 @@ import org.objectweb.asm.Opcodes;
  */
 public class MyMethodVisitor extends MethodVisitor {
 
-	// TODO
-	// For now, we are going to igonre before and after metods, augment just pure junit test methods
-	
 	boolean isTestCase;
 	int lineNumber;
 	Map<Integer, VariableType> variables = new HashMap<Integer, VariableType>();
@@ -61,7 +58,6 @@ public class MyMethodVisitor extends MethodVisitor {
 		super.visitIincInsn(var, increment);
 		instument(var);
 	}
-	
 	
 	private void instument(int var) {
 		if (isTestCase) {
