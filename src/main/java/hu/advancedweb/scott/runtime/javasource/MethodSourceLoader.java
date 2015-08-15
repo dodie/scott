@@ -12,41 +12,40 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 
-// TODO: clean exception handling
 public class MethodSourceLoader {
 	
 	public MethodSource loadMethodSource(String path, String methodName) {
-		CompilationUnit cu = getCompilationUnit(path);
-		
-		MethodBoundaryExtractor visitor = new MethodBoundaryExtractor(methodName);
-		final Bounderies boundary = new Bounderies();
-		visitor.visit(cu, boundary);
-		final MethodSource testMethodSource = new MethodSource(boundary.beginLine);
-		
 		try {
+			CompilationUnit cu = getCompilationUnit(path);
+			
+			MethodBoundaryExtractor visitor = new MethodBoundaryExtractor(methodName);
+			final Bounderies boundary = new Bounderies();
+			visitor.visit(cu, boundary);
+			final MethodSource testMethodSource = new MethodSource(boundary.beginLine);
+		
 			List<String> lines = Files.readAllLines(Paths.get(path),StandardCharsets.UTF_8);
 			for (int i = boundary.beginLine - 1; i < boundary.endLine; i++) {
 				testMethodSource.addLine(lines.get(i));
 			}
+			return testMethodSource;
 		} catch (IOException e) {
-			// TODO: later this printStackTrace should be removed, as it is valid scenario to not find the source code
-			e.printStackTrace();
+			// Ignore.
 		}
-		
-		return testMethodSource;
+		return null;
 	}
 	
-	private CompilationUnit getCompilationUnit(String testSourcePath) {
+	private CompilationUnit getCompilationUnit(String testSourcePath) throws IOException {
 		InputStream in = null;
 		CompilationUnit cu = null;
 		try {
 			in = new FileInputStream(new File(testSourcePath));
 			cu = JavaParser.parse(in);
-		} catch (Exception e) {
-			// TODO: later this printStackTrace should be removed, as it is valid scenario to not find the source code
+		} catch (ParseException e) {
 			e.printStackTrace();
+			throw new IOException(e);
 		} finally {
 			try {
 				in.close();
