@@ -1,6 +1,7 @@
 package hu.advancedweb.scott.runtime.event;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,7 +17,31 @@ public class EventStore {
 	}
 	
 	public static void track(Object value, int lineNumber) {
-		EVENTS.add(new Event(lineNumber, value.toString()));
+		EVENTS.add(new Event(lineNumber, objectToString(value)));
+	}
+
+	private static String objectToString(Object value) {
+		if (value instanceof Object[]) {
+			return Arrays.toString((Object[])value);
+		} else if (value instanceof boolean[]) {
+			return Arrays.toString((boolean[])value);
+		} else if (value instanceof byte[]) {
+			return Arrays.toString((byte[])value);
+		} else if (value instanceof short[]) {
+			return Arrays.toString((short[])value);
+		} else if (value instanceof char[]) {
+			return Arrays.toString((char[])value);
+		} else if (value instanceof int[]) {
+			return Arrays.toString((int[])value);
+		} else if (value instanceof long[]) {
+			return Arrays.toString((long[])value);
+		} else if (value instanceof float[]) {
+			return Arrays.toString((float[])value);
+		} else if (value instanceof double[]) {
+			return Arrays.toString((double[])value);
+		} else {
+			return value.toString();
+		}	
 	}
 
 	public static void track(byte value, int lineNumber) {
