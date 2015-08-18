@@ -3,10 +3,16 @@ package hu.advancedweb.scott.runtime.event;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+
+// TODO: rename *var*s to variableIndex 
+// TODO: provide track methods for computational types only, eg. track(boolean) will not be called. see jvms8, page29
 public class EventStore {
 	private static List<Event> EVENTS = new ArrayList<Event>();
+	private static Map<Integer, String> VARIABLE_NAMES = new HashMap<>();
 
 	public static void clear() {
 		EVENTS.clear();
@@ -16,8 +22,22 @@ public class EventStore {
 		return Collections.unmodifiableList(EVENTS);
 	}
 	
-	public static void track(Object value, int lineNumber) {
-		EVENTS.add(new Event(lineNumber, objectToString(value)));
+	public static void test() {
+		System.out.println("test");
+	}
+	
+	public static void registerVariable(int var) {
+		String name = "dd";
+		System.out.println("registering variable : " + var + " with: " + name);
+//		VARIABLE_NAMES.put(var, name);
+	}
+	
+	public static String getVariableName(int var) {
+		return VARIABLE_NAMES.get(var);
+	}
+	
+	public static void track(Object value, int lineNumber, int var) {
+		EVENTS.add(new Event(lineNumber, objectToString(value), var));
 	}
 
 	private static String objectToString(Object value) {
@@ -44,35 +64,35 @@ public class EventStore {
 		}	
 	}
 
-	public static void track(byte value, int lineNumber) {
-		EVENTS.add(new Event(lineNumber, Byte.toString(value)));
+	public static void track(byte value, int lineNumber, int var) {
+		EVENTS.add(new Event(lineNumber, Byte.toString(value), var));
 	}
 
-	public static void track(short value, int lineNumber) {
-		EVENTS.add(new Event(lineNumber, Short.toString(value)));
+	public static void track(short value, int lineNumber, int var) {
+		EVENTS.add(new Event(lineNumber, Short.toString(value), var));
 	}
 
-	public static void track(int value, int lineNumber) {
-		EVENTS.add(new Event(lineNumber, Integer.toString(value)));
+	public static void track(int value, int lineNumber, int var) {
+		EVENTS.add(new Event(lineNumber, Integer.toString(value), var));
 	}
 
-	public static void track(long value, int lineNumber) {
-		EVENTS.add(new Event(lineNumber, Long.toString(value)));
+	public static void track(long value, int lineNumber, int var) {
+		EVENTS.add(new Event(lineNumber, Long.toString(value), var));
 	}
 
-	public static void track(float value, int lineNumber) {
-		EVENTS.add(new Event(lineNumber, Float.toString(value)));
+	public static void track(float value, int lineNumber, int var) {
+		EVENTS.add(new Event(lineNumber, Float.toString(value), var));
 	}
 
-	public static void track(double value, int lineNumber) {
-		EVENTS.add(new Event(lineNumber, Double.toString(value)));
+	public static void track(double value, int lineNumber, int var) {
+		EVENTS.add(new Event(lineNumber, Double.toString(value), var));
 	}
 
-	public static void track(boolean value, int lineNumber) {
-		EVENTS.add(new Event(lineNumber, Boolean.toString(value)));
+	public static void track(boolean value, int lineNumber, int var) {
+		EVENTS.add(new Event(lineNumber, Boolean.toString(value), var));
 	}
 
-	public static void track(char value, int lineNumber) {
-		EVENTS.add(new Event(lineNumber, Character.toString(value)));
+	public static void track(char value, int lineNumber, int var) {
+		EVENTS.add(new Event(lineNumber, Character.toString(value), var));
 	}
 }

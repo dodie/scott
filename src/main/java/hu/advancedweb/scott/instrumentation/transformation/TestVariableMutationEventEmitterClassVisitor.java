@@ -14,7 +14,9 @@ public class TestVariableMutationEventEmitterClassVisitor extends ClassVisitor {
 	@Override
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {                               
 	    MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
-	    return new TestVariableMutationEventEmitterMethodVisitor(methodVisitor);
+	    TestVariableMutationEventEmitterMethodVisitor variableMutationEventEmitter = new TestVariableMutationEventEmitterMethodVisitor(methodVisitor);
+	    MethodVisitor variableExtractor = new TestVariableScopeExtractorMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions);
+	    return variableExtractor;
 	}
 
 }

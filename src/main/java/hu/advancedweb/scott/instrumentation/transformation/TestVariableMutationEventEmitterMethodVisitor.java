@@ -1,6 +1,8 @@
 package hu.advancedweb.scott.instrumentation.transformation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.objectweb.asm.AnnotationVisitor;
@@ -42,31 +44,75 @@ public class TestVariableMutationEventEmitterMethodVisitor extends MethodVisitor
 	private void resetState() {
 		variables.clear();
 	}
-
+	
+	@Override
+    public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
+		super.visitMethodInsn(opcode, owner, name, desc, itf);
+		
+		if (isTestCase) {
+			// track every variable state after method calls
+			for (Integer var : variables.keySet()) {
+				for (LocalVariableRange localVariableRange : localVariableScopes) {
+					if (localVariableRange.var == var &&
+							localVariableRange.start <= lineNumber &&
+							localVariableRange.end >= lineNumber) {
+						instument(var);
+						break;
+					}
+				}
+			}
+		}
+    }
+	
 	@Override
 	public void visitVarInsn(int opcode, int var) {
 		super.visitVarInsn(opcode, var);
-		VariableType variableType = VariableType.getByStoreOpCode(opcode);
-		if (variableType != null) {
-			variables.put(var, variableType);
-			instument(var);
+		if (isTestCase) {
+			VariableType variableType = VariableType.getByStoreOpCode(opcode);
+			if (variableType != null) {
+				variables.put(var, variableType);
+				instument(var);
+			}
 		}
 	}
 
 	@Override
 	public void visitIincInsn(int var, int increment) {
 		super.visitIincInsn(var, increment);
-		instument(var);
+		if (isTestCase) {
+			instument(var);
+		}
 	}
 	
 	private void instument(int var) {
-		if (isTestCase) {
-			super.visitVarInsn(variables.get(var).loadOpcode, var);
-			super.visitLdcInsn(lineNumber);
-	        super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/event/EventStore", "track", "(" + variables.get(var).signature + "I)V", false);
-		}	
+		super.visitVarInsn(variables.get(var).loadOpcode, var);
+		super.visitLdcInsn(lineNumber);
+        super.visitLdcInsn(var);
+        super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/event/EventStore", "track", "(" + variables.get(var).signature + "II)V", false);
 	}
-
+	
+	public void resetLocalVariableScopes() {
+		localVariableScopes.clear();
+	}
+	
+	public void addLocalVariableScope(int var, int start, int end) {
+		localVariableScopes.add(new LocalVariableRange(var, start, end));
+	}
+	
+	List<LocalVariableRange> localVariableScopes = new ArrayList<>();
+	
+	private static class LocalVariableRange {
+		final int var;
+		final int start;
+		final int end;
+		
+		public LocalVariableRange(int var, int start, int end) {
+			this.var = var;
+			this.start = start;
+			this.end = end;
+		}
+	}
+	
 	private static enum VariableType {
 		INTEGER(Opcodes.ILOAD, Opcodes.ISTORE, "I"),
 		LONG(Opcodes.LLOAD, Opcodes.LSTORE, "J"),
@@ -94,4 +140,5 @@ public class TestVariableMutationEventEmitterMethodVisitor extends MethodVisitor
 			return null;
 		}
 	}
+
 }

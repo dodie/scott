@@ -6,6 +6,7 @@ import hu.advancedweb.scott.runtime.javasource.MethodSource;
 import hu.advancedweb.scott.runtime.javasource.MethodSourceLoader;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.runner.Description;
@@ -32,8 +33,14 @@ public class ScottRunListener extends RunListener {
 		MethodSource testMethodSource = new MethodSourceLoader().loadMethodSource(TEST_SOURCE_PATH, TEST_METHOD_NAME);
 		
 		if (testMethodSource != null) {
+			Map<Integer, String> trackedValue = new HashMap<>();
+			
 			for (Event event : EventStore.getEvents()) {
-				testMethodSource.commentLine(event.lineNumber, event.value);
+				String lastValue = trackedValue.get(event.var);
+				if (!event.value.equals(lastValue)) {
+					testMethodSource.commentLine(event.lineNumber, EventStore.getVariableName(event.var) + "=" + event.value + ";" + event.var);
+					trackedValue.put(event.var, event.value);
+				}
 			}
 			renderFailure(failure, testMethodSource);
 		} else {
