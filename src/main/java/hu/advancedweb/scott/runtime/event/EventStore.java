@@ -22,14 +22,8 @@ public class EventStore {
 		return Collections.unmodifiableList(EVENTS);
 	}
 	
-	public static void test() {
-		System.out.println("test");
-	}
-	
-	public static void registerVariable(int var) {
-		String name = "dd";
-		System.out.println("registering variable : " + var + " with: " + name);
-//		VARIABLE_NAMES.put(var, name);
+	public static void registerVariable(String name, int var) {
+		VARIABLE_NAMES.put(var, name);
 	}
 	
 	public static String getVariableName(int var) {

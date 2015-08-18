@@ -50,7 +50,7 @@ public class TestVariableScopeExtractorMethodVisitor extends MethodNode {
 		super.visitLocalVariable(name, desc, signature, start, end, index);
 		
 		if (isTestCase) {
-			ranges.add(new LocalVariableRange(index, start, end));
+			ranges.add(new LocalVariableRange(index, name, start, end));
 		}
 	}
 	
@@ -73,7 +73,7 @@ public class TestVariableScopeExtractorMethodVisitor extends MethodNode {
 					
 					prevLine = entry.getKey();
 				}
-				mv.addLocalVariableScope(range.var, startLine, endLine);
+				mv.addLocalVariableScope(range.var, range.name, startLine, endLine);
 			}
 		}
 		accept(mv);
@@ -81,11 +81,13 @@ public class TestVariableScopeExtractorMethodVisitor extends MethodNode {
 	
 	private static class LocalVariableRange {
 		final int var;
+		final String name;
 		final Label start;
 		final Label end;
 		
-		public LocalVariableRange(int var, Label start, Label end) {
+		public LocalVariableRange(int var, String name, Label start, Label end) {
 			this.var = var;
+			this.name = name;
 			this.start = start;
 			this.end = end;
 		}

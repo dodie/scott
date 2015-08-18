@@ -71,6 +71,7 @@ public class TestVariableMutationEventEmitterMethodVisitor extends MethodVisitor
 			VariableType variableType = VariableType.getByStoreOpCode(opcode);
 			if (variableType != null) {
 				variables.put(var, variableType);
+				instrumentToTrackVariableName(var);
 				instument(var);
 			}
 		}
@@ -80,6 +81,7 @@ public class TestVariableMutationEventEmitterMethodVisitor extends MethodVisitor
 	public void visitIincInsn(int var, int increment) {
 		super.visitIincInsn(var, increment);
 		if (isTestCase) {
+			instrumentToTrackVariableName(var);
 			instument(var);
 		}
 	}
@@ -91,23 +93,41 @@ public class TestVariableMutationEventEmitterMethodVisitor extends MethodVisitor
         super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/event/EventStore", "track", "(" + variables.get(var).signature + "II)V", false);
 	}
 	
+	private void instrumentToTrackVariableName(int var) {
+		String name = null;
+		for (LocalVariableRange localVariableRange : localVariableScopes) {
+			if (localVariableRange.var == var &&
+					localVariableRange.start <= lineNumber &&
+					localVariableRange.end >= lineNumber) {
+				name = localVariableRange.name;
+				break;
+			}
+		}
+		
+		super.visitLdcInsn(name);
+        super.visitLdcInsn(var);
+        super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/event/EventStore", "registerVariable", "(Ljava/lang/String;I)V", false);
+	}
+	
 	public void resetLocalVariableScopes() {
 		localVariableScopes.clear();
 	}
 	
-	public void addLocalVariableScope(int var, int start, int end) {
-		localVariableScopes.add(new LocalVariableRange(var, start, end));
+	public void addLocalVariableScope(int var, String name, int start, int end) {
+		localVariableScopes.add(new LocalVariableRange(var, name, start, end));
 	}
 	
 	List<LocalVariableRange> localVariableScopes = new ArrayList<>();
 	
 	private static class LocalVariableRange {
 		final int var;
+		final String name;
 		final int start;
 		final int end;
 		
-		public LocalVariableRange(int var, int start, int end) {
+		public LocalVariableRange(int var, String name, int start, int end) {
 			this.var = var;
+			this.name = name;
 			this.start = start;
 			this.end = end;
 		}

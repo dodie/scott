@@ -38,7 +38,7 @@ public class ScottRunListener extends RunListener {
 			for (Event event : EventStore.getEvents()) {
 				String lastValue = trackedValue.get(event.var);
 				if (!event.value.equals(lastValue)) {
-					testMethodSource.commentLine(event.lineNumber, EventStore.getVariableName(event.var) + "=" + event.value + ";" + event.var);
+					testMethodSource.commentLine(event.lineNumber, EventStore.getVariableName(event.var) + "=" + event.value);
 					trackedValue.put(event.var, event.value);
 				}
 			}
@@ -46,7 +46,6 @@ public class ScottRunListener extends RunListener {
 		} else {
 			renderFailure(failure);
 		}
-		
 		
 		super.testFailure(failure);
 	}
