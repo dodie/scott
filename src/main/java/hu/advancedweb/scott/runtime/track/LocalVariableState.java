@@ -1,5 +1,10 @@
-package hu.advancedweb.scott.runtime.event;
+package hu.advancedweb.scott.runtime.track;
 
+/**
+ * Represents a local variable state for a variable index and line number.
+ * 
+ * @author David Csakvari
+ */
 public class LocalVariableState {
 	public final int lineNumber;
 	public final int var;

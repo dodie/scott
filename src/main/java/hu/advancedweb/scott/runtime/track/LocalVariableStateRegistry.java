@@ -1,18 +1,24 @@
-package hu.advancedweb.scott.runtime.event;
+package hu.advancedweb.scott.runtime.track;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-// TODO: provide track methods for computational types only, eg. track(boolean) will not be called. see jvms8, page29
+/**
+ * Track local variable changes.
+ * This class is called by the instrumented test methods.
+ * 
+ * @author David Csakvari
+ */
 public class LocalVariableStateRegistry {
+	// TODO: provide track methods for computational types only, eg. track(boolean) will not be called. see jvms8, page29
 	
 	private static List<LocalVariableState> LOCAL_VARIABLE_STATES = new ArrayList<LocalVariableState>();
 	
-	private static Map<Integer, Map<Integer, String>> LOCAL_VARIABLE_NAMES = new HashMap<>();
+	private static List<LocalVariableName> LOCAL_VARIABLE_NAMES = new ArrayList<LocalVariableName>();
+	
+//	private static Map<Integer, Map<Integer, String>> LOCAL_VARIABLE_NAMES = new HashMap<>();
 
 	public static void clear() {
 		LOCAL_VARIABLE_STATES.clear();
@@ -24,14 +30,14 @@ public class LocalVariableStateRegistry {
 	}
 	
 	public static String getLocalVariableName(int var, int lineNumber) {
-		Map<Integer, String> lineNumberToName = LOCAL_VARIABLE_NAMES.get(var);
-		
 		String name = null;
-		for (Map.Entry<Integer, String> entry : lineNumberToName.entrySet()) {
-			if (entry.getKey() > lineNumber) {
-				break;
-			} else {
-				name = entry.getValue();
+		for (LocalVariableName localVariableName : LOCAL_VARIABLE_NAMES) {
+			if (var == localVariableName.var) {
+				if (localVariableName.lineNumber > lineNumber) {
+					break;
+				} else {
+					name = localVariableName.name;
+				}	
 			}
 		}
 		
@@ -43,12 +49,7 @@ public class LocalVariableStateRegistry {
 	}
 
 	public static void trackVariableName(int var, int lineNumber, String name) {
-		if (!LOCAL_VARIABLE_NAMES.containsKey(var)) {
-			LOCAL_VARIABLE_NAMES.put(var, new HashMap<Integer, String>());
-		}
-		
-		Map<Integer, String> lineNumberToName = LOCAL_VARIABLE_NAMES.get(var);
-		lineNumberToName.put(lineNumber, name);
+		LOCAL_VARIABLE_NAMES.add(new LocalVariableName(lineNumber, name, var));
 	}
 	
 	public static void trackLocalVariableState(byte value, int lineNumber, int var) {

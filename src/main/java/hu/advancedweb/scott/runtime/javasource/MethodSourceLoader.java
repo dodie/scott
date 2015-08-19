@@ -1,6 +1,6 @@
 package hu.advancedweb.scott.runtime.javasource;
 
-import hu.advancedweb.scott.runtime.MethodSource;
+import hu.advancedweb.scott.runtime.ScottReport;
 import hu.advancedweb.scott.runtime.javasource.MethodBoundaryExtractor.Bounderies;
 
 import java.io.File;
@@ -18,24 +18,31 @@ import com.github.javaparser.ast.CompilationUnit;
 
 public class MethodSourceLoader {
 	
-	public MethodSource loadMethodSource(String path, String methodName) {
+	private final String path;
+	private final String methodName;
+
+	public MethodSourceLoader(String path, String methodName) {
+		this.path = path;
+		this.methodName = methodName;
+	}
+	
+	public void loadMethodSource(ScottReport testMethodSource) {
 		try {
 			CompilationUnit cu = getCompilationUnit(path);
 			
 			MethodBoundaryExtractor visitor = new MethodBoundaryExtractor(methodName);
 			final Bounderies boundary = new Bounderies();
 			visitor.visit(cu, boundary);
-			final MethodSource testMethodSource = new MethodSource(boundary.beginLine);
-		
+			
+			testMethodSource.setBeginLine(boundary.beginLine);
+			
 			List<String> lines = Files.readAllLines(Paths.get(path),StandardCharsets.UTF_8);
 			for (int i = boundary.beginLine - 1; i < boundary.endLine; i++) {
 				testMethodSource.addLine(lines.get(i));
 			}
-			return testMethodSource;
 		} catch (IOException e) {
 			// Ignore.
 		}
-		return null;
 	}
 	
 	private CompilationUnit getCompilationUnit(String testSourcePath) throws IOException {

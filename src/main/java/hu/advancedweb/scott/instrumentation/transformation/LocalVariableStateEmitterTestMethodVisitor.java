@@ -98,14 +98,14 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitVarInsn(localVariables.get(var).loadOpcode, var);
 		super.visitLdcInsn(lineNumber);
         super.visitLdcInsn(var);
-        super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/event/LocalVariableStateRegistry", "trackLocalVariableState", "(" + localVariables.get(var).signature + "II)V", false);
+        super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackLocalVariableState", "(" + localVariables.get(var).signature + "II)V", false);
 	}
 	
 	private void instrumentToTrackVariableName(int var) {
 		super.visitLdcInsn(var);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(getVariableNameInCurrentScope(var));
-        super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/event/LocalVariableStateRegistry", "trackVariableName", "(IILjava/lang/String;)V", false);
+        super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackVariableName", "(IILjava/lang/String;)V", false);
 	}
 	
 	private boolean isVariableInScope(int var) {

@@ -1,8 +1,8 @@
 package hu.advancedweb.scott.runtime;
 
-import hu.advancedweb.scott.runtime.event.LocalVariableState;
-import hu.advancedweb.scott.runtime.event.LocalVariableStateRegistry;
 import hu.advancedweb.scott.runtime.javasource.MethodSourceLoader;
+import hu.advancedweb.scott.runtime.track.LocalVariableState;
+import hu.advancedweb.scott.runtime.track.LocalVariableStateRegistry;
 
 import java.io.File;
 import java.util.HashMap;
@@ -26,6 +26,7 @@ public class ScottRunListener extends RunListener {
 	public void testStarted(Description description) throws Exception {
 		LocalVariableStateRegistry.clear();
 		
+		// current test source resolving is based on maven conventions
 		TEST_SOURCE_PATH = System.getProperty("user.dir") + "/../src/test/java/" + description.getTestClass().getCanonicalName().replace(".", File.separator) + ".java";
 		TEST_METHOD_NAME = description.getMethodName();
 
@@ -34,44 +35,44 @@ public class ScottRunListener extends RunListener {
 	
 	@Override
 	public void testFailure(Failure failure) throws Exception {
-		MethodSource testMethodSource = new MethodSourceLoader().loadMethodSource(TEST_SOURCE_PATH, TEST_METHOD_NAME);
+		final ScottReport methodSource = new ScottReport();
+
+		fillSource(methodSource);
+		fillTrackedData(methodSource);
 		
-		if (testMethodSource != null) {
-			Map<Integer, String> trackedValue = new HashMap<>();
-			
-			for (LocalVariableState event : LocalVariableStateRegistry.getLocalVariableStates()) {
-				String lastValue = trackedValue.get(event.var);
-				if (!event.value.equals(lastValue)) {
-					testMethodSource.commentLine(event.lineNumber, LocalVariableStateRegistry.getLocalVariableName(event.var, event.lineNumber) + "=" + event.value);
-					trackedValue.put(event.var, event.value);
-				}
-			}
-			renderFailure(failure, testMethodSource);
-		} else {
-			renderFailure(failure);
-		}
-		
+		render(failure, methodSource);
+
 		super.testFailure(failure);
 	}
 	
-	private void renderFailure(Failure failure, MethodSource testMethodSource) {
-		System.out.println(failure.getTestHeader() + " FAILED!");
-		System.out.println(renderTestMethodSource(testMethodSource));
+	private void fillSource(ScottReport methodSource) {
+		new MethodSourceLoader(TEST_SOURCE_PATH, TEST_METHOD_NAME).loadMethodSource(methodSource);
 	}
 	
-	private void renderFailure(Failure failure) {
-		System.out.println(failure.getTestHeader() + " FAILED! (no source found)");
+	private void fillTrackedData(ScottReport methodSource) {
+		Map<Integer, String> trackedValue = new HashMap<>();
+		
+		for (LocalVariableState event : LocalVariableStateRegistry.getLocalVariableStates()) {
+			String lastValue = trackedValue.get(event.var);
+			if (!event.value.equals(lastValue)) {
+				methodSource.commentLine(event.lineNumber, LocalVariableStateRegistry.getLocalVariableName(event.var, event.lineNumber) + "=" + event.value);
+				trackedValue.put(event.var, event.value);
+			}
+		}
 	}
+	
+	private void render(Failure failure, ScottReport scottReport) {
+		System.out.println(failure.getTestHeader() + " FAILED!");
 
-	public String renderTestMethodSource(MethodSource testMethodSource) {
 		StringBuilder sb = new StringBuilder();
-		for (Map.Entry<Integer, String> line : testMethodSource.getSourceLines().entrySet()) {
+		for (Map.Entry<Integer, String> line : scottReport.getSourceLines().entrySet()) {
 			sb.append(String.format("%1$4s", line.getKey()));
 			sb.append("|  ");
 			sb.append(line.getValue());
 			sb.append("\n");
 		}
-		return sb.toString();
+		
+		System.out.println(sb.toString());
 	}
 
 }

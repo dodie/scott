@@ -5,16 +5,16 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Model object for the 
- * @author dodi
- *
+ * Model object for the detailed failure report.
+ * 
+ * @author David Csakvari
  */
-public class MethodSource {
+public class ScottReport {
 	
 	private Map<Integer, String> sourceLines = new TreeMap<Integer, String>();
 	private int beginLine;
 	
-	public MethodSource(int beginLine) {
+	public void setBeginLine(int beginLine) {
 		this.beginLine = beginLine;
 	}
 
