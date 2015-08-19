@@ -1,9 +1,14 @@
-package hu.advancedweb.scott.runtime.javasource;
+package hu.advancedweb.scott.runtime;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Model object for the 
+ * @author dodi
+ *
+ */
 public class MethodSource {
 	
 	private Map<Integer, String> sourceLines = new TreeMap<Integer, String>();

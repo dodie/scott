@@ -1,5 +1,6 @@
 package hu.advancedweb.scott.runtime.javasource;
 
+import hu.advancedweb.scott.runtime.MethodSource;
 import hu.advancedweb.scott.runtime.javasource.MethodBoundaryExtractor.Bounderies;
 
 import java.io.File;

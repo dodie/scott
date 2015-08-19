@@ -5,6 +5,11 @@ import hu.advancedweb.scott.runtime.javasource.MethodBoundaryExtractor.Bounderie
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
+/**
+ * Extracts the begin and the end line for a method.
+ * 
+ * @author David Csakvari
+ */
 class MethodBoundaryExtractor extends VoidVisitorAdapter<Bounderies> {
 
 	private final String methodName;

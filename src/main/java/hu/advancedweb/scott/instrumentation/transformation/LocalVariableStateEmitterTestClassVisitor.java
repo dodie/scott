@@ -6,6 +6,10 @@ import org.objectweb.asm.Opcodes;
 
 /**
  * Manitpulates the class through the appropriate MethodVisitors.
+ * It is done in two traversals:
+ *  - extract local variable scopes
+ *  - manipulation
+ *  
  * @author David Csakvari
  */
 public class LocalVariableStateEmitterTestClassVisitor extends ClassVisitor {

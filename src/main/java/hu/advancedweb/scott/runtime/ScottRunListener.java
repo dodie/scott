@@ -1,8 +1,7 @@
 package hu.advancedweb.scott.runtime;
 
-import hu.advancedweb.scott.runtime.event.Event;
-import hu.advancedweb.scott.runtime.event.EventStore;
-import hu.advancedweb.scott.runtime.javasource.MethodSource;
+import hu.advancedweb.scott.runtime.event.LocalVariableState;
+import hu.advancedweb.scott.runtime.event.LocalVariableStateRegistry;
 import hu.advancedweb.scott.runtime.javasource.MethodSourceLoader;
 
 import java.io.File;
@@ -13,6 +12,11 @@ import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
+/**
+ * Scott's JUnit listener that produces the detailed failure reports for failed tests.
+ * 
+ * @author David Csakvari
+ */
 public class ScottRunListener extends RunListener {
 	
 	static String TEST_SOURCE_PATH;
@@ -20,7 +24,7 @@ public class ScottRunListener extends RunListener {
 
 	@Override
 	public void testStarted(Description description) throws Exception {
-		EventStore.clear();
+		LocalVariableStateRegistry.clear();
 		
 		TEST_SOURCE_PATH = System.getProperty("user.dir") + "/../src/test/java/" + description.getTestClass().getCanonicalName().replace(".", File.separator) + ".java";
 		TEST_METHOD_NAME = description.getMethodName();
@@ -35,10 +39,10 @@ public class ScottRunListener extends RunListener {
 		if (testMethodSource != null) {
 			Map<Integer, String> trackedValue = new HashMap<>();
 			
-			for (Event event : EventStore.getEvents()) {
+			for (LocalVariableState event : LocalVariableStateRegistry.getLocalVariableStates()) {
 				String lastValue = trackedValue.get(event.var);
 				if (!event.value.equals(lastValue)) {
-					testMethodSource.commentLine(event.lineNumber, EventStore.getVariableName(event.var) + "=" + event.value);
+					testMethodSource.commentLine(event.lineNumber, LocalVariableStateRegistry.getLocalVariableName(event.var, event.lineNumber) + "=" + event.value);
 					trackedValue.put(event.var, event.value);
 				}
 			}

@@ -5,7 +5,8 @@ import hu.advancedweb.scott.instrumentation.transformation.TestClassTransformer;
 import java.lang.instrument.Instrumentation;
 
 /**
- * Java Agent that instruments test methods for detailed failure reports.
+ * Scott's Java Agent that instruments test methods for detailed failure reports.
+ * 
  * @author David Csakvari
  */
 public class ScottAgent {

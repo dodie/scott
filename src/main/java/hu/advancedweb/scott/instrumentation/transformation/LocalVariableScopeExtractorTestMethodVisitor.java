@@ -12,17 +12,21 @@ import org.objectweb.asm.tree.MethodNode;
 
 /**
  * Tracks local variable scopes in test methods and passes this information to the next visitor.
+ * 
  * @author David Csakvari
  */
 public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	
 	/** True if the current method is a test case. */
 	private boolean isTestCase;
-
+	
+	/** Map line numbers to labels, as we got labels at local variable visits */
 	private Map<Integer, Label> lines = new TreeMap<>();
 	
-	private List<LocalVariableScope> scopes = new ArrayList<>();
+	/** Data collected from local variable visits. */
+	private List<LocalVariableScopeLabels> scopes = new ArrayList<>();
 	
+	/** Next MethodVisitor to be accepted at method end. */
 	private LocalVariableStateEmitterTestMethodVisitor next;
 	
 	public LocalVariableScopeExtractorTestMethodVisitor(LocalVariableStateEmitterTestMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
@@ -44,7 +48,6 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	private void reset() {
 		scopes.clear();
 		lines.clear();
-		next.resetLocalVariableScopes();		
 	}
 	
 	@Override
@@ -60,14 +63,15 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 		super.visitLocalVariable(name, desc, signature, start, end, index);
 		
 		if (isTestCase) {
-			scopes.add(new LocalVariableScope(index, name, start, end));
+			scopes.add(new LocalVariableScopeLabels(index, name, start, end));
 		}
 	}
 	
 	@Override
 	public void visitEnd() {
 		if (isTestCase) {
-			for (LocalVariableScope range : scopes) {
+			List<LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope> localVariableScopes = new ArrayList<>();
+			for (LocalVariableScopeLabels range : scopes) {
 				int prevLine = 0;
 				int startLine = 0;
 				int endLine = Integer.MAX_VALUE;
@@ -82,19 +86,20 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 					
 					prevLine = entry.getKey();
 				}
-				next.addLocalVariableScope(range.var, range.name, startLine, endLine);
+				localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, startLine, endLine));
 			}
+			next.setLocalVariableScopes(localVariableScopes);
 		}
 		accept(next);
 	}
 	
-	private static class LocalVariableScope {
+	private static class LocalVariableScopeLabels {
 		final int var;
 		final String name;
 		final Label start;
 		final Label end;
 		
-		public LocalVariableScope(int var, String name, Label start, Label end) {
+		public LocalVariableScopeLabels(int var, String name, Label start, Label end) {
 			this.var = var;
 			this.name = name;
 			this.start = start;
