@@ -10,32 +10,42 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.MethodNode;
 
-public class TestVariableScopeExtractorMethodVisitor extends MethodNode {
+/**
+ * Tracks local variable scopes in test methods and passes this information to the next visitor.
+ * @author David Csakvari
+ */
+public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	
-	TestVariableMutationEventEmitterMethodVisitor mv;
-	public TestVariableScopeExtractorMethodVisitor(TestVariableMutationEventEmitterMethodVisitor mv, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
+	/** True if the current method is a test case. */
+	private boolean isTestCase;
+
+	private Map<Integer, Label> lines = new TreeMap<>();
+	
+	private List<LocalVariableScope> scopes = new ArrayList<>();
+	
+	private LocalVariableStateEmitterTestMethodVisitor next;
+	
+	public LocalVariableScopeExtractorTestMethodVisitor(LocalVariableStateEmitterTestMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
 		super(Opcodes.ASM5, access, name, desc, signature, exceptions);
-		this.mv = mv;
+		this.next = next;
 	}
-	
-	boolean isTestCase;
 	
 	@Override
 	public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
 		isTestCase = "Lorg/junit/Test;".equals(desc);
+		
 		if (isTestCase) {
 			reset();
 		}
+		
 		return super.visitAnnotation(desc, visible);
 	}
 	
 	private void reset() {
-		mv.resetLocalVariableScopes();		
+		scopes.clear();
+		lines.clear();
+		next.resetLocalVariableScopes();		
 	}
-	
-
-	Map<Integer, Label> lines = new TreeMap<>();
-	List<LocalVariableRange> ranges = new ArrayList<>();
 	
 	@Override
 	public void visitLineNumber(int line, Label start) {
@@ -50,15 +60,14 @@ public class TestVariableScopeExtractorMethodVisitor extends MethodNode {
 		super.visitLocalVariable(name, desc, signature, start, end, index);
 		
 		if (isTestCase) {
-			ranges.add(new LocalVariableRange(index, name, start, end));
+			scopes.add(new LocalVariableScope(index, name, start, end));
 		}
 	}
 	
 	@Override
 	public void visitEnd() {
 		if (isTestCase) {
-			
-			for (LocalVariableRange range : ranges) {
+			for (LocalVariableScope range : scopes) {
 				int prevLine = 0;
 				int startLine = 0;
 				int endLine = Integer.MAX_VALUE;
@@ -73,25 +82,24 @@ public class TestVariableScopeExtractorMethodVisitor extends MethodNode {
 					
 					prevLine = entry.getKey();
 				}
-				mv.addLocalVariableScope(range.var, range.name, startLine, endLine);
+				next.addLocalVariableScope(range.var, range.name, startLine, endLine);
 			}
 		}
-		accept(mv);
+		accept(next);
 	}
 	
-	private static class LocalVariableRange {
+	private static class LocalVariableScope {
 		final int var;
 		final String name;
 		final Label start;
 		final Label end;
 		
-		public LocalVariableRange(int var, String name, Label start, Label end) {
+		public LocalVariableScope(int var, String name, Label start, Label end) {
 			this.var = var;
 			this.name = name;
 			this.start = start;
 			this.end = end;
 		}
 	}
-
 
 }
