@@ -44,5 +44,5 @@ Features
 For every failing test it reports the
 - source code of the failing test method
 - the newly assigned values for local variables
-- changes made to local variables
+- changes made to object referenced by local variables
 
