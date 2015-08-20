@@ -8,6 +8,12 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 
+
+/**
+ * Transform classes for detailed failure test reports.
+ * 
+ * @author David Csakvari
+ */
 public class TestClassTransformer implements ClassFileTransformer {
 
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {

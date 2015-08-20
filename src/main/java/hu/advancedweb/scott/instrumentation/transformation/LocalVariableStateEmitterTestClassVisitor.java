@@ -6,9 +6,9 @@ import org.objectweb.asm.Opcodes;
 
 /**
  * Manitpulates the class through the appropriate MethodVisitors.
- * It is done in two traversals:
- *  - extract local variable scopes
- *  - manipulation
+ * It is done in two traversals, hence it uses two method visitors:
+ *  - the first round extracts local variable scopes
+ *  - the second one does the instrumentation
  *  
  * @author David Csakvari
  */

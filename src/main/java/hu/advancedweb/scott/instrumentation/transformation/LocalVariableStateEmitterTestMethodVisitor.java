@@ -28,7 +28,8 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	
 	/** Variable scopes in the method. */
 	private List<LocalVariableScope> localVariableScopes = new ArrayList<>();
-
+	
+	
 	public LocalVariableStateEmitterTestMethodVisitor(MethodVisitor mv) {
 		super(Opcodes.ASM5, mv);
 	}

@@ -10,7 +10,9 @@ import java.lang.instrument.Instrumentation;
  * @author David Csakvari
  */
 public class ScottAgent {
+	
 	public static void premain(String agentArgument, Instrumentation instrumentation) {
 		instrumentation.addTransformer(new TestClassTransformer());
 	}
+	
 }

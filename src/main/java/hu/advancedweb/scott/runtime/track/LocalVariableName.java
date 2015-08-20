@@ -6,6 +6,7 @@ package hu.advancedweb.scott.runtime.track;
  * @author David Csakvari
  */
 public class LocalVariableName {
+	
 	public final int lineNumber;
 	public final int var;
 	public final String name;
@@ -15,4 +16,5 @@ public class LocalVariableName {
 		this.name = name;
 		this.var = var;
 	}
+	
 }

@@ -12,14 +12,15 @@ import java.util.List;
  * @author David Csakvari
  */
 public class LocalVariableStateRegistry {
-	// TODO: provide track methods for computational types only, eg. track(boolean) will not be called. see jvms8, page29
+	/*
+	 *  TODO: provide track methods for computational types only.
+	 *  Eg. track(boolean) will not be called from the instrumented code. see jvms8, page29
+	 */
 	
 	private static List<LocalVariableState> LOCAL_VARIABLE_STATES = new ArrayList<LocalVariableState>();
 	
 	private static List<LocalVariableName> LOCAL_VARIABLE_NAMES = new ArrayList<LocalVariableName>();
 	
-//	private static Map<Integer, Map<Integer, String>> LOCAL_VARIABLE_NAMES = new HashMap<>();
-
 	public static void clear() {
 		LOCAL_VARIABLE_STATES.clear();
 		LOCAL_VARIABLE_NAMES.clear();

@@ -29,6 +29,7 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	/** Next MethodVisitor to be accepted at method end. */
 	private LocalVariableStateEmitterTestMethodVisitor next;
 	
+	
 	public LocalVariableScopeExtractorTestMethodVisitor(LocalVariableStateEmitterTestMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
 		super(Opcodes.ASM5, access, name, desc, signature, exceptions);
 		this.next = next;

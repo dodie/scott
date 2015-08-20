@@ -6,6 +6,7 @@ package hu.advancedweb.scott.runtime.track;
  * @author David Csakvari
  */
 public class LocalVariableState {
+	
 	public final int lineNumber;
 	public final int var;
 	public final String value;
@@ -15,4 +16,5 @@ public class LocalVariableState {
 		this.value = value;
 		this.var = var;
 	}
+	
 }
