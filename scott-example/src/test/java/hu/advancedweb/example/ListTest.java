@@ -17,7 +17,8 @@ public class ListTest {
 		List<Integer> list = Arrays.asList(array);
 		
 		Set<Integer> set = new HashSet<Integer>(list);
-		
+		set.remove(1);
+
 		assertEquals(list.size(), set.size());
 	}
 	
