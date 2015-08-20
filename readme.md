@@ -1,5 +1,5 @@
-Scott Test Reporter - Example project
-=====================================
+Scott Test Reporter
+===================
 
 Scott provides detailed failure messages for tests written in Java
 based on their runtime behaviour and source code.
