@@ -19,7 +19,7 @@ public void test_1() {
 }
 ```
 
-This produces the following message:
+This produces the following message without Spock:
 ```
 test_1(hu.advancedweb.example.ListTest): expected:<4> but was:<3>
 ```
