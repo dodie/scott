@@ -13,13 +13,13 @@ public class ListTest {
 	
 	@Test
 	public void test_1() {
-		Integer[] array = new Integer[] { 1, 4, 2, 4 };
-		List<Integer> list = Arrays.asList(array);
+		Integer[] myArray = new Integer[] { 1, 4, 2, 4 };
+		List<Integer> myList = Arrays.asList(myArray);
 		
-		Set<Integer> set = new HashSet<Integer>(list);
-		set.remove(1);
+		Set<Integer> mySet = new HashSet<Integer>(myList);
+		mySet.remove(1);
 
-		assertEquals(list.size(), set.size());
+		assertEquals(myList.size(), mySet.size());
 	}
 	
 	@Test
