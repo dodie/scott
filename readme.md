@@ -57,8 +57,11 @@ For every failing test it reports the
 
 How to try
 ----------
-Just check out this repo and run ```mvn install``` on the *scott* module to build the tool,
-and ```mvn install``` on *scott-example* to see the showcase.
+The [scott-example](https://github.com/dodie/scott-example) project contains the required setup configuration to use Scott (see [pom.xml](https://github.com/dodie/scott-example/blob/master/pom.xml))
+
+1. Check out this repo
+2. Run ```mvn install``` in the *scott* directory.
+3. Run ```mvn install``` in the *scott-example* directory, and see the tests failing.
 
 
 Goals/Limitations
