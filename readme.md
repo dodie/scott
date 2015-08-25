@@ -71,9 +71,9 @@ that can be used in an existing project without requiring to change the tests or
 
 Some features I think would be cool to have:
 - Inspired by Spock, it would be really cool to show parameters passed to assert statements.
-- Currently it supports Maven and JUnit only. (Not to mention that tests must reside in the *test* scope to be discovered.)
+- Currently it supports Maven and JUnit only. (And tests must reside in the *test* direcotry to be discovered.)
 In the future it would be great to support other tools as well.
-- The reporting is fully text based. IDE support would
+- The reporting is fully text based. IDE support would be really nice.
 
 
 The project is in early / prototype stage, use it with caution.
