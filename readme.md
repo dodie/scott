@@ -26,12 +26,12 @@ public void test_1() {
 }
 ```
 
-This produces the following message without Spock:
+This produces the following message **without Spock**:
 ```
 test_1(hu.advancedweb.example.ListTest): expected:<4> but was:<3>
 ```
 
-With Scott, it shows additional information:
+**With Scott**, it shows additional information:
 ```
 test_1(hu.advancedweb.example.ListTest) FAILED!
   14|  @Test
@@ -51,6 +51,28 @@ Features
 --------
 For every failing test it reports the
 - assignments to local variables
-- and changes made to objects referenced by local variables
+- and changes made to objects referenced by local variables,
 - visualised on the source code of the test method.
+
+
+How to try
+----------
+Just check out this repo and run ```mvn install``` on the *scott* module to build the tool,
+and ```mvn install``` on *scott-example* to see the showcase.
+
+
+Goals/Limitations
+-----------------
+Scott does not intend to be a testing framework. Instead, it aims to be a simple tool
+that can be used in an existing project without requiring to change the tests or learn a new API.
+
+Some features I think would be cool to have:
+- Inspired by Spock, it would be really cool to show parameters passed to assert statements.
+- Currently it supports Maven and JUnit only. (Not to mention that tests must reside in the *test* scope to be discovered.)
+In the future it would be great to support other tools as well.
+- The reporting is fully text based. IDE support would
+
+
+The project is in early / prototype stage, use it with caution.
+Any contribution, idea and feedback is appreciated!
 
