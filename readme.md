@@ -57,7 +57,7 @@ For every failing test it reports the
 
 How to try
 ----------
-The [scott-example](https://github.com/dodie/scott-example) project contains the required setup configuration to use Scott (see [pom.xml](https://github.com/dodie/scott-example/blob/master/pom.xml))
+The [scott-example](https://github.com/dodie/scott/tree/master/scott-example) project contains the required setup configuration to use Scott (see [pom.xml](https://github.com/dodie/scott/blob/master/scott-example/pom.xml)).
 
 1. Check out this repo
 2. Run ```mvn install``` in the *scott* directory.
