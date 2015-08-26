@@ -1,6 +1,7 @@
 package hu.advancedweb.example;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,10 +27,10 @@ public class ListTest {
 	public void test_2() throws Throwable {
 		Integer[] array = new Integer[] { 1, 4, 2, 3 };
 		List<Integer> list = Arrays.asList(array);
-		
+		//list.add(1);
 		Collections.sort(list);
 
-		assertEquals(1, 2);
+		assertArrayEquals(array, new Integer[] { 1, 4, 2, 3 });
 	}
 	
 	@Test
