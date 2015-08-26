@@ -6,5 +6,6 @@ and a bunch of failing tests to demonstrate the detailed failure messages.
 
 Usage
 -----
-Just run ``` mvn install ``` to see the tests failing.
+1. Be sure to ```mvn install``` Scott before trying this (in *../scott*).
+2. Run ``` mvn install ``` to see the tests failing.
 
