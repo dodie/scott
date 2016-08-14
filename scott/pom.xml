@@ -1,10 +1,44 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
 	<groupId>hu.advancedweb</groupId>
 	<artifactId>scott</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
+	
+	<name>Scott Test Reporter</name>
+	<description>
+		Scott provides detailed failure messages for tests written
+		in Java based on their runtime behaviour and source code.
+		
+		With Scott even simple assertions provide the details needed
+		to trace the cause of the failure and to comprehend the
+		context of the test case. It provides details about local
+		variables to reduce the need to debug tests.
+	</description>
+	
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
 
+	<developers>
+		<developer>
+			<name>David Csakvari</name>
+			<email>dodiehun@gmail.com</email>
+			<organization>advancedweb.hu</organization>
+			<organizationUrl>https://advancedweb.hu</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<url>https://github.com/dodie/scott/tree/master</url>
+		<connection>scm:git:git://github.com/dodie/scott.git</connection>
+		<developerConnection>scm:git:ssh://github.com:dodie/scott.git</developerConnection>
+	</scm>
+	
 	<build>
 		<plugins>
 			<plugin>
@@ -24,6 +58,31 @@
 						<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
 					</archive>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
