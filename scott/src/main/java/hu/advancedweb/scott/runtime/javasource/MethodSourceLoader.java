@@ -1,8 +1,5 @@
 package hu.advancedweb.scott.runtime.javasource;
 
-import hu.advancedweb.scott.runtime.ScottReport;
-import hu.advancedweb.scott.runtime.javasource.MethodBoundaryExtractor.Bounderies;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,6 +12,9 @@ import java.util.List;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
+
+import hu.advancedweb.scott.runtime.ScottReport;
+import hu.advancedweb.scott.runtime.javasource.MethodBoundaryExtractor.Bounderies;
 
 public class MethodSourceLoader {
 	

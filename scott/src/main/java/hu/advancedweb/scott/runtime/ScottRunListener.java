@@ -1,9 +1,5 @@
 package hu.advancedweb.scott.runtime;
 
-import hu.advancedweb.scott.runtime.javasource.MethodSourceLoader;
-import hu.advancedweb.scott.runtime.track.LocalVariableState;
-import hu.advancedweb.scott.runtime.track.LocalVariableStateRegistry;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +7,10 @@ import java.util.Map;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
+
+import hu.advancedweb.scott.runtime.javasource.MethodSourceLoader;
+import hu.advancedweb.scott.runtime.track.LocalVariableState;
+import hu.advancedweb.scott.runtime.track.LocalVariableStateRegistry;
 
 /**
  * Scott's JUnit listener that produces the detailed failure reports for failed tests.

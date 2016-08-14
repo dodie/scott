@@ -1,7 +1,6 @@
 package hu.advancedweb.example;
 
 import static org.junit.Assert.assertEquals;
-import hu.advancedweb.example.Counter;
 
 import org.junit.Test;
 

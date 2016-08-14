@@ -1,8 +1,8 @@
 package hu.advancedweb.scott.instrumentation;
 
-import hu.advancedweb.scott.instrumentation.transformation.TestClassTransformer;
-
 import java.lang.instrument.Instrumentation;
+
+import hu.advancedweb.scott.instrumentation.transformation.TestClassTransformer;
 
 /**
  * Scott's Java Agent that instruments test methods for detailed failure reports.
