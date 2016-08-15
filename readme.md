@@ -21,35 +21,32 @@ Consider this failing test case:
 
 ```
 @Test
-public void test_1() {
+public void myTest() {
 	Integer[] myArray = new Integer[] { 1, 4, 2, 4 };
 	List<Integer> myList = Arrays.asList(myArray);
+	
+	Set<Integer> mySet = new HashSet<>(myList);
+	mySet.remove(4);
 
-	Set<Integer> mySet = new HashSet<Integer>(myList);
-	mySet.remove(1);
-
-	assertEquals(myList.size(), mySet.size());
+	assertTrue(mySet.contains(4));
 }
 ```
 
-This produces the following message **without Scott**:
-```
-test_1(hu.advancedweb.example.ListTest): expected:<4> but was:<3>
-```
+Normally it just produces an assertion error without a meaningful message.
+But **with Scott**, it shows additional information:
 
-**With Scott**, it shows additional information:
 ```
-test_1(hu.advancedweb.example.ListTest) FAILED!
-  14|  @Test
-  15|  public void test_1() {
-  16|        Integer[] myArray = new Integer[] { 1, 4, 2, 4 }; //myArray=[1, 4, 2, 4]
-  17|        List<Integer> myList = Arrays.asList(myArray); //myList=[1, 4, 2, 4]
-  18|
-  19|        Set<Integer> mySet = new HashSet<Integer>(myList); //mySet=[1, 2, 4]
-  20|        mySet.remove(1); //mySet=[2, 4]
-  21|
-  22|        assertEquals(myList.size(), mySet.size());
-  23|  }
+myTest(hu.advancedweb.example.ListTest) FAILED!
+  15|   @Test
+  16|   public void myTest() {
+  17|           Integer[] myArray = new Integer[] { 1, 4, 2, 4 }; //myArray=[1, 4, 2, 4]
+  18|           List<Integer> myList = Arrays.asList(myArray); //myList=[1, 4, 2, 4]
+  19|  
+  20|           Set<Integer> mySet = new HashSet<>(myList); //mySet=[1, 2, 4]
+  21|           mySet.remove(4); //mySet=[1, 2]
+  22|  
+  23|           assertTrue(mySet.contains(4));
+  24|   }
 ```
 
 Notice that even without using sophisticated assertions the required information is present in the test report.
