@@ -8,6 +8,12 @@ With Scott even simple assertions provide the details needed to
 trace the cause of the failure and to comprehend the context of the test case.
 It provides details about local variables to reduce the need to debug tests.
 
+It does not intend to be a testing framework. Instead, it aims to be a simple tool
+that can be used in an existing project without requiring to change the tests or learn a new API,
+favoring simple assertions expressed mostly in plain old Java.
+
+Supports Java 6, 7 and 8.
+
 
 Example
 -------
@@ -46,6 +52,8 @@ test_1(hu.advancedweb.example.ListTest) FAILED!
   23|  }
 ```
 
+Notice that even without using sophisticated assertions the required information is present in the test report.
+
 
 Features
 --------
@@ -66,16 +74,11 @@ The [scott-example](https://github.com/dodie/scott/tree/master/scott-example) pr
 
 Goals/Limitations
 -----------------
-Scott does not intend to be a testing framework. Instead, it aims to be a simple tool
-that can be used in an existing project without requiring to change the tests or learn a new API.
-
-Some features I think would be cool to have:
+Some important features are need some more work:
 - Inspired by Spock, it would be really cool to show parameters passed to assert statements.
-- Currently it supports Maven and JUnit only. (And tests must reside in the *test* direcotry to be discovered.)
-In the future it would be great to support other tools as well.
-- The reporting is fully text based. IDE support would be really nice.
+- Currently it supports Maven and JUnit only, and tests must reside in the *test* direcotry to be discovered.
+In the future it would be great to relax these limitations.
+- Better Maven and IDE support for easier usage.
 
-
-The project is in early / prototype stage, use it with caution.
-Any contribution, idea and feedback is appreciated!
+The project is in an early stage, any contribution, idea and feedback is appreciated!
 
