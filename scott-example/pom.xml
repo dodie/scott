@@ -67,7 +67,7 @@
 		<dependency>
 			<groupId>hu.advancedweb</groupId>
 			<artifactId>scott</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>1.0.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
