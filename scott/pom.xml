@@ -5,6 +5,7 @@
 	<groupId>hu.advancedweb</groupId>
 	<artifactId>scott</artifactId>
 	<version>1.0.0</version>
+	<url>https://github.com/dodie/scott</url>
 	
 	<name>Scott Test Reporter</name>
 	<description>
