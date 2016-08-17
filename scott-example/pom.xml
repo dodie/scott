@@ -7,20 +7,8 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>-javaagent:${project.build.directory}/agents/scott-agent.jar</argLine>
-					<workingDirectory>${basedir}/target</workingDirectory>
-					<properties>
-						<property>
-							<name>listener</name>
-							<value>hu.advancedweb.scott.runtime.ScottRunListener</value>
-						</property>
-					</properties>
-				</configuration>
-			</plugin>
+
+			<!-- Use the Maven Dependency Plugin to copy Scott's JAR to a directory. -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -45,6 +33,25 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- Modify the Maven Surefire Plugin's configuration that runs the tests
+			     to load Scott's Java Agent for instrumentation
+			     and to use Scott's JUnit listener to produce the test reports. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>-javaagent:${project.build.directory}/agents/scott-agent.jar</argLine>
+					<workingDirectory>${basedir}/target</workingDirectory>
+					<properties>
+						<property>
+							<name>listener</name>
+							<value>hu.advancedweb.scott.runtime.ScottRunListener</value>
+						</property>
+					</properties>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

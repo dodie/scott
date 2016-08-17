@@ -9,8 +9,8 @@ trace the cause of the failure and to comprehend the context of the test case.
 It provides details about local variables to reduce the need to debug tests.
 
 It does not intend to be a testing framework. Instead, it aims to be a simple tool
-that can be used in an existing project without requiring to change the tests or learn a new API,
-favoring simple assertions expressed mostly in plain old Java.
+that can be used in an existing project without requiring to change the tests or
+learn a new testing API, favoring simple assertions expressed mostly in plain old Java.
 
 Supports Java 6, 7 and 8.
 
@@ -60,13 +60,90 @@ For every failing test it reports the
 - visualised on the source code of the test method.
 
 
-How to try
+How to use
 ----------
-The [scott-example](https://github.com/dodie/scott/tree/master/scott-example) project contains the required setup configuration to use Scott (see [pom.xml](https://github.com/dodie/scott/blob/master/scott-example/pom.xml)).
+A Maven Plugin is on it's way to make it even easier,
+but until then add this to your *pom.xml* file:
 
-1. Check out this repo
-2. Run ```mvn install``` in the *scott* directory.
-3. Run ```mvn install``` in the *scott-example* directory, and see the tests failing.
+```
+<build>
+	<plugins>
+
+		...
+
+		<!-- Use the Maven Dependency Plugin to copy Scott's JAR from the dependency to a directory. -->
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-dependency-plugin</artifactId>
+			<version>2.5.1</version>
+			<executions>
+				<execution>
+					<id>copy-agent</id>
+					<phase>process-test-classes</phase>
+					<goals>
+						<goal>copy</goal>
+					</goals>
+					<configuration>
+						<artifactItems>
+							<artifactItem>
+								<groupId>hu.advancedweb</groupId>
+								<artifactId>scott</artifactId>
+								<outputDirectory>${project.build.directory}/agents</outputDirectory>
+								<destFileName>scott-agent.jar</destFileName>
+							</artifactItem>
+						</artifactItems>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+
+		<!-- Modify the Maven Surefire Plugin's configuration that runs the tests
+		     to load Scott's Java Agent for instrumentation
+		     and to use Scott's JUnit listener to produce the test reports. -->
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<configuration>
+				<argLine>-javaagent:${project.build.directory}/agents/scott-agent.jar</argLine>
+				<workingDirectory>${basedir}/target</workingDirectory>
+				<properties>
+					<property>
+						<name>listener</name>
+						<value>hu.advancedweb.scott.runtime.ScottRunListener</value>
+					</property>
+				</properties>
+			</configuration>
+		</plugin>
+
+		...
+
+	</plugins>
+</build>
+<dependencies>
+
+	...
+
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.12</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>hu.advancedweb</groupId>
+		<artifactId>scott</artifactId>
+		<version>1.0.0</version>
+		<scope>test</scope>
+	</dependency>
+
+	...
+
+</dependencies>
+```
+
+For a demo check out and ```mvn install``` the [scott-example](https://github.com/dodie/scott/tree/master/scott-example) project
+that contains the required setup configuration to use Scott (see [pom.xml](https://github.com/dodie/scott/blob/master/scott-example/pom.xml))
+and a bunch of failing tests for the show.
 
 
 Goals/Limitations
