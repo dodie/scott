@@ -47,6 +47,10 @@ public class ScottReport {
 		return Collections.unmodifiableList(variableSnapshotForLines.getOrDefault(lineNumber, new ArrayList<VariableSnapshot>()));
 	}
 	
+	public int getBeginLineNumber() {
+		return beginLineNumber;
+	}
+	
 	public int getExceptionLineNumber() {
 		return exceptionLineNumber;
 	}

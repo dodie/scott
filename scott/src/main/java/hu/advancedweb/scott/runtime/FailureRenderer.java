@@ -47,16 +47,12 @@ public class FailureRenderer {
 	}
 	
 	private static void fillException(ScottReport scottReport, Description description, Throwable throwable) {
-		Integer lineNumber = null;
+		Integer lineNumber = scottReport.getBeginLineNumber();
 		for (StackTraceElement stackTraceElement : throwable.getStackTrace()) {
 			if (description.getClassName().equals(stackTraceElement.getClassName())) {
 				lineNumber = stackTraceElement.getLineNumber();
 				break;
 			}
-		}
-		if (lineNumber == null) {
-			// TODO: rakjuk az elejére, vagy a végére okosan.
-			lineNumber = 1;
 		}
 		
 		scottReport.setException(lineNumber, throwable.getMessage());
@@ -67,18 +63,34 @@ public class FailureRenderer {
 		sb.append("\n");
 		for (Map.Entry<Integer, String> line : scottReport.getSourceLines().entrySet()) {
 			int lineNumber = line.getKey();
-			sb.append(String.format("%1$4s", lineNumber));
-			sb.append("|  ");
-			sb.append(line.getValue());
+			String lineText = line.getValue().replaceAll("\t", "    ");
 			
+			sb.append(String.format("%1$4s", lineNumber));
+			if (scottReport.getExceptionLineNumber() == lineNumber) {
+				sb.append("|* ");
+			} else {
+				sb.append("|  ");
+			}
+			
+			sb.append(lineText);
+			
+			boolean isFirstCommentInThisLine = true;
 			for (VariableSnapshot variableSnapshot : scottReport.getVariableSnapshots(lineNumber)) {
+				if (!isFirstCommentInThisLine) {
+					addBlankLine(sb, lineText);
+				}
+				
 				sb.append("  // ");
 				sb.append(variableSnapshot.name);
 				sb.append("=");
 				sb.append(variableSnapshot.value);
+				isFirstCommentInThisLine = false;
 			}
 			
 			if (scottReport.getExceptionLineNumber() == lineNumber) {
+				if (!isFirstCommentInThisLine) {
+					addBlankLine(sb, lineText);
+				}
 				sb.append("  // ");
 				sb.append(scottReport.getExceptionMessage());
 			}
@@ -86,6 +98,13 @@ public class FailureRenderer {
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+
+	private static void addBlankLine(StringBuilder sb, String lineText) {
+		sb.append("\n");
+		sb.append("    ");
+		sb.append("|  ");
+		sb.append(lineText.replaceAll(".", " "));
 	}
 
 }
