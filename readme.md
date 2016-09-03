@@ -37,16 +37,16 @@ But **with Scott**, it shows additional information:
 
 ```
 myTest(hu.advancedweb.example.ListTest) FAILED!
-  15|   @Test
-  16|   public void myTest() {
-  17|           Integer[] myArray = new Integer[] { 1, 4, 2, 4 }; //myArray=[1, 4, 2, 4]
-  18|           List<Integer> myList = Arrays.asList(myArray); //myList=[1, 4, 2, 4]
-  19|  
-  20|           Set<Integer> mySet = new HashSet<>(myList); //mySet=[1, 2, 4]
-  21|           mySet.remove(4); //mySet=[1, 2]
-  22|  
-  23|           assertTrue(mySet.contains(4));
-  24|   }
+  22|      @Test
+  23|      public void myTest() {
+  24|          Integer[] myArray = new Integer[] { 1, 4, 2, 4 };  // myArray=[1, 4, 2, 4]
+  25|          List<Integer> myList = Arrays.asList(myArray);  // myList=[1, 4, 2, 4]
+  26|          
+  27|          Set<Integer> mySet = new HashSet<>(myList);  // mySet=[1, 2, 4]
+  28|          mySet.remove(4);  // mySet=[1, 2]
+  29|  
+  30|*         assertTrue(mySet.contains(4));  // AssertionError
+  31|      }
 ```
 
 Notice that even without using sophisticated assertions the required information is present in the test report.

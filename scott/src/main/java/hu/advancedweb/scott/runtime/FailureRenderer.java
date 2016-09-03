@@ -55,7 +55,7 @@ public class FailureRenderer {
 			}
 		}
 		
-		scottReport.setException(lineNumber, throwable.getMessage());
+		scottReport.setException(lineNumber, throwable.getClass().getSimpleName(), throwable.getMessage());
 	}
 	
 	private static String renderPlain(ScottReport scottReport) {
@@ -92,7 +92,11 @@ public class FailureRenderer {
 					addBlankLine(sb, lineText);
 				}
 				sb.append("  // ");
-				sb.append(scottReport.getExceptionMessage());
+				sb.append(scottReport.getExceptionClassName());
+				if (scottReport.getExceptionMessage() != null) {
+					sb.append(": ");
+					sb.append(scottReport.getExceptionMessage());
+				}
 			}
 			
 			sb.append("\n");

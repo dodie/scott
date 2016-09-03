@@ -18,6 +18,7 @@ public class ScottReport {
 	private int beginLineNumber;
 	private int exceptionLineNumber;
 	private String exceptionMessage;
+	private String exceptionClassName;
 	
 	public void setBeginLine(int beginLine) {
 		this.beginLineNumber = beginLine;
@@ -34,8 +35,9 @@ public class ScottReport {
 		variableSnapshotForLines.put(lineNumber, variableSnapshots);
 	}
 	
-	public void setException(int lineNumber, String exceptionMessage) {
+	public void setException(int lineNumber, String exceptionClassName, String exceptionMessage) {
 		this.exceptionLineNumber = lineNumber;
+		this.exceptionClassName = exceptionClassName;
 		this.exceptionMessage = exceptionMessage;
 	}
 	
@@ -57,6 +59,10 @@ public class ScottReport {
 
 	public String getExceptionMessage() {
 		return exceptionMessage;
+	}
+	
+	public String getExceptionClassName() {
+		return exceptionClassName;
 	}
 
 }
