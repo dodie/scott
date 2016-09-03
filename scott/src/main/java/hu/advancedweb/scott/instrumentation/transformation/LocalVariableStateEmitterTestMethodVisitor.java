@@ -33,6 +33,14 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	public LocalVariableStateEmitterTestMethodVisitor(MethodVisitor mv) {
 		super(Opcodes.ASM5, mv);
 	}
+	
+	@Override
+	public void visitCode() {
+		super.visitCode();
+		if (isTestCase) {
+			instrumentToClearTrackedData();
+		}
+	}
 
 	@Override
 	public void visitLineNumber(int lineNumber, Label label) {
@@ -45,14 +53,10 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		isTestCase = "Lorg/junit/Test;".equals(desc);
 		
 		if (isTestCase) {
-			resetState();
+			localVariables.clear();
 		}
 		
 		return super.visitAnnotation(desc, visible);
-	}
-
-	private void resetState() {
-		localVariables.clear();
 	}
 	
 	@Override
@@ -63,7 +67,7 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 			// track every in-scope variable state after method calls
 			for (Integer var : localVariables.keySet()) {
 				if (isVariableInScope(var)) {
-					instumentToTrackVariableState(var);
+					instrumentToTrackVariableState(var);
 				}
 			}
 		}
@@ -79,7 +83,7 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 			if (variableType != null) {
 				localVariables.put(var, variableType);
 				instrumentToTrackVariableName(var);
-				instumentToTrackVariableState(var);
+				instrumentToTrackVariableState(var);
 			}
 		}
 	}
@@ -91,11 +95,15 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		if (isTestCase) {
 			// Track variable state and name at variable stores. (At variable increases.)
 			instrumentToTrackVariableName(var);
-			instumentToTrackVariableState(var);
+			instrumentToTrackVariableState(var);
 		}
 	}
 	
-	private void instumentToTrackVariableState(int var) {
+	private void instrumentToClearTrackedData() {
+        super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "clear", "()V", false);
+	}
+	
+	private void instrumentToTrackVariableState(int var) {
 		super.visitVarInsn(localVariables.get(var).loadOpcode, var);
 		super.visitLdcInsn(lineNumber);
         super.visitLdcInsn(var);

@@ -2,9 +2,14 @@ package hu.advancedweb.example;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Rule;
 import org.junit.Test;
 
+import hu.advancedweb.scott.runtime.ScottReportingRule;
+
 public class StringTest {
+	
+	@Rule public ScottReportingRule rule = new ScottReportingRule();
 
 	@Test
 	public void test_1() {

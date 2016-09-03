@@ -1,6 +1,8 @@
 package hu.advancedweb.scott.runtime;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -12,23 +14,45 @@ import java.util.TreeMap;
 public class ScottReport {
 	
 	private Map<Integer, String> sourceLines = new TreeMap<Integer, String>();
-	private int beginLine;
+	private Map<Integer, List<VariableSnapshot>> variableSnapshotForLines = new TreeMap<Integer, List<VariableSnapshot>>();
+	private int beginLineNumber;
+	private int exceptionLineNumber;
+	private String exceptionMessage;
 	
 	public void setBeginLine(int beginLine) {
-		this.beginLine = beginLine;
+		this.beginLineNumber = beginLine;
 	}
 
 	public void addLine(String source) {
-		sourceLines.put(beginLine, source);
-		beginLine++;
+		sourceLines.put(beginLineNumber, source);
+		beginLineNumber++;
 	}
 	
-	public void commentLine(int lineNumber, String comment) {
-		sourceLines.put(lineNumber, sourceLines.get(lineNumber) + " //" + comment);
+	public void addVariableSnapshot(int lineNumber, String name, String value) {
+		List<VariableSnapshot> variableSnapshots = variableSnapshotForLines.getOrDefault(lineNumber, new ArrayList<VariableSnapshot>());
+		variableSnapshots.add(new VariableSnapshot(name, value));
+		variableSnapshotForLines.put(lineNumber, variableSnapshots);
+	}
+	
+	public void setException(int lineNumber, String exceptionMessage) {
+		this.exceptionLineNumber = lineNumber;
+		this.exceptionMessage = exceptionMessage;
 	}
 	
 	public Map<Integer, String> getSourceLines() {
 		return Collections.unmodifiableMap(sourceLines);
+	}
+	
+	public List<VariableSnapshot> getVariableSnapshots(int lineNumber) {
+		return Collections.unmodifiableList(variableSnapshotForLines.getOrDefault(lineNumber, new ArrayList<VariableSnapshot>()));
+	}
+	
+	public int getExceptionLineNumber() {
+		return exceptionLineNumber;
+	}
+
+	public String getExceptionMessage() {
+		return exceptionMessage;
 	}
 
 }

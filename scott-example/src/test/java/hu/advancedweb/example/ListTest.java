@@ -10,9 +10,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.Rule;
 import org.junit.Test;
 
+import hu.advancedweb.scott.runtime.ScottReportingRule;
+
 public class ListTest {
+	
+	@Rule public ScottReportingRule rule = new ScottReportingRule();
 	
 	@Test
 	public void myTest() {
