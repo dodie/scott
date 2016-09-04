@@ -16,5 +16,10 @@ public class LocalVariableState {
 		this.value = value;
 		this.var = var;
 	}
+
+	@Override
+	public String toString() {
+		return "LocalVariableState [lineNumber=" + lineNumber + ", var=" + var + ", value=" + value + "]";
+	}
 	
 }

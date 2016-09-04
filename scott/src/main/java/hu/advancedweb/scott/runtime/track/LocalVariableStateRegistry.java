@@ -90,7 +90,9 @@ public class LocalVariableStateRegistry {
 	}
 
 	private static String objectToString(Object value) {
-		if (value instanceof Object[]) {
+		if (value == null) {
+			return "null";
+		} else if (value instanceof Object[]) {
 			return Arrays.toString((Object[])value);
 		} else if (value instanceof boolean[]) {
 			return Arrays.toString((boolean[])value);
