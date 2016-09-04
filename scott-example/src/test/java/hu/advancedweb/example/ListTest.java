@@ -50,20 +50,34 @@ public class ListTest {
 		assertArrayEquals(array, new Integer[] { 1, 4, 2, 3 });
 	}
 	
+	
+	
+	// FIXME
 	@Test
 	public void test_3() {
 		try {
-			// TODO: log nulls
 			String a = null;
 			System.out.println(a);
 			a.getBytes();
 		} catch (Exception e) {
-			// TODO: bug: determined scope of 'a' somehow contains the catch block too
+			// FIXME: bug: determined scope of 'a' somehow contains the catch block too
 			System.out.println(e);
 		}
-		System.out.println("xx");
 		String a = "";
 		System.out.println(a);
+		assertEquals(1, 2);
+	}
+	
+	// FIXME: this does not render anyting
+	@Test
+	public void test_4() throws Exception {
+		String b = "outer";
+		{
+			String a = "inner";
+		}
+		
+		// if i remove this line, it works fine
+		b = "Y"; 
 		assertEquals(1, 2);
 	}
 	
