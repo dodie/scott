@@ -91,11 +91,13 @@ public class FailureRenderer {
 				if (!isFirstCommentInThisLine) {
 					addBlankLine(sb, lineText);
 				}
+				
 				sb.append("  // ");
-				sb.append(scottReport.getExceptionClassName());
+				
 				if (scottReport.getExceptionMessage() != null) {
-					sb.append(": ");
 					sb.append(scottReport.getExceptionMessage());
+				} else {
+					sb.append(scottReport.getExceptionClassName());
 				}
 			}
 			
