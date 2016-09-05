@@ -13,57 +13,57 @@ public class RecordingTest {
 	@Test
 	public void recordInteger() throws Exception {
 		int i = 5;
-		assertThat(TestHelper.getLastRecorderStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
 	}
 	
 	@Test
 	public void recordShort() throws Exception {
 		short s = 500;
-		assertThat(TestHelper.getLastRecorderStateFor("s"), equalTo(Short.toString(s)));
+		assertThat(TestHelper.getLastRecordedStateFor("s"), equalTo(Short.toString(s)));
 	}
 
 	@Test
 	public void recordLong() throws Exception {
 		long l = 1000L;
-		assertThat(TestHelper.getLastRecorderStateFor("l"), equalTo(Long.toString(l)));
+		assertThat(TestHelper.getLastRecordedStateFor("l"), equalTo(Long.toString(l)));
 	}
 	
 	@Test
 	public void recordDouble() throws Exception {
 		double d = 5.5D;
-		assertThat(TestHelper.getLastRecorderStateFor("d"), equalTo(Double.toString(d)));
+		assertThat(TestHelper.getLastRecordedStateFor("d"), equalTo(Double.toString(d)));
 	}
 	
 	@Test
 	public void recordFloat() throws Exception {
 		float f = 5.5F;
-		assertThat(TestHelper.getLastRecorderStateFor("f"), equalTo(Float.toString(f)));
+		assertThat(TestHelper.getLastRecordedStateFor("f"), equalTo(Float.toString(f)));
 	}
 	
 	@Ignore // TODO: Scott record "1" for true and "0" for zero.
 	@Test
 	public void recordBoolean() throws Exception {
 		boolean b = true;
-		assertThat(TestHelper.getLastRecorderStateFor("b"), equalTo(Boolean.toString(b)));
+		assertThat(TestHelper.getLastRecordedStateFor("b"), equalTo(Boolean.toString(b)));
 	}
 	
 	@Test
 	public void recordString() throws Exception {
 		String s = "Hello World!";
-		assertThat(TestHelper.getLastRecorderStateFor("s"), equalTo(s));
+		assertThat(TestHelper.getLastRecordedStateFor("s"), equalTo(s));
 	}
 	
 	@Test
 	public void recordNull() throws Exception {
 		@SuppressWarnings("unused")
 		String s = null;
-		assertThat(TestHelper.getLastRecorderStateFor("s"), equalTo("null"));
+		assertThat(TestHelper.getLastRecordedStateFor("s"), equalTo("null"));
 	}
 	
 	@Test
 	public void recordCustomObject() throws Exception {
 		MyClass myClass = new MyClass(5);
-		assertThat(TestHelper.getLastRecorderStateFor("myClass"), equalTo(myClass.toString()));
+		assertThat(TestHelper.getLastRecordedStateFor("myClass"), equalTo(myClass.toString()));
 	}
 	
 	public static class MyClass {

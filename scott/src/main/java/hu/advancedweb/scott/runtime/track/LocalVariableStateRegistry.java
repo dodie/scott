@@ -7,7 +7,8 @@ import java.util.List;
 
 /**
  * Track local variable changes.
- * This class is called by the instrumented test methods.
+ * This class is called by the instrumented test methods to record stuff,
+ * and queried by the test reporter.
  * 
  * @author David Csakvari
  */
@@ -28,6 +29,10 @@ public class LocalVariableStateRegistry {
 	
 	public static List<LocalVariableState> getLocalVariableStates() {
 		return Collections.unmodifiableList(LOCAL_VARIABLE_STATES);
+	}
+	
+	public static List<LocalVariableName> getLocalVariableNames() {
+		return Collections.unmodifiableList(LOCAL_VARIABLE_NAMES);
 	}
 	
 	public static String getLocalVariableName(int var, int lineNumber) {

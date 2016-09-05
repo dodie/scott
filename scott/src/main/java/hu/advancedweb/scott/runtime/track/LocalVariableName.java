@@ -16,5 +16,10 @@ public class LocalVariableName {
 		this.name = name;
 		this.var = var;
 	}
+
+	@Override
+	public String toString() {
+		return "LocalVariableName [lineNumber=" + lineNumber + ", var=" + var + ", name=" + name + "]";
+	}
 	
 }

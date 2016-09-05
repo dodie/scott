@@ -7,56 +7,85 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import hu.advancedweb.scott.helper.TestHelper;
-import hu.advancedweb.scott.runtime.track.LocalVariableStateRegistry;
 
 public class RecordMutationTest {
 	
 	@Test
 	public void simpleMutation() throws Exception {
 		int i = 5;
-		assertThat(TestHelper.getLastRecorderStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
 		
 		i = 10;
-		assertThat(TestHelper.getLastRecorderStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
 		
 		i = 15;
-		assertThat(TestHelper.getLastRecorderStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
 	}
 	
 	@Test
 	public void mutateToNull() throws Exception {
 		String s = "Hello World!";
-		assertThat(TestHelper.getLastRecorderStateFor("s"), equalTo(s));
+		assertThat(TestHelper.getLastRecordedStateFor("s"), equalTo(s));
 		
 		s = null;
-		assertThat(TestHelper.getLastRecorderStateFor("s"), equalTo("null"));
+		assertThat(TestHelper.getLastRecordedStateFor("s"), equalTo("null"));
 	}
 	
 	@Test
-	public void mutationWithBranches() throws Exception {
+	public void mutationWithIfBranch() throws Exception {
 		int i = 5;
-		assertThat(TestHelper.getLastRecorderStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
 		
 		if (i < 5) {
 			i = 10;
 		}
-		assertThat(TestHelper.getLastRecorderStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
 		
 		i = 15;
-		assertThat(TestHelper.getLastRecorderStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
 	}
 	
 	@Test
-	public void mutationWithBranches_2() throws Exception {
+	public void mutationWithBlock() throws Exception {
 		String outer = "outer";
-		assertThat(TestHelper.getLastRecorderStateFor("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
 		{
 			String inner = "inner";
-			assertThat(TestHelper.getLastRecorderStateFor("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner));
 		}
 		
 		outer = "outer_changed";
-		assertThat(TestHelper.getLastRecorderStateFor("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
+	}
+
+//	//FIXME: This test kills the whole Test file, nothing is recorded. If I add a single Sysout to the inner block it seems to fix it.
+//	@Test
+//	public void mutationWithBlockThatHasASingleDeclaration() throws Exception {
+//		String outer = "outer";
+//		{
+//			String inner = "inner";
+//		}
+//		
+//		assertThat(TestHelper.getLastRecorderStateFor("inner"), equalTo("inner"));
+//		assertThat(TestHelper.getLastRecorderStateFor("outer"), equalTo("outer"));
+//	}
+
+	@Test
+	public void mutationWithBlockThatHasASingleMethodCall() throws Exception {
+		String outer = "outer";
+		{
+			outer.length();
+		}
+		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo("outer"));
+	}
+	
+	@Test
+	public void mutationWithEmptyBlock() throws Exception {
+		String outer = "outer";
+		{
+			// This is an empty block.
+		}
+		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo("outer"));
 	}
 	
 	@Test
@@ -65,44 +94,33 @@ public class RecordMutationTest {
 		
 		for (int j = 0; j < 10; j++) {
 			i = j*2;
-			assertThat(TestHelper.getLastRecorderStateFor("i"), equalTo(Integer.toString(i)));
-			assertThat(TestHelper.getLastRecorderStateFor("j"), equalTo(Integer.toString(j)));
+			assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
+			assertThat(TestHelper.getLastRecordedStateFor("j"), equalTo(Integer.toString(j)));
 		}
 	}
 	
 	@Test
 	public void objectMutation() throws Exception {
 		MyMutable myMutable = new MyMutable(10);
-		assertThat(TestHelper.getLastRecorderStateFor("myMutable"), equalTo(myMutable.toString()));
+		assertThat(TestHelper.getLastRecordedStateFor("myMutable"), equalTo(myMutable.toString()));
 		
 		myMutable.set(15);
-		assertThat(TestHelper.getLastRecorderStateFor("myMutable"), equalTo(myMutable.toString()));
+		assertThat(TestHelper.getLastRecordedStateFor("myMutable"), equalTo(myMutable.toString()));
 		
 		myMutable.set(20);
-		assertThat(TestHelper.getLastRecorderStateFor("myMutable"), equalTo(myMutable.toString()));
+		assertThat(TestHelper.getLastRecordedStateFor("myMutable"), equalTo(myMutable.toString()));
 	}
 	
 	@Test
 	public void indirectObjectMutation() throws Exception {
 		MyMutable myMutable = new MyMutable(10);
-		assertThat(TestHelper.getLastRecorderStateFor("myMutable"), equalTo(myMutable.toString()));
+		assertThat(TestHelper.getLastRecordedStateFor("myMutable"), equalTo(myMutable.toString()));
 		
 		MyMutator myMutator = new MyMutator(myMutable);
 		myMutator.mutate(15);
-		assertThat(TestHelper.getLastRecorderStateFor("myMutable"), equalTo(myMutable.toString()));
+		assertThat(TestHelper.getLastRecordedStateFor("myMutable"), equalTo(myMutable.toString()));
 	}
 	
-	// FIXME: if i unignore this test, nothing is instrumented
-	@Test
-	@Ignore
-	public void test_4() throws Exception {
-		String b = "outer";
-		{
-			String a = "inner";
-		}
-		
-		b = "Y"; 
-	}
 
 	public static class MyMutator {
 		MyMutable myMutable;

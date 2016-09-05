@@ -9,7 +9,7 @@ import hu.advancedweb.scott.runtime.track.LocalVariableStateRegistry;
 
 public class TestHelper {
 	
-	public static String getLastRecorderStateFor(String variableName) {
+	public static String getLastRecordedStateFor(String variableName) {
 		List<LocalVariableState> states = new ArrayList<LocalVariableState>(LocalVariableStateRegistry.getLocalVariableStates());
 		Collections.reverse(states);
 		
