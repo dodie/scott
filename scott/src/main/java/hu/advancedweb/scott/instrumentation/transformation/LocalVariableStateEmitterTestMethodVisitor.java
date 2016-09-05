@@ -1,6 +1,7 @@
 package hu.advancedweb.scott.instrumentation.transformation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,7 +123,10 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	}
 	
 	private String getVariableNameInCurrentScope(int var) {
-		for (LocalVariableScope localVariableRange : localVariableScopes) {
+		// check the scopes in reverse order in case of multiple var declarations on the same line
+		List<LocalVariableScope> localVariableScopesReversed = localVariableScopes;
+		Collections.reverse(localVariableScopesReversed);
+		for (LocalVariableScope localVariableRange : localVariableScopesReversed) {
 			if (localVariableRange.var == var &&
 					localVariableRange.start <= lineNumber &&
 					localVariableRange.end >= lineNumber) {

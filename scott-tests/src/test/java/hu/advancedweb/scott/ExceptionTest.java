@@ -1,13 +1,11 @@
 package hu.advancedweb.scott;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import hu.advancedweb.scott.helper.TestHelper;
-import hu.advancedweb.scott.runtime.track.LocalVariableStateRegistry;
 
 public class ExceptionTest {
 	
@@ -25,8 +23,7 @@ public class ExceptionTest {
 		}
 	}
 	
-	// FIXME: "e" doesn't get recorded
-	@Ignore
+	@SuppressWarnings("null")
 	@Test
 	public void recordExceptionsWithVariablesInTheTryScope() {
 		String o = null;
@@ -41,6 +38,5 @@ public class ExceptionTest {
 			assertThat(TestHelper.getLastRecordedStateFor("o"), equalTo(o));
 		}	
 	}
-
 	
 }
