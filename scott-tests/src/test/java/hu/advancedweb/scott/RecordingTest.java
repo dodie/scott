@@ -62,14 +62,14 @@ public class RecordingTest {
 	
 	@Test
 	public void recordCustomObject() throws Exception {
-		MyClass myClass = new MyClass(5);
+		CustomClass myClass = new CustomClass(5);
 		assertThat(TestHelper.getLastRecordedStateFor("myClass"), equalTo(myClass.toString()));
 	}
 	
-	public static class MyClass {
+	public static class CustomClass {
 		int i;
 		
-		public MyClass(int i) {
+		public CustomClass(int i) {
 			this.i = i;
 		}
 

@@ -3,7 +3,6 @@ package hu.advancedweb.scott;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import hu.advancedweb.scott.helper.TestHelper;
@@ -81,6 +80,7 @@ public class RecordMutationTest {
 	
 	@Test
 	public void mutationWithEmptyBlock() throws Exception {
+		@SuppressWarnings("unused")
 		String outer = "outer";
 		{
 			// This is an empty block.
@@ -101,43 +101,46 @@ public class RecordMutationTest {
 	
 	@Test
 	public void objectMutation() throws Exception {
-		MyMutable myMutable = new MyMutable(10);
-		assertThat(TestHelper.getLastRecordedStateFor("myMutable"), equalTo(myMutable.toString()));
+		Mutable mutable = new Mutable(10);
+		assertThat(TestHelper.getLastRecordedStateFor("mutable"), equalTo(mutable.toString()));
 		
-		myMutable.set(15);
-		assertThat(TestHelper.getLastRecordedStateFor("myMutable"), equalTo(myMutable.toString()));
+		mutable.set(15);
+		assertThat(TestHelper.getLastRecordedStateFor("mutable"), equalTo(mutable.toString()));
 		
-		myMutable.set(20);
-		assertThat(TestHelper.getLastRecordedStateFor("myMutable"), equalTo(myMutable.toString()));
+		mutable.set(20);
+		assertThat(TestHelper.getLastRecordedStateFor("mutable"), equalTo(mutable.toString()));
 	}
 	
 	@Test
 	public void indirectObjectMutation() throws Exception {
-		MyMutable myMutable = new MyMutable(10);
-		assertThat(TestHelper.getLastRecordedStateFor("myMutable"), equalTo(myMutable.toString()));
+		Mutable mutable = new Mutable(10);
+		assertThat(TestHelper.getLastRecordedStateFor("mutable"), equalTo(mutable.toString()));
 		
-		MyMutator myMutator = new MyMutator(myMutable);
-		myMutator.mutate(15);
-		assertThat(TestHelper.getLastRecordedStateFor("myMutable"), equalTo(myMutable.toString()));
+		Mutator mutator = new Mutator(mutable);
+		mutator.mutate(15);
+
+		assertThat(TestHelper.getLastRecordedStateFor("mutable"), equalTo(mutable.toString()));
 	}
 	
-
-	public static class MyMutator {
-		MyMutable myMutable;
-
-		MyMutator(MyMutable myMutable) {
-			this.myMutable = myMutable;
-		}
+	@Test
+	public void multipleIndirectObjectMutation() throws Exception {
+		Mutable mutable1 = new Mutable(10);
+		Mutable mutable2 = new Mutable(20);
+		assertThat(TestHelper.getLastRecordedStateFor("mutable1"), equalTo(mutable1.toString()));
+		assertThat(TestHelper.getLastRecordedStateFor("mutable2"), equalTo(mutable2.toString()));
 		
-		void mutate(int state) {
-			myMutable.set(state);
-		}
+		MultiMutator multiMutator = new MultiMutator(mutable1, mutable2);
+		multiMutator.mutate(15);
+		
+		assertThat(TestHelper.getLastRecordedStateFor("mutable1"), equalTo(mutable1.toString()));
+		assertThat(TestHelper.getLastRecordedStateFor("mutable2"), equalTo(mutable2.toString()));
 	}
+
 	
-	public static class MyMutable {
+	public static class Mutable {
 		int state;
 		
-		MyMutable(int state) {
+		Mutable(int state) {
 			this.state = state;
 		}
 		
@@ -147,7 +150,34 @@ public class RecordMutationTest {
 
 		@Override
 		public String toString() {
-			return "MyClass [state=" + state + "]";
+			return "Mutable [state=" + state + "]";
+		}
+	}
+	
+	public static class Mutator {
+		Mutable mutable;
+
+		Mutator(Mutable mutable) {
+			this.mutable = mutable;
+		}
+		
+		void mutate(int state) {
+			mutable.set(state);
+		}
+	}
+
+	public static class MultiMutator {
+		Mutable mutable1;
+		Mutable mutable2;
+
+		MultiMutator(Mutable mutable1, Mutable mutable2) {
+			this.mutable1 = mutable1;
+			this.mutable2 = mutable2;
+		}
+		
+		void mutate(int state) {
+			mutable1.set(state);
+			mutable2.set(state);
 		}
 	}
 
