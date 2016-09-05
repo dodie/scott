@@ -40,7 +40,8 @@ public class RecordingTest {
 		assertThat(TestHelper.getLastRecordedStateFor("f"), equalTo(Float.toString(f)));
 	}
 	
-	@Ignore // TODO: Scott record "1" for true and "0" for zero.
+	// FIXME: Scott record "1" for true and "0" for zero. See Issue #1.
+	@Ignore
 	@Test
 	public void recordBoolean() throws Exception {
 		boolean b = true;
@@ -66,7 +67,9 @@ public class RecordingTest {
 		assertThat(TestHelper.getLastRecordedStateFor("myClass"), equalTo(myClass.toString()));
 	}
 	
-//	//FIXME: This test kills the whole Test file, nothing is recorded. If I add a single Sysout to the inner block it seems to fix it.
+//	//FIXME: This test kills the whole Test file, nothing is recorded.
+//	// If I add a single Sysout to the inner block it seems to fix it.
+//	// See Issue #2.
 //	@Test
 //	public void mutationWithBlockThatHasASingleDeclaration() throws Exception {
 //		String outer = "outer";
