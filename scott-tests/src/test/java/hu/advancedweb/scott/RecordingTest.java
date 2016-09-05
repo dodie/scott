@@ -66,6 +66,18 @@ public class RecordingTest {
 		assertThat(TestHelper.getLastRecordedStateFor("myClass"), equalTo(myClass.toString()));
 	}
 	
+//	//FIXME: This test kills the whole Test file, nothing is recorded. If I add a single Sysout to the inner block it seems to fix it.
+//	@Test
+//	public void mutationWithBlockThatHasASingleDeclaration() throws Exception {
+//		String outer = "outer";
+//		{
+//			String inner = "inner";
+//		}
+//		
+//		assertThat(TestHelper.getLastRecorderStateFor("inner"), equalTo("inner"));
+//		assertThat(TestHelper.getLastRecorderStateFor("outer"), equalTo("outer"));
+//	}
+	
 	public static class CustomClass {
 		int i;
 		
