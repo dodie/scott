@@ -50,20 +50,4 @@ public class ListTest {
 		assertArrayEquals(array, new Integer[] { 1, 4, 2, 3 });
 	}
 	
-	// FIXME
-	@Test
-	public void test_3() {
-		try {
-			String a = null;
-			System.out.println(a);
-			a.getBytes();
-		} catch (Exception e) {
-			// FIXME: bug: determined scope of 'a' somehow contains the catch block too
-			System.out.println(e);
-		}
-		String a = "";
-		System.out.println(a);
-		assertEquals(1, 2);
-	}
-	
 }
