@@ -50,8 +50,6 @@ public class ListTest {
 		assertArrayEquals(array, new Integer[] { 1, 4, 2, 3 });
 	}
 	
-	
-	
 	// FIXME
 	@Test
 	public void test_3() {
@@ -65,19 +63,6 @@ public class ListTest {
 		}
 		String a = "";
 		System.out.println(a);
-		assertEquals(1, 2);
-	}
-	
-	// FIXME: this does not render anyting
-	@Test
-	public void test_4() throws Exception {
-		String b = "outer";
-		{
-			String a = "inner";
-		}
-		
-		// if i remove this line, it works fine
-		b = "Y"; 
 		assertEquals(1, 2);
 	}
 	
