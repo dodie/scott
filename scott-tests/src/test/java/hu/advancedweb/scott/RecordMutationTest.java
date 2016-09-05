@@ -3,9 +3,11 @@ package hu.advancedweb.scott;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import hu.advancedweb.scott.helper.TestHelper;
+import hu.advancedweb.scott.runtime.track.LocalVariableStateRegistry;
 
 public class RecordMutationTest {
 	
@@ -56,7 +58,7 @@ public class RecordMutationTest {
 		outer = "outer_changed";
 		assertThat(TestHelper.getLastRecorderStateFor("outer"), equalTo(outer));
 	}
-
+	
 	@Test
 	public void mutationWithLoops() throws Exception {
 		int i = 0;
@@ -88,6 +90,18 @@ public class RecordMutationTest {
 		MyMutator myMutator = new MyMutator(myMutable);
 		myMutator.mutate(15);
 		assertThat(TestHelper.getLastRecorderStateFor("myMutable"), equalTo(myMutable.toString()));
+	}
+	
+	// FIXME: if i unignore this test, nothing is instrumented
+	@Test
+	@Ignore
+	public void test_4() throws Exception {
+		String b = "outer";
+		{
+			String a = "inner";
+		}
+		
+		b = "Y"; 
 	}
 
 	public static class MyMutator {
