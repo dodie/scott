@@ -146,13 +146,3 @@ that contains the required setup configuration to use Scott (see [pom.xml](https
 and a bunch of failing tests for the show.
 
 
-Goals/Limitations
------------------
-Some important features are need some more work:
-- Inspired by Spock, it would be really cool to show parameters passed to assert statements.
-- Currently it supports Maven and JUnit only, and tests must reside in the *test* direcotry to be discovered.
-In the future it would be great to relax these limitations.
-- Better Maven and IDE support for easier usage.
-
-The project is in an early stage, any contribution, idea and feedback is appreciated!
-
