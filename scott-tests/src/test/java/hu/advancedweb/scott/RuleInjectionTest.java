@@ -18,7 +18,7 @@ import hu.advancedweb.scott.instrumentation.transformation.ConstructorTransforme
 public class RuleInjectionTest {
 	
 	@Test
-	public void testName() throws Exception {
+	public void ruleInjected() throws Exception {
 		Field field = this.getClass().getDeclaredField("scottReportingRule");
 		
 		Annotation[] annotations = field.getDeclaredAnnotations();

@@ -17,9 +17,6 @@ import org.objectweb.asm.tree.MethodNode;
  */
 public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	
-	/** True if the current method is a test case. */
-	private boolean isTestCase;
-	
 	/** Map line numbers to labels, as we got labels at local variable visits */
 	private Map<Integer, Label> lines = new TreeMap<>();
 	
@@ -37,11 +34,7 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	
 	@Override
 	public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-		isTestCase = "Lorg/junit/Test;".equals(desc);
-		
-		if (isTestCase) {
-			reset();
-		}
+		reset();
 		
 		return super.visitAnnotation(desc, visible);
 	}
@@ -54,43 +47,36 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	@Override
 	public void visitLineNumber(int line, Label start) {
 		super.visitLineNumber(line, start);
-		if (isTestCase) {
-			lines.put(line, start);
-		}
+		lines.put(line, start);
 	}
 
 	@Override
 	public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
 		super.visitLocalVariable(name, desc, signature, start, end, index);
-		
-		if (isTestCase) {
-			scopes.add(new LocalVariableScopeLabels(index, name, start, end));
-		}
+		scopes.add(new LocalVariableScopeLabels(index, name, start, end));
 	}
 	
 	@Override
 	public void visitEnd() {
-		if (isTestCase) {
-			List<LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope> localVariableScopes = new ArrayList<>();
-			for (LocalVariableScopeLabels range : scopes) {
-				int prevLine = 0;
-				int startLine = 0;
-				int endLine = Integer.MAX_VALUE;
-				for (Map.Entry<Integer, Label> entry : lines.entrySet()) {
-					if (entry.getValue() == range.start) {
-						startLine = prevLine;
-					}
-					
-					if (entry.getValue() == range.end) {
-						endLine = prevLine;
-					}
-					
-					prevLine = entry.getKey();
+		List<LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope> localVariableScopes = new ArrayList<>();
+		for (LocalVariableScopeLabels range : scopes) {
+			int prevLine = 0;
+			int startLine = 0;
+			int endLine = Integer.MAX_VALUE;
+			for (Map.Entry<Integer, Label> entry : lines.entrySet()) {
+				if (entry.getValue() == range.start) {
+					startLine = prevLine;
 				}
-				localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, startLine, endLine));
+				
+				if (entry.getValue() == range.end) {
+					endLine = prevLine;
+				}
+				
+				prevLine = entry.getKey();
 			}
-			next.setLocalVariableScopes(localVariableScopes);
+			localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, startLine, endLine));
 		}
+		next.setLocalVariableScopes(localVariableScopes);
 		accept(next);
 	}
 	

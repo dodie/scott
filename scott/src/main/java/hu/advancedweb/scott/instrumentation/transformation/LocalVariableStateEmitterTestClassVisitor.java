@@ -36,20 +36,27 @@ public class LocalVariableStateEmitterTestClassVisitor extends ClassVisitor {
 	
 	@Override
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {                               
-		if (transformationParameters.isTestClass) {
-			MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
+		MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
+
+		if (name.equals("<init>")) {
+			if (transformationParameters.isRuleInjectionRequired) {
+				MethodVisitor constructorTransformerMethodVisitor = new ConstructorTransformerMethodVisitor(methodVisitor, access, name, desc, signature, exceptions, className);
+				return constructorTransformerMethodVisitor;
+			} else {
+				return methodVisitor;
+			}
+		} else if (transformationParameters.isMethodInstrumentationRequired(name, desc, signature)) {
 		    LocalVariableStateEmitterTestMethodVisitor variableMutationEventEmitter = new LocalVariableStateEmitterTestMethodVisitor(methodVisitor);
 		    MethodVisitor variableExtractor = new LocalVariableScopeExtractorTestMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions);
-		    MethodVisitor constructorTransformerMethodVisitor = new ConstructorTransformerMethodVisitor(variableExtractor, access, name, desc, signature, exceptions, className);
-		    return constructorTransformerMethodVisitor;
+		    return variableExtractor;
 		} else {
-			return super.visitMethod(access, name, desc, signature, exceptions);
+			return methodVisitor;
 		}
 	}
 	
 	@Override
 	public void visitEnd() {
-		if (transformationParameters.isTestClass) {
+		if (transformationParameters.isRuleInjectionRequired) {
 		    FieldVisitor fv = super.visitField(Opcodes.ACC_PUBLIC, "scottReportingRule", Type.getDescriptor(ScottReportingRule.class), null, null);
 		    if (fv != null) {
 		    	fv.visitAnnotation(Type.getDescriptor(Rule.class), true).visitEnd();

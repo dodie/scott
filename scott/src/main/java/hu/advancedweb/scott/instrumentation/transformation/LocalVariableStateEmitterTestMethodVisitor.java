@@ -18,9 +18,6 @@ import org.objectweb.asm.Opcodes;
  */
 public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 
-	/** True if the current method is a test case to instrument. */
-	private boolean isTestCase;
-	
 	/** The current line number to determine variables in scope. */
 	private int lineNumber;
 	
@@ -37,9 +34,7 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	@Override
 	public void visitCode() {
 		super.visitCode();
-		if (isTestCase) {
-			instrumentToClearTrackedData();
-		}
+		instrumentToClearTrackedData();
 	}
 
 	@Override
@@ -50,12 +45,7 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	
 	@Override
 	public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-		isTestCase = "Lorg/junit/Test;".equals(desc);
-		
-		if (isTestCase) {
-			localVariables.clear();
-		}
-		
+		localVariables.clear();
 		return super.visitAnnotation(desc, visible);
 	}
 	
@@ -63,12 +53,10 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 		super.visitMethodInsn(opcode, owner, name, desc, itf);
 		
-		if (isTestCase) {
-			// track every in-scope variable state after method calls
-			for (Integer var : localVariables.keySet()) {
-				if (isVariableInScope(var)) {
-					instrumentToTrackVariableState(var);
-				}
+		// track every in-scope variable state after method calls
+		for (Integer var : localVariables.keySet()) {
+			if (isVariableInScope(var)) {
+				instrumentToTrackVariableState(var);
 			}
 		}
     }
@@ -77,14 +65,12 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	public void visitVarInsn(int opcode, int var) {
 		super.visitVarInsn(opcode, var);
 		
-		if (isTestCase) {
-			// Track variable state and name at variable stores. (Typical variable assignments.)
-			VariableType variableType = VariableType.getByStoreOpCode(opcode);
-			if (variableType != null) {
-				localVariables.put(var, variableType);
-				instrumentToTrackVariableName(var);
-				instrumentToTrackVariableState(var);
-			}
+		// Track variable state and name at variable stores. (Typical variable assignments.)
+		VariableType variableType = VariableType.getByStoreOpCode(opcode);
+		if (variableType != null) {
+			localVariables.put(var, variableType);
+			instrumentToTrackVariableName(var);
+			instrumentToTrackVariableState(var);
 		}
 	}
 
@@ -92,11 +78,9 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	public void visitIincInsn(int var, int increment) {
 		super.visitIincInsn(var, increment);
 		
-		if (isTestCase) {
-			// Track variable state and name at variable stores. (At variable increases.)
-			instrumentToTrackVariableName(var);
-			instrumentToTrackVariableState(var);
-		}
+		// Track variable state and name at variable stores. (At variable increases.)
+		instrumentToTrackVariableName(var);
+		instrumentToTrackVariableState(var);
 	}
 	
 	private void instrumentToClearTrackedData() {
