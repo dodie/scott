@@ -7,6 +7,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
+import hu.advancedweb.scott.instrumentation.transformation.param.TransformationParameters;
 import hu.advancedweb.scott.runtime.ScottReportingRule;
 
 /**
@@ -19,15 +20,12 @@ import hu.advancedweb.scott.runtime.ScottReportingRule;
  */
 public class LocalVariableStateEmitterTestClassVisitor extends ClassVisitor {
 	
-	String className;
+	private String className;
+	private TransformationParameters transformationParameters;
 	
-	/**
-	 * @deprecated should use separate class visitor to determine this
-	 */
-	boolean isTestClass;
-
-	public LocalVariableStateEmitterTestClassVisitor(ClassVisitor cv) {
+	public LocalVariableStateEmitterTestClassVisitor(ClassVisitor cv, TransformationParameters transformationParameters) {
 		super(Opcodes.ASM5, cv);
+		this.transformationParameters = transformationParameters;
 	}
 	
 	@Override
@@ -38,23 +36,25 @@ public class LocalVariableStateEmitterTestClassVisitor extends ClassVisitor {
 	
 	@Override
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {                               
-		MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
-	    LocalVariableStateEmitterTestMethodVisitor variableMutationEventEmitter = new LocalVariableStateEmitterTestMethodVisitor(methodVisitor, this);
-	    MethodVisitor variableExtractor = new LocalVariableScopeExtractorTestMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions);
-	    MethodVisitor constructorTransformerMethodVisitor = new ConstructorTransformerMethodVisitor(variableExtractor, access, name, desc, signature, exceptions, className);
-	    return constructorTransformerMethodVisitor;
+		if (transformationParameters.isTestClass) {
+			MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
+		    LocalVariableStateEmitterTestMethodVisitor variableMutationEventEmitter = new LocalVariableStateEmitterTestMethodVisitor(methodVisitor);
+		    MethodVisitor variableExtractor = new LocalVariableScopeExtractorTestMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions);
+		    MethodVisitor constructorTransformerMethodVisitor = new ConstructorTransformerMethodVisitor(variableExtractor, access, name, desc, signature, exceptions, className);
+		    return constructorTransformerMethodVisitor;
+		} else {
+			return super.visitMethod(access, name, desc, signature, exceptions);
+		}
 	}
 	
 	@Override
 	public void visitEnd() {
-		
-		if (isTestClass) {
+		if (transformationParameters.isTestClass) {
 		    FieldVisitor fv = super.visitField(Opcodes.ACC_PUBLIC, "scottReportingRule", Type.getDescriptor(ScottReportingRule.class), null, null);
 		    if (fv != null) {
 		    	fv.visitAnnotation(Type.getDescriptor(Rule.class), true).visitEnd();
 		    }
 		}
-		
 		super.visitEnd();
 	}
 	

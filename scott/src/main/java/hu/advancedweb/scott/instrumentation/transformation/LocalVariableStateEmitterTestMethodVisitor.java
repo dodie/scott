@@ -30,11 +30,8 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	/** Variable scopes in the method. */
 	private List<LocalVariableScope> localVariableScopes = new ArrayList<>();
 
-	private LocalVariableStateEmitterTestClassVisitor localVariableStateEmitterTestClassVisitor;
-	
-	public LocalVariableStateEmitterTestMethodVisitor(MethodVisitor mv, LocalVariableStateEmitterTestClassVisitor localVariableStateEmitterTestClassVisitor) {
+	public LocalVariableStateEmitterTestMethodVisitor(MethodVisitor mv) {
 		super(Opcodes.ASM5, mv);
-		this.localVariableStateEmitterTestClassVisitor = localVariableStateEmitterTestClassVisitor;
 	}
 	
 	@Override
@@ -54,8 +51,6 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	@Override
 	public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
 		isTestCase = "Lorg/junit/Test;".equals(desc);
-		
-		localVariableStateEmitterTestClassVisitor.isTestClass = localVariableStateEmitterTestClassVisitor.isTestClass || isTestCase;
 		
 		if (isTestCase) {
 			localVariables.clear();

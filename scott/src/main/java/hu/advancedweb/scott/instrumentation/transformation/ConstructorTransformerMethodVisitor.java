@@ -25,11 +25,7 @@ public class ConstructorTransformerMethodVisitor extends MethodNode {
 	
 	@Override
     public void visitInsn(int opcode) {
-		// TODO: for now, we only instrument this class for the sake of the test
-		// in the future a separate class visitor will be responsible to determine if instrumentation is needed
-		String testClassName = "hu/advancedweb/scott/RuleInjectionTest";
-		
-		if (methodName.equals("<init>") && className.equals(testClassName)) {
+		if (methodName.equals("<init>")) {
 			if ((opcode == Opcodes.ARETURN) || (opcode == Opcodes.IRETURN)
 					|| (opcode == Opcodes.LRETURN)
 					|| (opcode == Opcodes.FRETURN)
