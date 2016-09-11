@@ -42,14 +42,6 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<argLine>-javaagent:${project.build.directory}/agents/scott-agent.jar</argLine>
-					<workingDirectory>${basedir}/target</workingDirectory>
-					<!-- With ScottReportingRule we don't need to register the run listener. -->
-					<!-- properties>
-						<property>
-							<name>listener</name>
-							<value>hu.advancedweb.scott.runtime.ScottRunListener</value>
-						</property>
-					</properties -->
 				</configuration>
 			</plugin>
 

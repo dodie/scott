@@ -19,7 +19,7 @@ public class FailureRenderer {
 
 	public static String render(Description description, Throwable throwable) {
 		// current test source resolving is based on maven conventions
-		String testSourcePath = System.getProperty("user.dir") + "/../src/test/java/" + description.getTestClass().getCanonicalName().replace(".", File.separator) + ".java";
+		String testSourcePath = System.getProperty("user.dir") + "/src/test/java/" + description.getTestClass().getCanonicalName().replace(".", File.separator) + ".java";
 		String testMethodName = description.getMethodName();
 		
 		final ScottReport scottReport = new ScottReport();
