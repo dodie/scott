@@ -27,7 +27,7 @@ public class MethodSourceLoader {
 		this.methodName = methodName;
 	}
 	
-	public void loadMethodSource(ScottReport testMethodSource) {
+	public void loadMethodSource(ScottReport scottReport) {
 		try {
 			CompilationUnit cu = getCompilationUnit(path);
 			
@@ -35,11 +35,11 @@ public class MethodSourceLoader {
 			final Bounderies boundary = new Bounderies();
 			visitor.visit(cu, boundary);
 			
-			testMethodSource.setBeginLine(boundary.beginLine);
+			scottReport.setBeginLine(boundary.beginLine);
 			
 			List<String> lines = Files.readAllLines(Paths.get(path),StandardCharsets.UTF_8);
 			for (int i = boundary.beginLine - 1; i < boundary.endLine; i++) {
-				testMethodSource.addLine(lines.get(i));
+				scottReport.addLine(lines.get(i));
 			}
 		} catch (IOException e) {
 			// Ignore.

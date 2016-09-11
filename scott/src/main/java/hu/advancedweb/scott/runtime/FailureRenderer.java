@@ -18,20 +18,24 @@ import hu.advancedweb.scott.runtime.track.LocalVariableStateRegistry;
 public class FailureRenderer {
 
 	public static String render(Description description, Throwable throwable) {
-		// current test source resolving is based on maven conventions
-		String testSourcePath = System.getProperty("user.dir") + "/src/test/java/" + description.getTestClass().getCanonicalName().replace(".", File.separator) + ".java";
-		String testMethodName = description.getMethodName();
-		
 		final ScottReport scottReport = new ScottReport();
-		fillSource(scottReport, testSourcePath, testMethodName);
+		fillSource(scottReport, description);
 		fillTrackedData(scottReport);
 		fillException(scottReport, description, throwable);
 
 		return renderPlain(scottReport);
 	}
 	
-	private static void fillSource(ScottReport scottReport, String testSourcePath, String testMethodName) {
-		new MethodSourceLoader(testSourcePath, testMethodName).loadMethodSource(scottReport);
+	private static void fillSource(ScottReport scottReport, Description description) {
+		try {
+			// current test source resolving is based on maven conventions
+			String testSourcePath = System.getProperty("user.dir") + "/src/test/java/" + description.getTestClass().getCanonicalName().replace(".", File.separator) + ".java";
+			String testMethodName = description.getMethodName();
+					
+			new MethodSourceLoader(testSourcePath, testMethodName).loadMethodSource(scottReport);
+		} catch (Exception e) {
+			// Ignore, we could not find the test source.
+		}
 	}
 	
 	private static void fillTrackedData(ScottReport scottReport) {

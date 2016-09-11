@@ -30,12 +30,14 @@ public class ScottReport {
 	}
 	
 	public void addVariableSnapshot(int lineNumber, String name, String value) {
+		checkIfSourceFound(lineNumber);
 		List<VariableSnapshot> variableSnapshots = variableSnapshotForLines.getOrDefault(lineNumber, new ArrayList<VariableSnapshot>());
 		variableSnapshots.add(new VariableSnapshot(name, value));
 		variableSnapshotForLines.put(lineNumber, variableSnapshots);
 	}
 	
 	public void setException(int lineNumber, String exceptionClassName, String exceptionMessage) {
+		checkIfSourceFound(lineNumber);
 		this.exceptionLineNumber = lineNumber;
 		this.exceptionClassName = exceptionClassName;
 		this.exceptionMessage = exceptionMessage;
@@ -64,5 +66,12 @@ public class ScottReport {
 	public String getExceptionClassName() {
 		return exceptionClassName;
 	}
+	
+	private void checkIfSourceFound(int lineNumber) {
+		if (!sourceLines.containsKey(lineNumber)) {
+			sourceLines.put(lineNumber, "???");
+		}
+	}
+
 
 }
