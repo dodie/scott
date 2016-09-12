@@ -28,15 +28,31 @@ public class FailureRenderer {
 	
 	private static void fillSource(ScottReport scottReport, Description description) {
 		try {
-			// TODO: current test source resolving is based on maven conventions. See issue #6.
-			String testSourcePath = System.getProperty("user.dir") + "/src/test/java/" + description.getTestClass().getCanonicalName().replace(".", File.separator) + ".java";
+			String testSourcePath = getSourcePath(description.getTestClass().getCanonicalName().replace(".", File.separator));
 			String testMethodName = description.getMethodName();
-					
-			new MethodSourceLoader(testSourcePath, testMethodName).loadMethodSource(scottReport);
+			fillSource(scottReport, testSourcePath, testMethodName);
 		} catch (Exception e) {
-			// Ignore, we could not find the test source.
-			// TODO: As a fallback, look for the bottom of the stack trace and find the first instrumented method, and try to take its source. See issue #8.
+			try {
+				// As a fallback, look for the currently tracked method, and try to take its source.
+				String testSourcePath = getSourcePath(LocalVariableStateRegistry.getTestClassType());
+				String testMethodName = LocalVariableStateRegistry.getTestMethodName();
+				fillSource(scottReport, testSourcePath, testMethodName);
+			} catch (Exception e2) {
+				// Ignore, we simply don't fill the test source for the report.
+				// It's better than crashing the test run.
+				System.out.println("Kaboom!" );
+				e2.printStackTrace();
+			}
 		}
+	}
+
+	private static String getSourcePath(String type) {
+		// TODO: current test source resolving is based on maven conventions. See issue #6.
+		return System.getProperty("user.dir") + "/src/test/java/" + type + ".java";
+	}
+
+	private static void fillSource(ScottReport scottReport, String testSourcePath, String testMethodName) {
+		new MethodSourceLoader(testSourcePath, testMethodName).loadMethodSource(scottReport);
 	}
 	
 	private static void fillTrackedData(ScottReport scottReport) {

@@ -27,14 +27,20 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	/** Variable scopes in the method. */
 	private List<LocalVariableScope> localVariableScopes = new ArrayList<>();
 
-	public LocalVariableStateEmitterTestMethodVisitor(MethodVisitor mv) {
+	private String methodName;
+
+	private String className;
+
+	public LocalVariableStateEmitterTestMethodVisitor(MethodVisitor mv, String className, String methodName) {
 		super(Opcodes.ASM5, mv);
+		this.className = className;
+		this.methodName = methodName;
 	}
 	
 	@Override
 	public void visitCode() {
 		super.visitCode();
-		instrumentToClearTrackedData();
+		instrumentToClearTrackedDataAndSignalStartOfRecording();
 	}
 
 	@Override
@@ -83,8 +89,10 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		instrumentToTrackVariableState(var);
 	}
 	
-	private void instrumentToClearTrackedData() {
-        super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "clear", "()V", false);
+	private void instrumentToClearTrackedDataAndSignalStartOfRecording() {
+		super.visitLdcInsn(className);
+		super.visitLdcInsn(methodName);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "startTracking", "(Ljava/lang/String;Ljava/lang/String;)V", false);
 	}
 	
 	private void instrumentToTrackVariableState(int var) {

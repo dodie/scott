@@ -22,8 +22,15 @@ public class LocalVariableStateRegistry {
 	private static List<LocalVariableState> LOCAL_VARIABLE_STATES = new ArrayList<LocalVariableState>();
 	
 	private static List<LocalVariableName> LOCAL_VARIABLE_NAMES = new ArrayList<LocalVariableName>();
+
+	private static String METHOD_NAME;
+
+	private static String CLASS_NAME;
 	
-	public static void clear() {
+	public static void startTracking(String className, String methodName) {
+		CLASS_NAME = className;
+		METHOD_NAME = methodName;
+		
 		LOCAL_VARIABLE_STATES.clear();
 		LOCAL_VARIABLE_NAMES.clear();
 	}
@@ -34,6 +41,14 @@ public class LocalVariableStateRegistry {
 	
 	public static List<LocalVariableName> getLocalVariableNames() {
 		return Collections.unmodifiableList(LOCAL_VARIABLE_NAMES);
+	}
+	
+	public static String getTestClassType() {
+		return CLASS_NAME;
+	}
+	
+	public static String getTestMethodName() {
+		return METHOD_NAME;
 	}
 	
 	public static String getLocalVariableName(int var, int lineNumber) {

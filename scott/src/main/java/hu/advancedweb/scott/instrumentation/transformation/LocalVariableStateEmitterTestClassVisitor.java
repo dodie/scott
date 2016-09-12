@@ -46,7 +46,7 @@ public class LocalVariableStateEmitterTestClassVisitor extends ClassVisitor {
 				return methodVisitor;
 			}
 		} else if (transformationParameters.isMethodInstrumentationRequired(name, desc, signature)) {
-		    LocalVariableStateEmitterTestMethodVisitor variableMutationEventEmitter = new LocalVariableStateEmitterTestMethodVisitor(methodVisitor);
+		    LocalVariableStateEmitterTestMethodVisitor variableMutationEventEmitter = new LocalVariableStateEmitterTestMethodVisitor(methodVisitor, className, name);
 		    MethodVisitor variableExtractor = new LocalVariableScopeExtractorTestMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions);
 		    return variableExtractor;
 		} else {
