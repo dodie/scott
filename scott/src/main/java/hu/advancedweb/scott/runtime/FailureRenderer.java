@@ -28,13 +28,14 @@ public class FailureRenderer {
 	
 	private static void fillSource(ScottReport scottReport, Description description) {
 		try {
-			// current test source resolving is based on maven conventions
+			// TODO: current test source resolving is based on maven conventions. See issue #6.
 			String testSourcePath = System.getProperty("user.dir") + "/src/test/java/" + description.getTestClass().getCanonicalName().replace(".", File.separator) + ".java";
 			String testMethodName = description.getMethodName();
 					
 			new MethodSourceLoader(testSourcePath, testMethodName).loadMethodSource(scottReport);
 		} catch (Exception e) {
 			// Ignore, we could not find the test source.
+			// TODO: As a fallback, look for the bottom of the stack trace and find the first instrumented method, and try to take its source. See issue #8.
 		}
 	}
 	

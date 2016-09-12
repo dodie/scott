@@ -6,6 +6,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 public class DiscoveryClassVisitor extends ClassVisitor {
+	// TODO: provide an opt-out mechanism from the automatic instrumentation. See issue #7.
 	
 	private TransformationParameters.Builder transformationParameters;
 

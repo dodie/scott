@@ -22,6 +22,9 @@ public class ScottRunListener extends RunListener {
 	
 	@Override
 	public void testFailure(Failure failure) throws Exception {
+		// TODO: the simple System.out.println really not fits nicely into the test reports.
+		// try changing the original exception's message with reflection. See issue #8.
+		
 		System.out.println(failure.getTestHeader() + " FAILED!");
 		System.out.println(FailureRenderer.render(description, failure.getException()));
 		super.testFailure(failure);
