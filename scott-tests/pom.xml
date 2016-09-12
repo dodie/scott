@@ -42,7 +42,6 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<argLine>-javaagent:${project.build.directory}/agents/scott-agent.jar</argLine>
-					<workingDirectory>${basedir}/target</workingDirectory>
 				</configuration>
 			</plugin>
 
