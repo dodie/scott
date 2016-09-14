@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.junit.runner.Description;
 
-import hu.advancedweb.scott.runtime.javasource.MethodSourceLoader;
+import hu.advancedweb.scott.runtime.javasource.MethodSource;
 import hu.advancedweb.scott.runtime.track.LocalVariableState;
 import hu.advancedweb.scott.runtime.track.LocalVariableStateRegistry;
 
@@ -19,29 +19,32 @@ public class FailureRenderer {
 
 	public static String render(Description description, Throwable throwable) {
 		final ScottReport scottReport = new ScottReport();
-		fillSource(scottReport, description);
+		MethodSource methodSource = getTestMethodSource(description);
+		
+		fillSource(scottReport, methodSource);
 		fillTrackedData(scottReport);
-		fillException(scottReport, description, throwable);
+		fillException(scottReport, methodSource, throwable);
 
 		return renderPlain(scottReport);
 	}
 	
-	private static void fillSource(ScottReport scottReport, Description description) {
+	private static MethodSource getTestMethodSource(Description description) {
 		try {
-			String testSourcePath = getSourcePath(description.getTestClass().getCanonicalName().replace(".", File.separator));
+			String testClassName = description.getTestClass().getCanonicalName();
+			String testSourcePath = getSourcePath(testClassName.replace(".", File.separator));
 			String testMethodName = description.getMethodName();
-			fillSource(scottReport, testSourcePath, testMethodName);
+			return new MethodSource(testSourcePath, testClassName, testMethodName);
 		} catch (Exception e) {
 			try {
 				// As a fallback, look for the currently tracked method, and try to take its source.
+				String testClassName = LocalVariableStateRegistry.getTestClassType().replace("/", ".");
 				String testSourcePath = getSourcePath(LocalVariableStateRegistry.getTestClassType());
 				String testMethodName = LocalVariableStateRegistry.getTestMethodName();
-				fillSource(scottReport, testSourcePath, testMethodName);
+				return new MethodSource(testSourcePath, testClassName, testMethodName);
 			} catch (Exception e2) {
 				// Ignore, we simply don't fill the test source for the report.
 				// It's better than crashing the test run.
-				System.out.println("Kaboom!" );
-				e2.printStackTrace();
+				return null;
 			}
 		}
 	}
@@ -50,11 +53,16 @@ public class FailureRenderer {
 		// TODO: current test source resolving is based on maven conventions. See issue #6.
 		return System.getProperty("user.dir") + "/src/test/java/" + type + ".java";
 	}
-
-	private static void fillSource(ScottReport scottReport, String testSourcePath, String testMethodName) {
-		new MethodSourceLoader(testSourcePath, testMethodName).loadMethodSource(scottReport);
-	}
 	
+	private static void fillSource(ScottReport scottReport, MethodSource methodSource) {
+		if (methodSource != null) {
+			scottReport.setBeginLine(methodSource.getBeginLine());
+			for (String line : methodSource.getReportLines()) {
+				scottReport.addLine(line);
+			}
+		}
+	}
+
 	private static void fillTrackedData(ScottReport scottReport) {
 		Map<Integer, String> trackedValue = new HashMap<>();
 		
@@ -67,10 +75,11 @@ public class FailureRenderer {
 		}
 	}
 	
-	private static void fillException(ScottReport scottReport, Description description, Throwable throwable) {
+	private static void fillException(ScottReport scottReport, MethodSource methodSource, Throwable throwable) {
 		Integer lineNumber = scottReport.getBeginLineNumber();
 		for (StackTraceElement stackTraceElement : throwable.getStackTrace()) {
-			if (description.getClassName().equals(stackTraceElement.getClassName())) {
+			if (methodSource.getClassName().equals(stackTraceElement.getClassName()) &&
+					methodSource.getMethodName().equals(stackTraceElement.getMethodName())) {
 				lineNumber = stackTraceElement.getLineNumber();
 				break;
 			}

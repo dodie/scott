@@ -7,42 +7,40 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 
-import hu.advancedweb.scott.runtime.ScottReport;
 import hu.advancedweb.scott.runtime.javasource.MethodBoundaryExtractor.Bounderies;
 
-public class MethodSourceLoader {
+public class MethodSource {
 	
 	private final String path;
 	private final String methodName;
+	private int beginLine;
+	private List<String> reportLines = new ArrayList<String>();
+	private String className;
 
 	
-	public MethodSourceLoader(String path, String methodName) {
+	public MethodSource(String path, String className, String methodName) throws IOException {
 		this.path = path;
+		this.className = className;
 		this.methodName = methodName;
-	}
 	
-	public void loadMethodSource(ScottReport scottReport) {
-		try {
-			CompilationUnit cu = getCompilationUnit(path);
-			
-			MethodBoundaryExtractor visitor = new MethodBoundaryExtractor(methodName);
-			final Bounderies boundary = new Bounderies();
-			visitor.visit(cu, boundary);
-			
-			scottReport.setBeginLine(boundary.beginLine);
-			
-			List<String> lines = Files.readAllLines(Paths.get(path),StandardCharsets.UTF_8);
-			for (int i = boundary.beginLine - 1; i < boundary.endLine; i++) {
-				scottReport.addLine(lines.get(i));
-			}
-		} catch (IOException e) {
-			// Ignore.
+		CompilationUnit cu = getCompilationUnit(path);
+		
+		MethodBoundaryExtractor visitor = new MethodBoundaryExtractor(methodName);
+		final Bounderies boundary = new Bounderies();
+		visitor.visit(cu, boundary);
+		
+		beginLine = boundary.beginLine;
+		
+		List<String> lines = Files.readAllLines(Paths.get(path),StandardCharsets.UTF_8);
+		for (int i = boundary.beginLine - 1; i < boundary.endLine; i++) {
+			reportLines.add(lines.get(i));
 		}
 	}
 	
@@ -64,6 +62,26 @@ public class MethodSourceLoader {
 		}
 		
 		return cu;
+	}
+	
+	public String getPath() {
+		return path;
+	}
+	
+	public String getClassName() {
+		return className;
+	}
+	
+	public String getMethodName() {
+		return methodName;
+	}
+	
+	public int getBeginLine() {
+		return beginLine;
+	}
+	
+	public List<String> getReportLines() {
+		return reportLines;
 	}
 
 }
