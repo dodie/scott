@@ -13,7 +13,6 @@ Run ``` mvn install ``` to see the tests failing.
 
 Examples
 --------
+![Console](https://github.com/dodie/scott-showcase/blob/master/cucucmber_console.png "Console")
+![HTML](https://github.com/dodie/scott-showcase/blob/master/cucumber_html.png "HTML")
 
-[[https://github.com/dodie/scott-showcase/blob/master/cucucmber_console.png|alt=Console]]
-
-[[https://github.com/dodie/scott-showcase/blob/master/cucumber_html.png|alt=HTML]]
