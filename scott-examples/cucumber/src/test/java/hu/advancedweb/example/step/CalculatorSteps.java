@@ -39,7 +39,7 @@ public class CalculatorSteps {
 	}
 
 	@Then("^I should see 20, 40 and 80 if I repeat the operation three times$")
-	public void i_should_see_the_following_numbers_if_I_repeat_the_operation_three_times() throws Throwable {
+	public void i_should_see_the_following_numbers() throws Throwable {
 		int result;
 		
 		calculator.pressEnter();
