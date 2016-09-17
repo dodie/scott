@@ -10,6 +10,11 @@ import org.objectweb.asm.tree.MethodNode;
 
 import hu.advancedweb.scott.runtime.ScottReportingRule;
 
+/**
+ * Transformes the constructor to instantiate the `scottReportingRule` field.
+ * 
+ * @author David Csakvari
+ */
 public class ConstructorTransformerMethodVisitor extends MethodNode {
 	
 	private String className;

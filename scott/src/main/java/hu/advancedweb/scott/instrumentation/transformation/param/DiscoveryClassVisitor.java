@@ -5,8 +5,13 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+/**
+ * Determines what classes and methods to instrument,
+ * and fills the passed TransformationParameters.Builder object.
+ * 
+ * @author David Csakvari
+ */
 public class DiscoveryClassVisitor extends ClassVisitor {
-	// TODO: provide an opt-out mechanism from the automatic instrumentation. See issue #7.
 	
 	private TransformationParameters.Builder transformationParameters;
 

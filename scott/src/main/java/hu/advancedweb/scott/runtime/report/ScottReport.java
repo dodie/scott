@@ -11,7 +11,7 @@ import java.util.TreeMap;
  * 
  * @author David Csakvari
  */
-public class ScottReport {
+class ScottReport {
 	
 	private Map<Integer, String> sourceLines = new TreeMap<Integer, String>();
 	private Map<Integer, List<VariableSnapshot>> variableSnapshotForLines = new TreeMap<Integer, List<VariableSnapshot>>();

@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This object is constructed before the instrumentation happens.
+ * It is filled for each class based on the contents of the class
+ * and the actual Scott parameters.
+ * 
+ * @see DiscoveryClassVisitor
+ * @author David Csakvari
+ */
 public class TransformationParameters {
 	
 	public final boolean isRuleInjectionRequired;

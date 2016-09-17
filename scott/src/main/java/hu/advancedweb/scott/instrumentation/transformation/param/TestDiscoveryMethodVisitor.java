@@ -7,6 +7,11 @@ import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+/**
+ * Determines the instrumentation rules based on method properties.
+ * 
+ * @author David Csakvari
+ */
 public class TestDiscoveryMethodVisitor extends MethodVisitor {
 
 	private TransformationParameters.Builder transformationParameters;
@@ -33,11 +38,12 @@ public class TestDiscoveryMethodVisitor extends MethodVisitor {
 	@Override
 	public void visitEnd() {
 		for (String annotationDesc : annotations) {
-			boolean isTestCase = "Lorg/junit/Test;".equals(annotationDesc);
-			
-			if (isTestCase) {
-				transformationParameters.isRuleInjectionRequired = true;
+			if (AnnotationMatcher.match(annotationDesc, "scott.track.method_annotation", new String[] {"org.junit.Test"})) {
 				transformationParameters.markMethodForInstrumentation(methodName, methodDesc, methodSignature);
+			}
+			
+			if (AnnotationMatcher.match(annotationDesc, "scott.injectrule.method_annotation", new String[] {"org.junit.Test"})) {
+				transformationParameters.isRuleInjectionRequired = true;
 			}
 		}
 		super.visitEnd();

@@ -1,6 +1,11 @@
 package hu.advancedweb.scott.runtime.report;
 
-public class VariableSnapshot {
+/**
+ * Represents a variable name - value pair for a 
+ * @author David Csakvari
+ *
+ */
+class VariableSnapshot {
 	
 	final String name;
 	final String value;
