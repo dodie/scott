@@ -4,6 +4,8 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+import hu.advancedweb.scott.runtime.report.FailureRenderer;
+
 /**
  * To produce the detailed failure reports use this JUnit Rule.
  * 

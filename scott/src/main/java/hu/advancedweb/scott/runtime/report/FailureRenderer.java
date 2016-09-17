@@ -1,4 +1,4 @@
-package hu.advancedweb.scott.runtime;
+package hu.advancedweb.scott.runtime.report;
 
 import java.io.File;
 import java.util.HashMap;
@@ -21,7 +21,10 @@ public class FailureRenderer {
 		final ScottReport scottReport = new ScottReport();
 		MethodSource methodSource = getTestMethodSource(description);
 		
-		fillSource(scottReport, methodSource);
+		if (methodSource != null) {
+			fillSource(scottReport, methodSource);
+		}
+		
 		fillTrackedData(scottReport);
 		fillException(scottReport, methodSource, throwable);
 
@@ -55,11 +58,9 @@ public class FailureRenderer {
 	}
 	
 	private static void fillSource(ScottReport scottReport, MethodSource methodSource) {
-		if (methodSource != null) {
-			scottReport.setBeginLine(methodSource.getBeginLine());
-			for (String line : methodSource.getReportLines()) {
-				scottReport.addLine(line);
-			}
+		scottReport.setBeginLine(methodSource.getBeginLine());
+		for (String line : methodSource.getReportLines()) {
+			scottReport.addLine(line);
 		}
 	}
 
@@ -77,11 +78,14 @@ public class FailureRenderer {
 	
 	private static void fillException(ScottReport scottReport, MethodSource methodSource, Throwable throwable) {
 		Integer lineNumber = scottReport.getBeginLineNumber();
-		for (StackTraceElement stackTraceElement : throwable.getStackTrace()) {
-			if (methodSource.getClassName().equals(stackTraceElement.getClassName()) &&
-					methodSource.getMethodName().equals(stackTraceElement.getMethodName())) {
-				lineNumber = stackTraceElement.getLineNumber();
-				break;
+		
+		if (methodSource != null) {
+			for (StackTraceElement stackTraceElement : throwable.getStackTrace()) {
+				if (methodSource.getClassName().equals(stackTraceElement.getClassName()) &&
+						methodSource.getMethodName().equals(stackTraceElement.getMethodName())) {
+					lineNumber = stackTraceElement.getLineNumber();
+					break;
+				}
 			}
 		}
 		

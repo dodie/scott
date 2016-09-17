@@ -1,4 +1,4 @@
-package hu.advancedweb.scott.runtime;
+package hu.advancedweb.scott.runtime.report;
 
 public class VariableSnapshot {
 	

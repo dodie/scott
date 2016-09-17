@@ -8,6 +8,8 @@ import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
+import hu.advancedweb.scott.runtime.report.FailureRenderer;
+
 /**
  * An alternative way to produce the detailed failure reports is to register this JUnit listener.
  * 
@@ -28,7 +30,6 @@ public class ScottRunListener extends RunListener {
 	public void testStarted(Description description) throws Exception {
 		this.description = description;
 		augmentedExceptions.clear();
-		
 		super.testStarted(description);
 	}
 	
@@ -58,4 +59,5 @@ public class ScottRunListener extends RunListener {
 			}
 		}
 	}
+	
 }

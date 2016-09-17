@@ -1,4 +1,4 @@
-package hu.advancedweb.scott.runtime;
+package hu.advancedweb.scott.runtime.report;
 
 import java.util.ArrayList;
 import java.util.Collections;
