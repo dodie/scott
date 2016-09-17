@@ -13,6 +13,11 @@ Run ``` mvn install ``` to see the tests failing.
 
 Examples
 --------
+
+Console output:
 ![Console](https://github.com/dodie/scott-showcase/blob/master/cucucmber_console.png "Console")
+
+HTML report:
 ![HTML](https://github.com/dodie/scott-showcase/blob/master/cucumber_html.png "HTML")
 
+Of course the produced JSON can contain the augmented message, so tools like Jenkins can display it too.
