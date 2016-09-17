@@ -8,7 +8,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import hu.advancedweb.example.Calculator;
 
-public class AdditionSteps {
+public class CalculatorSteps {
 
 	public static Calculator calculator;
 
@@ -51,7 +51,8 @@ public class AdditionSteps {
 		assertThat(result, equalTo(40));
 		
 		calculator.pressEnter();
-		calculator.pressEnter(); // Oops.
+		// Oops. Accidentally pressing the button twice.
+		calculator.pressEnter();
 		result = calculator.getResult();
 		assertThat(result, equalTo(80));
 	}

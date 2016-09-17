@@ -110,34 +110,54 @@ public class FailureRenderer {
 			
 			boolean isFirstCommentInThisLine = true;
 			for (VariableSnapshot variableSnapshot : scottReport.getVariableSnapshots(lineNumber)) {
-				if (!isFirstCommentInThisLine) {
-					addBlankLine(sb, lineText);
-				}
+				String[] variableSnapshotTextLines = getVariableSnapshotComment(variableSnapshot);
 				
-				sb.append("  // ");
-				sb.append(variableSnapshot.name);
-				sb.append("=");
-				sb.append(variableSnapshot.value);
-				isFirstCommentInThisLine = false;
+				for (String comment : variableSnapshotTextLines) {
+					renderComment(sb, lineText, comment, isFirstCommentInThisLine);
+					isFirstCommentInThisLine = false;
+				}
 			}
 			
 			if (scottReport.getExceptionLineNumber() == lineNumber) {
-				if (!isFirstCommentInThisLine) {
-					addBlankLine(sb, lineText);
-				}
+				String[] exceptionMessageLines = getExceptionComment(scottReport);
 				
-				sb.append("  // ");
-				
-				if (scottReport.getExceptionMessage() != null) {
-					sb.append(scottReport.getExceptionMessage());
-				} else {
-					sb.append(scottReport.getExceptionClassName());
+				for (String comment : exceptionMessageLines) {
+					renderComment(sb, lineText, comment, isFirstCommentInThisLine);
+					isFirstCommentInThisLine = false;
 				}
 			}
 			
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+
+	private static String[] getExceptionComment(ScottReport scottReport) {
+		final String exceptionMessage;
+		if (scottReport.getExceptionMessage() != null) {
+			exceptionMessage = scottReport.getExceptionClassName() + ": " + scottReport.getExceptionMessage().trim();
+		} else {
+			exceptionMessage = scottReport.getExceptionClassName();
+		}
+		
+		String[] exceptionMessageLines = exceptionMessage.split("\\n");
+		return exceptionMessageLines;
+	}
+
+	private static String[] getVariableSnapshotComment(VariableSnapshot variableSnapshot) {
+		String variableSnapshotText = variableSnapshot.name + "=" + variableSnapshot.value.trim();
+		String[] variableSnapshotTextLines = variableSnapshotText.split("\\n");
+		return variableSnapshotTextLines;
+	}
+	
+	private static void renderComment(StringBuilder sb, String lineText, String comment, boolean isFirstCommentInThisLine) {
+		if (!isFirstCommentInThisLine) {
+			addBlankLine(sb, lineText);
+		}
+		
+		sb.append("  // ");
+		sb.append(comment);
+		isFirstCommentInThisLine = false;
 	}
 
 	private static void addBlankLine(StringBuilder sb, String lineText) {
