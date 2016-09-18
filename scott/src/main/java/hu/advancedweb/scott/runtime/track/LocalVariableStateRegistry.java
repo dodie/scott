@@ -13,11 +13,6 @@ import java.util.List;
  * @author David Csakvari
  */
 public class LocalVariableStateRegistry {
-	/*
-	 *  TODO: provide track methods for computational types only.
-	 *  Eg. track(boolean) will not be called from the instrumented code. see jvms8, page29
-	 *  See Issue #1.
-	 */
 	
 	private static List<LocalVariableState> LOCAL_VARIABLE_STATES = new ArrayList<LocalVariableState>();
 	
