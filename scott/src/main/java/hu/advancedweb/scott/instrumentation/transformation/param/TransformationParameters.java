@@ -16,28 +16,48 @@ public class TransformationParameters {
 	
 	public final boolean isRuleInjectionRequired;
 	
-	private final List<String> instrumentTheseMethods;
+	private final List<String> trackTheseMethods;
 	
-	public boolean isMethodInstrumentationRequired(String methodName, String methodDesc, String methodSignature) {
-		return instrumentTheseMethods.contains(methodName + "|" + methodDesc + "|" + methodSignature);
+	private final List<String> clearTrackedDataInTheBeginningOfTheseMethods;
+	
+	public boolean isMethodTrackingRequired(String methodName, String methodDesc, String methodSignature) {
+		return trackTheseMethods.contains(encode(methodName, methodDesc, methodSignature));
+	}
+
+	public boolean isClearingTrackedDataInTheBeginningOfThisMethodRequired(String methodName, String methodDesc, String methodSignature) {
+		return clearTrackedDataInTheBeginningOfTheseMethods.contains(encode(methodName, methodDesc, methodSignature));
 	}
 	
-	private TransformationParameters(boolean isRuleInjectionRequired, List<String> instrumentTheseMethods) {
+	private TransformationParameters(boolean isRuleInjectionRequired, List<String> trackTheseMethods, List<String> clearTrackedDataInTheBeginningOfTheseMethods) {
 		this.isRuleInjectionRequired = isRuleInjectionRequired;
-		this.instrumentTheseMethods = instrumentTheseMethods;
+		this.trackTheseMethods = trackTheseMethods;
+		this.clearTrackedDataInTheBeginningOfTheseMethods = clearTrackedDataInTheBeginningOfTheseMethods;
 	}
 	
 	public static final class Builder {
-		boolean isRuleInjectionRequired;
-		List<String> instrumentTheseMethods = new ArrayList<>();
+		private boolean isRuleInjectionRequired;
+		private List<String> trackTheseMethods = new ArrayList<>();
+		private List<String> clearTrackedDataInTheBeginningOfTheseMethods = new ArrayList<>();
 		
 		public TransformationParameters build() {
-			return new TransformationParameters(isRuleInjectionRequired, Collections.unmodifiableList(instrumentTheseMethods));
+			return new TransformationParameters(isRuleInjectionRequired, Collections.unmodifiableList(trackTheseMethods), Collections.unmodifiableList(clearTrackedDataInTheBeginningOfTheseMethods));
+		}
+		
+		void markClassForRuleInjection() {
+			this.isRuleInjectionRequired = true;
 		}
 
-		void markMethodForInstrumentation(String methodName, String methodDesc, String methodSignature) {
-			instrumentTheseMethods.add(methodName + "|" + methodDesc + "|" + methodSignature);	
+		void markMethodForTracking(String methodName, String methodDesc, String methodSignature) {
+			trackTheseMethods.add(encode(methodName, methodDesc, methodSignature));
 		}
+		
+		void markMethodForClearingTrackedData(String methodName, String methodDesc, String methodSignature) {
+			clearTrackedDataInTheBeginningOfTheseMethods.add(encode(methodName, methodDesc, methodSignature));
+		}
+	}
+	
+	private static String encode(String methodName, String methodDesc, String methodSignature) {
+		return methodName + "|" + methodDesc + "|" + methodSignature;
 	}
 
 }

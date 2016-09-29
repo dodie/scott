@@ -39,11 +39,12 @@ public class TestDiscoveryMethodVisitor extends MethodVisitor {
 	public void visitEnd() {
 		for (String annotationDesc : annotations) {
 			if (AnnotationMatcher.match(annotationDesc, "scott.track.method_annotation", new String[] {"org.junit.Test"})) {
-				transformationParameters.markMethodForInstrumentation(methodName, methodDesc, methodSignature);
+				transformationParameters.markMethodForTracking(methodName, methodDesc, methodSignature);
+				transformationParameters.markMethodForClearingTrackedData(methodName, methodDesc, methodSignature);
 			}
 			
 			if (AnnotationMatcher.match(annotationDesc, "scott.injectrule.method_annotation", new String[] {"org.junit.Test"})) {
-				transformationParameters.isRuleInjectionRequired = true;
+				transformationParameters.markClassForRuleInjection();
 			}
 		}
 		super.visitEnd();

@@ -31,16 +31,21 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 
 	private String className;
 
-	public LocalVariableStateEmitterTestMethodVisitor(MethodVisitor mv, String className, String methodName) {
+	private boolean clearTrackedDataAtStart;
+
+	public LocalVariableStateEmitterTestMethodVisitor(MethodVisitor mv, String className, String methodName, boolean clearTrackedDataAtStart) {
 		super(Opcodes.ASM5, mv);
 		this.className = className;
 		this.methodName = methodName;
+		this.clearTrackedDataAtStart = clearTrackedDataAtStart;
 	}
 	
 	@Override
 	public void visitCode() {
 		super.visitCode();
-		instrumentToClearTrackedDataAndSignalStartOfRecording();
+		if (clearTrackedDataAtStart) {
+			instrumentToClearTrackedDataAndSignalStartOfRecording();
+		}
 	}
 
 	@Override
@@ -98,15 +103,15 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	private void instrumentToTrackVariableState(int var) {
 		super.visitVarInsn(localVariables.get(var).loadOpcode, var);
 		super.visitLdcInsn(lineNumber);
-        super.visitLdcInsn(var);
-        super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackLocalVariableState", "(" + localVariables.get(var).signature + "II)V", false);
+		super.visitLdcInsn(var);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackLocalVariableState", "(" + localVariables.get(var).signature + "II)V", false);
 	}
 	
 	private void instrumentToTrackVariableName(int var) {
 		super.visitLdcInsn(var);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(getVariableNameInCurrentScope(var));
-        super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackVariableName", "(IILjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackVariableName", "(IILjava/lang/String;)V", false);
 	}
 	
 	private boolean isVariableInScope(int var) {
@@ -116,7 +121,9 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	private String getVariableNameInCurrentScope(int var) {
 		// check the scopes in reverse order in case of multiple var declarations on the same line
 		List<LocalVariableScope> localVariableScopesReversed = localVariableScopes;
+		
 		Collections.reverse(localVariableScopesReversed);
+		
 		for (LocalVariableScope localVariableRange : localVariableScopesReversed) {
 			if (localVariableRange.var == var &&
 					localVariableRange.start <= lineNumber &&
@@ -142,6 +149,11 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 			this.name = name;
 			this.start = start;
 			this.end = end;
+		}
+
+		@Override
+		public String toString() {
+			return "LocalVariableScope [var=" + var + ", name=" + name + ", start=" + start + ", end=" + end + "]";
 		}
 	}
 	
