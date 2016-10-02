@@ -131,11 +131,20 @@ public class RecordingTest {
 		}
 	}
 
-//	//FIXME: This test kills the whole Test file, nothing is recorded.
+//	//FIXME: This test kills the whole Test file, nothing is recorded. See Issue #2.
 //	@Test
 //	public void methodWithJustADeclarationInABlockDontCrash() {
 //		{
 //			String inner = "inner";
+//		}
+//	}
+
+//	//FIXME: This test kills the whole Test file, nothing is recorded. See Issue #2.
+//	@Test
+//	public void methodWithJustDeclarationsInABlockDontCrash() {
+//		{
+//			String inner = "inner";
+//			String inner2 = "inner2";
 //		}
 //	}
 	
@@ -151,21 +160,9 @@ public class RecordingTest {
 //		assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo("inner"));
 //		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo("outer"));
 //	}
-	
+
+//	//FIXME: This test kills the whole Test file, nothing is recorded. See Issue #2.
 //	@Test
-//	public void inlineFormat2tingWithTryCatch() {
-//		try {
-//			String inner = "inner";
-//			assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner));
-//			String inner2 = "inner2";
-//			assertThat(TestHelper.getLastRecordedStateFor("inner2"), equalTo(inner2));
-//		} catch (Exception e) {
-//			assertThat(TestHelper.getLastRecordedStateFor("e"), equalTo(e.toString()));
-//		}
-//	}
-	
-//	@Test
-//	@Ignore
 //	public void inlineFormat2tingWithTryCatch2() {
 //		try {
 //			String inner = "inner";
@@ -176,5 +173,6 @@ public class RecordingTest {
 ////			assertThat(TestHelper.getLastRecordedStateFor("e"), equalTo(e.toString()));
 //		}
 //	}
+
 	
 }

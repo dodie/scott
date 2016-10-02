@@ -1,8 +1,11 @@
 package hu.advancedweb.scott.instrumentation.transformation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 import java.util.TreeMap;
 
 import org.objectweb.asm.AnnotationVisitor;
@@ -23,6 +26,8 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	/** Data collected from local variable visits. */
 	private List<LocalVariableScopeLabels> scopes = new ArrayList<>();
 	
+	private Set<TryCatchBlock> tryCatchBlocks = new HashSet<>();
+	
 	/** Next MethodVisitor to be accepted at method end. */
 	private LocalVariableStateEmitterTestMethodVisitor next;
 	
@@ -42,6 +47,13 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	private void reset() {
 		scopes.clear();
 		lines.clear();
+		tryCatchBlocks.clear();
+	}
+	
+	@Override
+	public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
+		super.visitTryCatchBlock(start, end, handler, type);
+		tryCatchBlocks.add(new TryCatchBlock(start, handler));
 	}
 	
 	@Override
@@ -60,16 +72,35 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	public void visitEnd() {
 		List<LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope> localVariableScopes = new ArrayList<>();
 		for (LocalVariableScopeLabels range : scopes) {
+			
 			int prevLine = 0;
 			int startLine = 0;
 			int endLine = Integer.MAX_VALUE;
+			
+			TryCatchBlock inTry = null;
+			Stack<TryCatchBlock> tryCatchBlockScopes = new Stack<>();
 			for (Map.Entry<Integer, Label> entry : lines.entrySet()) {
-				if (entry.getValue() == range.start) {
+				Label label = entry.getValue();
+				
+				if (label == range.start) {
 					startLine = prevLine;
+					
+					if (!tryCatchBlockScopes.isEmpty()) {
+						inTry = tryCatchBlockScopes.peek();
+					}
+				} else if (inTry == null && label == range.end) {
+					endLine = prevLine;
+				} else if (inTry != null && label == inTry.handler) {
+					endLine = prevLine;
 				}
 				
-				if (entry.getValue() == range.end) {
-					endLine = prevLine;
+				// Fix for issue #14
+				for (TryCatchBlock tryCatchBlock : tryCatchBlocks) {
+					if (label == tryCatchBlock.start) {
+						tryCatchBlockScopes.push(tryCatchBlock);
+					} else if (label == tryCatchBlock.handler) {
+						tryCatchBlockScopes.pop();
+					}
 				}
 				
 				prevLine = entry.getKey();
@@ -93,5 +124,15 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 			this.end = end;
 		}
 	}
-
+	
+	private static class TryCatchBlock {
+		final Label start;
+		final Label handler;
+		
+		public TryCatchBlock(Label start, Label handler) {
+			this.start = start;
+			this.handler = handler;
+		}
+	}
+	
 }
