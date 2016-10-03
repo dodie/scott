@@ -58,10 +58,6 @@ public class LocalVariableStateRegistry {
 			}
 		}
 		
-		if (name == null) {
-			throw new IllegalStateException("Name is null!");
-		}
-
 		return name;
 	}
 

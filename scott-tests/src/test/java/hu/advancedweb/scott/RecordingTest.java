@@ -1,7 +1,7 @@
 package hu.advancedweb.scott;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -112,6 +112,7 @@ public class RecordingTest {
 		assertThat(TestHelper.getLastRecordedStateFor("inner10"), equalTo(inner10));
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void methodWithJustADeclarationDontCrash() {
 		String outer = "outer!";
@@ -131,48 +132,63 @@ public class RecordingTest {
 		}
 	}
 
-//	//FIXME: This test kills the whole Test file, nothing is recorded. See Issue #2.
-//	@Test
-//	public void methodWithJustADeclarationInABlockDontCrash() {
-//		{
-//			String inner = "inner";
-//		}
-//	}
+	@SuppressWarnings("unused")
+	@Test
+	public void methodWithJustADeclarationInABlockDontCrash() {
+		{
+			String inner = "inner";
+		}
+	}
 
-//	//FIXME: This test kills the whole Test file, nothing is recorded. See Issue #2.
-//	@Test
-//	public void methodWithJustDeclarationsInABlockDontCrash() {
-//		{
-//			String inner = "inner";
-//			String inner2 = "inner2";
-//		}
-//	}
+	@SuppressWarnings("unused")
+	@Test
+	public void methodWithJustDeclarationsInABlockDontCrash() {
+		{
+			String inner = "inner";
+			String inner2 = "inner2";
+		}
+	}
 	
-//	//FIXME: This test kills the whole Test file, nothing is recorded. See Issue #2.
-//	// If I add a single Sysout to the inner block it seems to fix it.
+	@SuppressWarnings("unused")
+	@Test
+	public void methodEndingWithADeclarationsInABlockDontCrash() {
+		{
+			String inner = "inner";
+			System.out.println("");
+			String inner2 = "inner2";
+		}
+	}
+	
+	@SuppressWarnings("unused")
+	@Test
+	public void methodWithJustADeclarationInATryBlockDontCrash() {
+		try {
+			String inner = "inner";
+		} catch (Exception e) {
+			// Don't care.
+		}
+	}
+	
+	@SuppressWarnings("unused")
+	@Test
+	public void methodWithJustADeclarationInACatchBlockDontCrash() {
+		try {
+			throw new NullPointerException();
+		} catch (Exception e) {
+			String inner = "inner";
+		}
+	}
+	
+	// FIXME: we can't record the name of a variable, if its declaration is the last statement in a block. See issue #15.
 //	@Test
-//	public void methodWithJustADeclarationInABlockDontCrash2() throws Exception {
+//	public void captureLastVariableName() throws Exception {
 //		String outer = "outer";
 //		{
 //			String inner = "inner";
 //		}
 //		
-//		assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo("inner"));
+//		assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo("inner")); // <- this fails, we track the value, but not the name
 //		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo("outer"));
 //	}
 
-//	//FIXME: This test kills the whole Test file, nothing is recorded. See Issue #2.
-//	@Test
-//	public void inlineFormat2tingWithTryCatch2() {
-//		try {
-//			String inner = "inner";
-////			assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner));
-//			String inner2 = "inner2";
-////			assertThat(TestHelper.getLastRecordedStateFor("inner2"), equalTo(inner2));
-//		} catch (Exception e) {
-////			assertThat(TestHelper.getLastRecordedStateFor("e"), equalTo(e.toString()));
-//		}
-//	}
-
-	
 }

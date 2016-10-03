@@ -169,7 +169,12 @@ public class FailureRenderer {
 	}
 
 	private static String[] getVariableSnapshotComment(VariableSnapshot variableSnapshot) {
-		String variableSnapshotText = variableSnapshot.name + "=" + variableSnapshot.value.trim();
+		final String variableSnapshotText;
+		if (variableSnapshot.name != null) {
+			variableSnapshotText = variableSnapshot.name + "=" + variableSnapshot.value.trim();
+		} else {
+			variableSnapshotText = variableSnapshot.value.trim();
+		}
 		String[] variableSnapshotTextLines = variableSnapshotText.split("\\n");
 		return variableSnapshotTextLines;
 	}

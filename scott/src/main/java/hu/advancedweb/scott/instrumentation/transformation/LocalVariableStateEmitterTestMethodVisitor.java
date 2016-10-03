@@ -84,7 +84,7 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 			instrumentToTrackVariableState(var);
 		}
 	}
-
+	
 	@Override
 	public void visitIincInsn(int var, int increment) {
 		super.visitIincInsn(var, increment);
@@ -108,10 +108,13 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	}
 	
 	private void instrumentToTrackVariableName(int var) {
-		super.visitLdcInsn(var);
-		super.visitLdcInsn(lineNumber);
-		super.visitLdcInsn(getVariableNameInCurrentScope(var));
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackVariableName", "(IILjava/lang/String;)V", false);
+		String variableName = getVariableNameInCurrentScope(var);
+		if (variableName != null) { // FIXME: Workaround for issue #15.
+			super.visitLdcInsn(var);
+			super.visitLdcInsn(lineNumber);
+			super.visitLdcInsn(variableName);
+			super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackVariableName", "(IILjava/lang/String;)V", false);
+		}
 	}
 	
 	private boolean isVariableInScope(int var) {
