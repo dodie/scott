@@ -89,13 +89,13 @@ public class FailureRenderer {
 	}
 
 	private static void fillTrackedData(ScottReport scottReport) {
-		Map<Integer, String> trackedValue = new HashMap<>();
+		Map<String, String> trackedValue = new HashMap<>();
 		
 		for (LocalVariableState event : LocalVariableStateRegistry.getLocalVariableStates()) {
-			String lastValue = trackedValue.get(event.var);
+			String lastValue = trackedValue.get(event.key);
 			if (!event.value.equals(lastValue)) {
-				scottReport.addVariableSnapshot(event.lineNumber, LocalVariableStateRegistry.getLocalVariableName(event.var, event.lineNumber), event.value);
-				trackedValue.put(event.var, event.value);
+				scottReport.addVariableSnapshot(event.lineNumber, LocalVariableStateRegistry.getLocalVariableName(event.key, event.lineNumber), event.value);
+				trackedValue.put(event.key, event.value);
 			}
 		}
 	}

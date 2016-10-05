@@ -27,6 +27,10 @@ public class DiscoveryClassVisitor extends ClassVisitor {
 	
 	@Override
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+		if (name.startsWith("lambda$")) {
+			transformationParameters.markMethodForTracking(name, desc, signature);
+		}
+	
 		MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
 		MethodVisitor testDiscoveryMethodVisitor = new TestDiscoveryMethodVisitor(methodVisitor, transformationParameters, name, desc, signature);
 		return testDiscoveryMethodVisitor;

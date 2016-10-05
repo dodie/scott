@@ -21,7 +21,7 @@ import org.objectweb.asm.tree.MethodNode;
 public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	
 	/** Map line numbers to labels, as we got labels at local variable visits */
-	private Map<Integer, Label> lines = new TreeMap<>();
+	private TreeMap<Integer, Label> lines = new TreeMap<>();
 	
 	/** Data collected from local variable visits. */
 	private List<LocalVariableScopeLabels> scopes = new ArrayList<>();
@@ -40,7 +40,6 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	@Override
 	public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
 		reset();
-		
 		return super.visitAnnotation(desc, visible);
 	}
 	
@@ -72,10 +71,10 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	public void visitEnd() {
 		List<LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope> localVariableScopes = new ArrayList<>();
 		for (LocalVariableScopeLabels range : scopes) {
-			
-			int prevLine = 0;
-			int startLine = 0;
-			int endLine = Integer.MAX_VALUE;
+
+			int prevLine = lines.firstKey();
+			int startLine = lines.firstKey();
+			int endLine = lines.lastKey();
 			
 			TryCatchBlock inTry = null;
 			Stack<TryCatchBlock> tryCatchBlockScopes = new Stack<>();

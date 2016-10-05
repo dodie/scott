@@ -14,7 +14,7 @@ public class TestHelper {
 		Collections.reverse(states);
 		
 		for (LocalVariableState localVariableState : states) {
-			String nameOfLocalVariableState = LocalVariableStateRegistry.getLocalVariableName(localVariableState.var, localVariableState.lineNumber);
+			String nameOfLocalVariableState = LocalVariableStateRegistry.getLocalVariableName(localVariableState.key, localVariableState.lineNumber);
 			if (nameOfLocalVariableState.equals(variableName)) {
 				return localVariableState.value;
 			}

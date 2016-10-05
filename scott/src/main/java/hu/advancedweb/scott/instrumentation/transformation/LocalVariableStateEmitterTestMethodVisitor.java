@@ -104,16 +104,18 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitVarInsn(localVariables.get(var).loadOpcode, var);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(var);
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackLocalVariableState", "(" + localVariables.get(var).signature + "II)V", false);
+		super.visitLdcInsn(methodName);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackLocalVariableState", "(" + localVariables.get(var).signature + "IILjava/lang/String;)V", false);
 	}
 	
 	private void instrumentToTrackVariableName(int var) {
 		String variableName = getVariableNameInCurrentScope(var);
 		if (variableName != null) { // FIXME: Workaround for issue #15.
-			super.visitLdcInsn(var);
-			super.visitLdcInsn(lineNumber);
 			super.visitLdcInsn(variableName);
-			super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackVariableName", "(IILjava/lang/String;)V", false);
+			super.visitLdcInsn(lineNumber);
+			super.visitLdcInsn(var);
+			super.visitLdcInsn(methodName);
+			super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackVariableName", "(Ljava/lang/String;IILjava/lang/String;)V", false);
 		}
 	}
 	
