@@ -62,6 +62,20 @@ public class RecordingTest {
 	}
 	
 	@Test
+	public void recordArray() throws Exception {
+		@SuppressWarnings("unused")
+		String[] array = {"a", "b"};
+		assertThat(TestHelper.getLastRecordedStateFor("array"), equalTo("[a, b]"));
+	}
+
+	@Test
+	public void recordEmptyArray() throws Exception {
+		@SuppressWarnings("unused")
+		String[] array = {};
+		assertThat(TestHelper.getLastRecordedStateFor("array"), equalTo("[]"));
+	}
+
+	@Test
 	public void recordCustomObject() throws Exception {
 		CustomClass myClass = new CustomClass(5);
 		assertThat(TestHelper.getLastRecordedStateFor("myClass"), equalTo(myClass.toString()));
