@@ -9,7 +9,6 @@ import org.junit.Test;
 
 public class LambdaTest {
 
-	// FIXME: No data reported for the body of the lambda. See Issue #11.
 	@Test
 	public void test_with_lambda() throws Exception {
 		Function<String, String> generatePalindrome = input -> {
@@ -26,8 +25,6 @@ public class LambdaTest {
 		String word = "cat";
 		
 		String palindromized = generatePalindrome.apply(word);
-		
-		assertEquals("Hello World!", "Hello World!!!");
 		
 		assertThat(palindromized, equalTo(word + word));
 	}
