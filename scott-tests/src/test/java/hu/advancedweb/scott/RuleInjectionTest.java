@@ -11,10 +11,6 @@ import org.junit.Test;
 
 import hu.advancedweb.scott.instrumentation.transformation.ConstructorTransformerMethodVisitor;
 
-/**
- *  For now rule injection works only in this test.
- *	@see ConstructorTransformerMethodVisitor
- */
 public class RuleInjectionTest {
 	
 	@Test
