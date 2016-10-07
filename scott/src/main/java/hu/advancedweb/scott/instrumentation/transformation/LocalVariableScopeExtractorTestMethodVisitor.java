@@ -64,7 +64,7 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	@Override
 	public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
 		super.visitLocalVariable(name, desc, signature, start, end, index);
-		scopes.add(new LocalVariableScopeLabels(index, name, start, end));
+		scopes.add(new LocalVariableScopeLabels(index, name, desc, start, end));
 	}
 	
 	@Override
@@ -104,7 +104,7 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 				
 				prevLine = entry.getKey();
 			}
-			localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, startLine, endLine));
+			localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, range.desc, startLine, endLine));
 		}
 		next.setLocalVariableScopes(localVariableScopes);
 		accept(next);
@@ -113,12 +113,14 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	private static class LocalVariableScopeLabels {
 		final int var;
 		final String name;
+		final String desc;
 		final Label start;
 		final Label end;
 		
-		public LocalVariableScopeLabels(int var, String name, Label start, Label end) {
+		public LocalVariableScopeLabels(int var, String name, String desc, Label start, Label end) {
 			this.var = var;
 			this.name = name;
+			this.desc = desc;
 			this.start = start;
 			this.end = end;
 		}

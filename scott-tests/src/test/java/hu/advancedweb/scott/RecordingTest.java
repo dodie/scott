@@ -1,9 +1,8 @@
 package hu.advancedweb.scott;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import hu.advancedweb.scott.helper.TestHelper;
@@ -40,12 +39,19 @@ public class RecordingTest {
 		assertThat(TestHelper.getLastRecordedStateFor("f"), equalTo(Float.toString(f)));
 	}
 	
-	// FIXME: Scott record "1" for true and "0" for zero. See Issue #1.
-	@Ignore
 	@Test
 	public void recordBoolean() throws Exception {
-		boolean b = true;
-		assertThat(TestHelper.getLastRecordedStateFor("b"), equalTo(Boolean.toString(b)));
+		boolean bt = true;
+		assertThat(TestHelper.getLastRecordedStateFor("bt"), equalTo(Boolean.toString(bt)));
+		
+		boolean bf = false;
+		assertThat(TestHelper.getLastRecordedStateFor("bf"), equalTo(Boolean.toString(bf)));
+		
+		boolean bot = Boolean.TRUE;
+		assertThat(TestHelper.getLastRecordedStateFor("bot"), equalTo(Boolean.toString(bot)));
+		
+		boolean bof = Boolean.FALSE;
+		assertThat(TestHelper.getLastRecordedStateFor("bof"), equalTo(Boolean.toString(bof)));
 	}
 	
 	@Test

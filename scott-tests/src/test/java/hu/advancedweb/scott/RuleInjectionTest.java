@@ -9,8 +9,6 @@ import java.lang.reflect.Field;
 
 import org.junit.Test;
 
-import hu.advancedweb.scott.instrumentation.transformation.ConstructorTransformerMethodVisitor;
-
 public class RuleInjectionTest {
 	
 	@Test
