@@ -93,7 +93,10 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 					endLine = prevLine;
 				}
 				
-				// Fix for issue #14
+				/*
+				 * Fix for issue #14: Variable scopes in Try blocks previously had wrong end line number, 
+				 * as they pointied to the end of the catch block, even if they were declared in the try block.
+				 */
 				for (TryCatchBlock tryCatchBlock : tryCatchBlocks) {
 					if (label == tryCatchBlock.start) {
 						tryCatchBlockScopes.push(tryCatchBlock);
