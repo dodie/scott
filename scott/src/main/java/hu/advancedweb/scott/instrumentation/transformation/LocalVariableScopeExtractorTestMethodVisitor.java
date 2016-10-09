@@ -104,7 +104,14 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 				
 				prevLine = entry.getKey();
 			}
-			localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, range.desc, startLine, endLine));
+			
+			if (startLine <= endLine) {
+				localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, range.desc, startLine, endLine));
+			} else {
+				// Sometimes the end label is for an earlier line number than the start label, see Issue #17.
+				localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, range.desc, endLine, startLine));
+			}
+				
 		}
 		next.setLocalVariableScopes(localVariableScopes);
 		accept(next);
