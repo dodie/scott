@@ -4,6 +4,10 @@
 	<groupId>hu.advancedweb</groupId>
 	<artifactId>scott-example-cucumber</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -67,6 +71,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19.1</version>
 				<configuration>
 					<argLine>-javaagent:${project.build.directory}/agents/scott-agent.jar -Dscott.track.method_annotation="org.junit.Test,cucumber.api.java.*"</argLine>
 					<properties>
