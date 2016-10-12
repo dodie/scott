@@ -17,6 +17,8 @@ import hu.advancedweb.scott.runtime.track.LocalVariableStateRegistry;
  */
 public class FailureRenderer {
 
+	private static SourcePathResolver sourcePathResolver = new SourcePathResolver();
+
 	public static String render(Description description, Throwable throwable) {
 		final ScottReport scottReport = new ScottReport();
 		MethodSource methodSource = getTestMethodSource(description);
@@ -34,14 +36,14 @@ public class FailureRenderer {
 	private static MethodSource getTestMethodSource(Description description) {
 		try {
 			String testClassName = description.getTestClass().getCanonicalName();
-			String testSourcePath = getSourcePath(testClassName);
+			String testSourcePath = sourcePathResolver.getSourcePath(testClassName);
 			String testMethodName = description.getMethodName();
 			return new MethodSource(testSourcePath, testClassName, testMethodName);
 		} catch (Exception e) {
 			try {
 				// As a fallback, look for the currently tracked method, and try to take its source.
 				String testClassName = LocalVariableStateRegistry.getTestClassType().replace("/", ".");
-				String testSourcePath = getSourcePath(testClassName);
+				String testSourcePath = sourcePathResolver.getSourcePath(testClassName);
 				String testMethodName = LocalVariableStateRegistry.getTestMethodName();
 				return new MethodSource(testSourcePath, testClassName, testMethodName);
 			} catch (Exception e2) {
@@ -52,35 +54,6 @@ public class FailureRenderer {
 		}
 	}
 	
-	private static String getSourcePath(final String fqn) {
-		final String baseDirectory = System.getProperty("user.dir") + File.separator + "src" + File.separator;
-		final String relativeFilePath = fqn.replace(".", File.separator) + ".java";
-		return getSourcePath(baseDirectory, relativeFilePath, 2);
-	}
-	
-	private static String getSourcePath(final String baseDirectory, final String relativeFilePath, final int level) {
-		if (!new File(baseDirectory).exists() || !new File(baseDirectory).isDirectory()) {
-			return null;
-		} else {
-			String pathInBaseDirectory = baseDirectory + relativeFilePath;
-			if (new File(pathInBaseDirectory).exists()) {
-				return pathInBaseDirectory;
-			} else {
-				if (level == 0) {
-					return null;
-				}
-				String[] entries = new File(baseDirectory).list();
-				for (String entry : entries) {
-					String path = getSourcePath(baseDirectory + entry + File.separator, relativeFilePath, level - 1);
-					if (path != null) {
-						return path;
-					}
-				}
-				return null;
-			}
-		}
-	}
-
 	private static void fillSource(ScottReport scottReport, MethodSource methodSource) {
 		scottReport.setBeginLine(methodSource.getBeginLine());
 		for (String line : methodSource.getReportLines()) {
