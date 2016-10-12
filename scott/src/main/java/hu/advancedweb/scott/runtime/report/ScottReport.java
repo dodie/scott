@@ -13,8 +13,9 @@ import java.util.TreeMap;
  */
 class ScottReport {
 	
-	private Map<Integer, String> sourceLines = new TreeMap<Integer, String>();
-	private Map<Integer, List<VariableSnapshot>> variableSnapshotForLines = new TreeMap<Integer, List<VariableSnapshot>>();
+	private TreeMap<Integer, String> sourceForLineNumbers = new TreeMap<>();
+	private List<Snapshot> initialSnapshots = new ArrayList<>();
+	private Map<Integer, List<Snapshot>> snapshotsForLineNumbers = new TreeMap<>();
 	private int beginLineNumber;
 	private int exceptionLineNumber;
 	private String exceptionMessage;
@@ -25,15 +26,19 @@ class ScottReport {
 	}
 
 	public void addLine(String source) {
-		sourceLines.put(beginLineNumber, source);
+		sourceForLineNumbers.put(beginLineNumber, source);
 		beginLineNumber++;
 	}
 	
-	public void addVariableSnapshot(int lineNumber, String name, String value) {
+	public void addInitialSnapshot(String name, String value) {
+		initialSnapshots.add(new Snapshot(name, value));
+	}
+	
+	public void addSnapshot(int lineNumber, String name, String value) {
 		checkIfSourceFound(lineNumber);
-		List<VariableSnapshot> variableSnapshots = variableSnapshotForLines.getOrDefault(lineNumber, new ArrayList<VariableSnapshot>());
-		variableSnapshots.add(new VariableSnapshot(name, value));
-		variableSnapshotForLines.put(lineNumber, variableSnapshots);
+		List<Snapshot> variableSnapshots = snapshotsForLineNumbers.getOrDefault(lineNumber, new ArrayList<Snapshot>());
+		variableSnapshots.add(new Snapshot(name, value));
+		snapshotsForLineNumbers.put(lineNumber, variableSnapshots);
 	}
 	
 	public void setException(int lineNumber, String exceptionClassName, String exceptionMessage) {
@@ -43,12 +48,16 @@ class ScottReport {
 		this.exceptionMessage = exceptionMessage;
 	}
 	
-	public Map<Integer, String> getSourceLines() {
-		return Collections.unmodifiableMap(sourceLines);
+	public TreeMap<Integer, String> getSourceLines() {
+		return sourceForLineNumbers;
 	}
 	
-	public List<VariableSnapshot> getVariableSnapshots(int lineNumber) {
-		return Collections.unmodifiableList(variableSnapshotForLines.getOrDefault(lineNumber, new ArrayList<VariableSnapshot>()));
+	public List<Snapshot> getVariableSnapshots(int lineNumber) {
+		return Collections.unmodifiableList(snapshotsForLineNumbers.getOrDefault(lineNumber, new ArrayList<Snapshot>()));
+	}
+	
+	public List<Snapshot> getInitialSnapshots() {
+		return Collections.unmodifiableList(initialSnapshots);
 	}
 	
 	public int getBeginLineNumber() {
@@ -68,8 +77,8 @@ class ScottReport {
 	}
 	
 	private void checkIfSourceFound(int lineNumber) {
-		if (!sourceLines.containsKey(lineNumber)) {
-			sourceLines.put(lineNumber, "???");
+		if (!sourceForLineNumbers.containsKey(lineNumber)) {
+			sourceForLineNumbers.put(lineNumber, "???");
 		}
 	}
 

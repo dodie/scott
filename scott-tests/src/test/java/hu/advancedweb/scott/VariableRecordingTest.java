@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import hu.advancedweb.scott.helper.TestHelper;
 
-public class RecordingTest {
+public class VariableRecordingTest {
 	
 	@Test
 	public void recordInteger() throws Exception {

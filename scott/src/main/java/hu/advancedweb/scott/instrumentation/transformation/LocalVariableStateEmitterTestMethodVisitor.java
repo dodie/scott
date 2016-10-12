@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Label;
@@ -27,11 +28,14 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	/** Variable scopes in the method. */
 	private List<LocalVariableScope> localVariableScopes = new ArrayList<>();
 
+	private Set<AccessedField> accessedFields;
+
 	private String methodName;
 
 	private String className;
 
 	private boolean clearTrackedDataAtStart;
+
 
 	public LocalVariableStateEmitterTestMethodVisitor(MethodVisitor mv, String className, String methodName, boolean clearTrackedDataAtStart) {
 		super(Opcodes.ASM5, mv);
@@ -45,6 +49,11 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitCode();
 		if (clearTrackedDataAtStart) {
 			instrumentToClearTrackedDataAndSignalStartOfRecording();
+		}
+		
+		// track initial field states
+		for (AccessedField accessedField : accessedFields) {
+			instrumentToTrackFieldState(accessedField);
 		}
 	}
 
@@ -63,12 +72,17 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	@Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 		super.visitMethodInsn(opcode, owner, name, desc, itf);
-		
+
 		// track every in-scope variable state after method calls
 		for (Integer var : localVariables.keySet()) {
 			if (isVariableInScope(var)) {
 				instrumentToTrackVariableState(var);
 			}
+		}
+		
+		// track every field state after method calls
+		for (AccessedField accessedField : accessedFields) {
+			instrumentToTrackFieldState(accessedField);
 		}
     }
 	
@@ -100,6 +114,19 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "startTracking", "(Ljava/lang/String;Ljava/lang/String;)V", false);
 	}
 	
+	@Override
+	public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+		super.visitFieldInsn(opcode, owner, name, desc);
+		if (Opcodes.PUTFIELD == opcode|| Opcodes.PUTSTATIC == opcode) {
+			for (AccessedField accessedField : accessedFields) {
+				if (accessedField.name.equals(name)) {
+					instrumentToTrackFieldState(accessedField);
+					break;
+				}
+			}
+		}
+	}
+	
 	private void instrumentToTrackVariableState(int var) {
 		super.visitVarInsn(localVariables.get(var).loadOpcode, var);
 		super.visitLdcInsn(lineNumber);
@@ -122,6 +149,23 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 			// If no variable declaration found for this variable, use the description from the load opcode.
 			super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackLocalVariableState", "(" + localVariables.get(var).signature + "IILjava/lang/String;)V", false);
 		}
+	}
+	
+	private void instrumentToTrackFieldState(AccessedField accessedField) {
+		final int opcode;
+		if (accessedField.isStatic) {
+			opcode = Opcodes.GETSTATIC;
+		} else {
+			opcode = Opcodes.GETFIELD;
+			super.visitVarInsn(Opcodes.ALOAD, 0);
+		}
+		
+		super.visitFieldInsn(opcode, accessedField.owner, accessedField.name, accessedField.desc);
+		super.visitLdcInsn(accessedField.name);
+		super.visitLdcInsn(lineNumber);
+		super.visitLdcInsn(accessedField.isStatic);
+		super.visitLdcInsn(accessedField.owner);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackFieldState", "(" + accessedField.desc + "Ljava/lang/String;IZLjava/lang/String;)V", false);
 	}
 	
 	private void instrumentToTrackVariableName(int var) {
@@ -157,6 +201,55 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 
 	public void setLocalVariableScopes(List<LocalVariableScope> localVariableScopes) {
 		this.localVariableScopes = localVariableScopes;
+	}
+	
+	public void setAccessedFields(Set<AccessedField> accessedFields) {
+		this.accessedFields = accessedFields;
+	}
+	
+	static class AccessedField {
+		final String owner;
+		final String name;
+		final String desc;
+		final boolean isStatic;
+		
+		public AccessedField(String owner, String name, String desc, boolean isStatic) {
+			this.owner = owner;
+			this.name = name;
+			this.desc = desc;
+			this.isStatic = isStatic;
+		}
+
+		@Override
+		public String toString() {
+			return "AccessedField [owner=" + owner + ", name=" + name + ", desc=" + desc + ", isStatic=" + isStatic + "]";
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((name == null) ? 0 : name.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			AccessedField other = (AccessedField) obj;
+			if (name == null) {
+				if (other.name != null)
+					return false;
+			} else if (!name.equals(other.name))
+				return false;
+			return true;
+		}
+
 	}
 	
 	static class LocalVariableScope {

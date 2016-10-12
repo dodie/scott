@@ -2,6 +2,7 @@ package hu.advancedweb.scott.instrumentation.transformation;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,6 +13,8 @@ import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.MethodNode;
+
+import hu.advancedweb.scott.instrumentation.transformation.LocalVariableStateEmitterTestMethodVisitor.AccessedField;
 
 /**
  * Tracks local variable scopes in test methods and passes this information to the next visitor.
@@ -26,15 +29,19 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	/** Data collected from local variable visits. */
 	private List<LocalVariableScopeLabels> scopes = new ArrayList<>();
 	
+	private Set<AccessedField> accessedFields = new LinkedHashSet<>();
+	
 	private Set<TryCatchBlock> tryCatchBlocks = new HashSet<>();
 	
 	/** Next MethodVisitor to be accepted at method end. */
 	private LocalVariableStateEmitterTestMethodVisitor next;
 	
+	private String className;
 	
-	public LocalVariableScopeExtractorTestMethodVisitor(LocalVariableStateEmitterTestMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
+	public LocalVariableScopeExtractorTestMethodVisitor(LocalVariableStateEmitterTestMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions, String className) {
 		super(Opcodes.ASM5, access, name, desc, signature, exceptions);
 		this.next = next;
+		this.className = className;
 	}
 	
 	@Override
@@ -45,6 +52,7 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	
 	private void reset() {
 		scopes.clear();
+		accessedFields.clear();
 		lines.clear();
 		tryCatchBlocks.clear();
 	}
@@ -65,6 +73,22 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
 		super.visitLocalVariable(name, desc, signature, start, end, index);
 		scopes.add(new LocalVariableScopeLabels(index, name, desc, start, end));
+	}
+	
+	@Override
+	public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+		super.visitFieldInsn(opcode, owner, name, desc);
+		
+		final boolean isStatic;
+		if (Opcodes.GETSTATIC == opcode || Opcodes.PUTSTATIC == opcode) {
+			isStatic = true;
+		} else {
+			isStatic = false;
+		}
+		
+		if (className.equals(owner)) {
+			accessedFields.add(new AccessedField(owner, name, desc, isStatic));
+		}
 	}
 	
 	@Override
@@ -117,6 +141,7 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 				
 		}
 		next.setLocalVariableScopes(localVariableScopes);
+		next.setAccessedFields(accessedFields);
 		accept(next);
 	}
 	
