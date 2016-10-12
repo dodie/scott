@@ -28,16 +28,13 @@ public class SourcePathResolver {
 	private String cacheKey = null;
 	private String cacheValue = null;
 	
-	/**
-	 * Finds the source file path for the given FQN.
-	 * @throws IOException
-	 */
+
 	public String getSourcePath(final String fqn) throws IOException {
 		if (fqn.equals(cacheKey)) {
 			return cacheValue;
 		}
 		
-		final String currentDir = System.getProperty("user.dir");
+		final String currentDir = System.getProperty("user.dir").replace("\\", "/");
 		final String relativeFilePath = fqn.replace(".", "/") + ".java";
 		
 		final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + currentDir + "/**/" + relativeFilePath);
