@@ -159,13 +159,18 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 			opcode = Opcodes.GETFIELD;
 			super.visitVarInsn(Opcodes.ALOAD, 0);
 		}
+
+		String desc = accessedField.desc;
+		if (desc.startsWith("L") || desc.startsWith("[")) {
+			desc = VariableType.REFERENCE.signature;
+		}
 		
 		super.visitFieldInsn(opcode, accessedField.owner, accessedField.name, accessedField.desc);
 		super.visitLdcInsn(accessedField.name);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(accessedField.isStatic);
 		super.visitLdcInsn(accessedField.owner);
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackFieldState", "(" + accessedField.desc + "Ljava/lang/String;IZLjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackFieldState", "(" + desc + "Ljava/lang/String;IZLjava/lang/String;)V", false);
 	}
 	
 	private void instrumentToTrackVariableName(int var) {
