@@ -23,43 +23,43 @@ public class FieldRecordingTest {
 	@Test
 	public void recordInteger() throws Exception {
 		i = 5;
-		assertThat(TestHelper.getLastRecordedStateForField("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateForField("this.i"), equalTo(Integer.toString(i)));
 	}
 	
 	@Test
 	public void recordShort() throws Exception {
 		s = 500;
-		assertThat(TestHelper.getLastRecordedStateForField("s"), equalTo(Short.toString(s)));
+		assertThat(TestHelper.getLastRecordedStateForField("this.s"), equalTo(Short.toString(s)));
 	}
 
 	@Test
 	public void recordLong() throws Exception {
 		l = 1000L;
-		assertThat(TestHelper.getLastRecordedStateForField("l"), equalTo(Long.toString(l)));
+		assertThat(TestHelper.getLastRecordedStateForField("this.l"), equalTo(Long.toString(l)));
 	}
 	
 	@Test
 	public void recordDouble() throws Exception {
 		d = 5.5D;
-		assertThat(TestHelper.getLastRecordedStateForField("d"), equalTo(Double.toString(d)));
+		assertThat(TestHelper.getLastRecordedStateForField("this.d"), equalTo(Double.toString(d)));
 	}
 	
 	@Test
 	public void recordFloat() throws Exception {
 		f = 5.5F;
-		assertThat(TestHelper.getLastRecordedStateForField("f"), equalTo(Float.toString(f)));
+		assertThat(TestHelper.getLastRecordedStateForField("this.f"), equalTo(Float.toString(f)));
 	}
 	
 	@Test
 	public void recordBoolean() throws Exception {
 		bool = true;
-		assertThat(TestHelper.getLastRecordedStateForField("bool"), equalTo(Boolean.toString(bool)));
+		assertThat(TestHelper.getLastRecordedStateForField("this.bool"), equalTo(Boolean.toString(bool)));
 	}
 	
 	@Test
 	public void recordString() throws Exception {
 		object = "Hello World!";
-		assertThat(TestHelper.getLastRecordedStateForField("object"), equalTo(object));
+		assertThat(TestHelper.getLastRecordedStateForField("this.object"), equalTo(object));
 	}
 
 }

@@ -9,74 +9,64 @@ import hu.advancedweb.scott.helper.TestHelper;
 
 public class FieldRecordingInitialValuesTest {
 	
-	byte b = 0;
-	short s = 0;
-	int i = 0;
-	long l = 0L;
-	float f = 0.0F;
-	double d = 0.0D;
-	boolean bool = false;
-	char c = 'i';
-	String object = "initial";
+	int a = 10;
+	int b = 11;
+	static int A = 12;
+	static int B = 13;
 	
 	
 	@Test
-	public void test_1_recordFieldAccess() throws Exception {
+	public void recordFieldAccess() throws Exception {
 		// track initial states of accessed fields
-		assertThat(TestHelper.getLastRecordedStateForField("b"), equalTo("0"));
-		assertThat(TestHelper.getLastRecordedStateForField("s"), equalTo("0"));
-		assertThat(TestHelper.getLastRecordedStateForField("i"), equalTo("0"));
-		assertThat(TestHelper.getLastRecordedStateForField("l"), equalTo("0"));
-		assertThat(TestHelper.getLastRecordedStateForField("f"), equalTo("0.0"));
-		assertThat(TestHelper.getLastRecordedStateForField("d"), equalTo("0.0"));
-		assertThat(TestHelper.getLastRecordedStateForField("bool"), equalTo("false"));
-		assertThat(TestHelper.getLastRecordedStateForField("c"), equalTo("i"));
-		assertThat(TestHelper.getLastRecordedStateForField("object"), equalTo("initial"));
+		assertThat(TestHelper.getLastRecordedStateForField("this.a"), equalTo("10"));
+		assertThat(TestHelper.getLastRecordedStateForField("this.b"), equalTo("11"));
+		assertThat(TestHelper.getLastRecordedStateForField("FieldRecordingInitialValuesTest.A"), equalTo("12"));
+		assertThat(TestHelper.getLastRecordedStateForField("FieldRecordingInitialValuesTest.B"), equalTo("13"));
 		
 		@SuppressWarnings("unused")
-		String accessed = "" + b + s + i + l + f + d + bool + c + object;
+		String accessed = "" + a + b + A + B;
 	}
 	
 	@Test
-	public void test_2_recordFieldSubsetAccess() throws Exception {
+	public void recordFieldSubsetAccess() throws Exception {
 		// track initial states of accessed fields
-		assertThat(TestHelper.getLastRecordedStateForField("b"), equalTo("0"));
-		assertThat(TestHelper.getLastRecordedStateForField("s"), equalTo("0"));
-		assertThat(TestHelper.getLastRecordedStateForField("i"), equalTo("0"));
-		assertThat(TestHelper.getLastRecordedStateForField("l"), equalTo("0"));
-		assertThat(TestHelper.getLastRecordedStateForField("f"), equalTo("0.0"));
-		assertThat(TestHelper.getLastRecordedStateForField("d"), equalTo("0.0"));
+		assertThat(TestHelper.getLastRecordedStateForField("this.a"), equalTo("10"));
+		assertThat(TestHelper.getLastRecordedStateForField("FieldRecordingInitialValuesTest.A"), equalTo("12"));
 		
 		// don't record not accessed fields
-		assertThat(TestHelper.getLastRecordedStateForField("bool"), equalTo(null));
-		assertThat(TestHelper.getLastRecordedStateForField("c"), equalTo(null));
-		assertThat(TestHelper.getLastRecordedStateForField("object"), equalTo(null));
+		assertThat(TestHelper.getLastRecordedStateForField("b"), equalTo(null));
+		assertThat(TestHelper.getLastRecordedStateForField("FieldRecordingInitialValuesTest.B"), equalTo(null));
 		
 		@SuppressWarnings("unused")
-		String accessed = "" + b + s + i + l + f + d; 
+		String accessed = "" + a + A;
 	}
 	
 	@Test
-	public void test_3_recordWrite() throws Exception {
+	public void recordWrite() throws Exception {
 		// initial value match
-		assertThat(TestHelper.getLastRecordedStateForField("i"), equalTo("0"));
+		assertThat(TestHelper.getLastRecordedStateForField("this.a"), equalTo("10"));
+		assertThat(TestHelper.getLastRecordedStateForField("FieldRecordingInitialValuesTest.A"), equalTo("12"));
 		
-		i = 10;
+		a = 20;
+		A = 22;
 		
 		// values after write match
-		assertThat(TestHelper.getLastRecordedStateForField("i"), equalTo("10"));
+		assertThat(TestHelper.getLastRecordedStateForField("this.a"), equalTo("20"));
+		assertThat(TestHelper.getLastRecordedStateForField("FieldRecordingInitialValuesTest.A"), equalTo("22"));
 	}
 	
 	@Test
-	public void test_4_recordReadAndWrite() throws Exception {
+	public void recordReadAndWrite() throws Exception {
 		// initial modified values match
-		assertThat(TestHelper.getLastRecordedStateForField("i"), equalTo("0"));
+		assertThat(TestHelper.getLastRecordedStateForField("this.b"), equalTo("11"));
+		assertThat(TestHelper.getLastRecordedStateForField("FieldRecordingInitialValuesTest.B"), equalTo("13"));
 		
 		@SuppressWarnings("unused")
-		String accessed = "" + i;
+		String accessed = "" + b + B;
 		
 		// no change after reading
-		assertThat(TestHelper.getLastRecordedStateForField("i"), equalTo("0"));
+		assertThat(TestHelper.getLastRecordedStateForField("this.b"), equalTo("11"));
+		assertThat(TestHelper.getLastRecordedStateForField("FieldRecordingInitialValuesTest.B"), equalTo("13"));
 	}
 	
 }

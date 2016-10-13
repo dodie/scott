@@ -28,7 +28,7 @@ public class TestHelper {
 		Collections.reverse(states);
 		
 		for (LocalVariableState localVariableState : states) {
-			if (localVariableState.key.endsWith("." + fieldName)) {
+			if (localVariableState.key.equals(fieldName)) {
 				return localVariableState.value;
 			}
 		}
