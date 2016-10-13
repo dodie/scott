@@ -31,14 +31,14 @@ public class FieldRecordingInitialValuesTest {
 	public void recordFieldSubsetAccess() throws Exception {
 		// track initial states of accessed fields
 		assertThat(TestHelper.getLastRecordedStateForField("this.a"), equalTo("10"));
-		assertThat(TestHelper.getLastRecordedStateForField("FieldRecordingInitialValuesTest.A"), equalTo("12"));
+		assertThat(TestHelper.getLastRecordedStateForField("FieldRecordingInitialValuesTest.B"), equalTo("13"));
 		
 		// don't record not accessed fields
 		assertThat(TestHelper.getLastRecordedStateForField("b"), equalTo(null));
-		assertThat(TestHelper.getLastRecordedStateForField("FieldRecordingInitialValuesTest.B"), equalTo(null));
+		assertThat(TestHelper.getLastRecordedStateForField("FieldRecordingInitialValuesTest.A"), equalTo(null));
 		
 		@SuppressWarnings("unused")
-		String accessed = "" + a + A;
+		String accessed = "" + a + B;
 	}
 	
 	@Test
