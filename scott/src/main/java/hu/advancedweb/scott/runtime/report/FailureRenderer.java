@@ -1,6 +1,5 @@
 package hu.advancedweb.scott.runtime.report;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,29 +103,37 @@ public class FailureRenderer {
 	}
 	
 	private static String renderPlain(ScottReport scottReport) {
+		boolean firstLineWithBraketAppended = false;
+		boolean initialReportAppended = false;
+		
 		StringBuilder sb = new StringBuilder();
 		sb.append("\n");
-		
-		String blankLine = scottReport.getSourceLines().firstEntry().getValue().replaceAll("\t", "    ").replaceFirst("[^\\s].*$", "");
-		if (!scottReport.getInitialSnapshots().isEmpty()) {
-			sb.append("    ");
-			sb.append("|  ");
-			sb.append(blankLine);
-			sb.append("// Values of the accessed fields before the test:");
-			sb.append("\n");
-			for (Snapshot snapshot : scottReport.getInitialSnapshots()) {
-				sb.append("    ");
-				sb.append("|  ");
-				sb.append(blankLine);
-				sb.append("//    -> ");
-				sb.append(snapshot.name + "=" + snapshot.value.trim());
-				sb.append("\n");
-			}
-		}
 		
 		for (Map.Entry<Integer, String> line : scottReport.getSourceLines().entrySet()) {
 			int lineNumber = line.getKey();
 			String lineText = line.getValue().replaceAll("\t", "    ");
+			
+			if (firstLineWithBraketAppended && initialReportAppended == false) {
+				initialReportAppended = true;
+				if (!scottReport.getInitialSnapshots().isEmpty()) {
+					String blankLine = lineText.replaceFirst("[^\\s].*$", "");
+					sb.append("    ");
+					sb.append("|  ");
+					sb.append(blankLine);
+					sb.append("\n");
+					for (Snapshot snapshot : scottReport.getInitialSnapshots()) {
+						sb.append("    ");
+						sb.append("|  ");
+						sb.append(blankLine);
+						sb.append("//    -> ");
+						sb.append(snapshot.name + "=" + snapshot.value.trim());
+						sb.append("\n");
+					}
+					sb.append("    ");
+					sb.append("|  ");
+					sb.append("\n");
+				}
+			}
 			
 			sb.append(String.format("%1$4s", lineNumber));
 			if (scottReport.getExceptionLineNumber() == lineNumber) {
@@ -155,9 +162,11 @@ public class FailureRenderer {
 					isFirstCommentInThisLine = false;
 				}
 			}
-			
 			sb.append("\n");
+			
+			firstLineWithBraketAppended = firstLineWithBraketAppended || lineText.contains("{");
 		}
+		
 		return sb.toString();
 	}
 
