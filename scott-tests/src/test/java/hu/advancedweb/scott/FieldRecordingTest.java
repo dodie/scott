@@ -1,12 +1,12 @@
 package hu.advancedweb.scott;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+import hu.advancedweb.scott.helper.TestHelper;
+
 public class FieldRecordingTest {
 	
 	byte b = 0;
@@ -19,36 +19,47 @@ public class FieldRecordingTest {
 	char c = 'i';
 	String object = "initial";
 
+	
 	@Test
-	public void test_1_recordRead() throws Exception {
-		// initial values match
-		
-		
+	public void recordInteger() throws Exception {
+		i = 5;
+		assertThat(TestHelper.getLastRecordedStateForField("i"), equalTo(Integer.toString(i)));
 	}
 	
 	@Test
-	public void test_2_recordWrite() throws Exception {
-		// initial values match
-		
-		// values after write match
-	}
-	
-	@Test
-	public void test_3_recordReadAndWrite() throws Exception {
-		// initial values match
-		
-		// no change after reading
-		
-		// values after write
-	}
-	
-	@Test
-	public void test_4_recordSubset() throws Exception {
-		// initial values contains only the accessed fields
+	public void recordShort() throws Exception {
+		s = 500;
+		assertThat(TestHelper.getLastRecordedStateForField("s"), equalTo(Short.toString(s)));
 	}
 
+	@Test
+	public void recordLong() throws Exception {
+		l = 1000L;
+		assertThat(TestHelper.getLastRecordedStateForField("l"), equalTo(Long.toString(l)));
+	}
 	
-	// TODO: maybe: align with var recording test and do tests by type as well
-
+	@Test
+	public void recordDouble() throws Exception {
+		d = 5.5D;
+		assertThat(TestHelper.getLastRecordedStateForField("d"), equalTo(Double.toString(d)));
+	}
+	
+	@Test
+	public void recordFloat() throws Exception {
+		f = 5.5F;
+		assertThat(TestHelper.getLastRecordedStateForField("f"), equalTo(Float.toString(f)));
+	}
+	
+	@Test
+	public void recordBoolean() throws Exception {
+		bool = true;
+		assertThat(TestHelper.getLastRecordedStateForField("bool"), equalTo(Boolean.toString(bool)));
+	}
+	
+	@Test
+	public void recordString() throws Exception {
+		object = "Hello World!";
+		assertThat(TestHelper.getLastRecordedStateForField("object"), equalTo(object));
+	}
 
 }

@@ -22,5 +22,18 @@ public class TestHelper {
 		
 		return null;
 	}
+	
+	public static String getLastRecordedStateForField(String fieldName) {
+		List<LocalVariableState> states = new ArrayList<LocalVariableState>(LocalVariableStateRegistry.getFieldStates());
+		Collections.reverse(states);
+		
+		for (LocalVariableState localVariableState : states) {
+			if (localVariableState.key.endsWith("." + fieldName)) {
+				return localVariableState.value;
+			}
+		}
+		
+		return null;
+	}
 
 }
