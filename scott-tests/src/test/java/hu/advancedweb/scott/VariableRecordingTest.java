@@ -199,16 +199,4 @@ public class VariableRecordingTest {
 		}
 	}
 	
-	// FIXME: we can't record the name of a variable, if its declaration is the last statement in a block. See issue #15.
-//	@Test
-//	public void captureLastVariableName() throws Exception {
-//		String outer = "outer";
-//		{
-//			String inner = "inner";
-//		}
-//		
-//		assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo("inner")); // <- this fails, we track the value, but not the name
-//		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo("outer"));
-//	}
-
 }

@@ -175,7 +175,14 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	
 	private void instrumentToTrackVariableName(int var) {
 		String variableName = getVariableNameInCurrentScope(var);
-		if (variableName != null) { // FIXME: Workaround for issue #15.
+		if (variableName != null) { 
+			/* 
+			 * This null-check is the workaround for issue #15:
+			 * If a variable declaration is the last statement in a code block,
+			 * then the variable name is not present in the compiled bytecode.
+			 * With this workaround Scott can still track the assigned value to such variables.
+			 */
+			
 			super.visitLdcInsn(variableName);
 			super.visitLdcInsn(lineNumber);
 			super.visitLdcInsn(var);
