@@ -14,7 +14,7 @@ import java.util.TreeMap;
 class ScottReport {
 	
 	private TreeMap<Integer, String> sourceForLineNumbers = new TreeMap<>();
-	private List<Snapshot> initialSnapshots = new ArrayList<>();
+	private Map<Integer, List<Snapshot>> initialSnapshots = new TreeMap<>();
 	private Map<Integer, List<Snapshot>> snapshotsForLineNumbers = new TreeMap<>();
 	private int beginLineNumber;
 	private int exceptionLineNumber;
@@ -30,8 +30,10 @@ class ScottReport {
 		beginLineNumber++;
 	}
 	
-	public void addInitialSnapshot(String name, String value) {
-		initialSnapshots.add(new Snapshot(name, value));
+	public void addInitialSnapshot(int lineNumber, String name, String value) {
+		List<Snapshot> variableSnapshots = initialSnapshots.getOrDefault(lineNumber, new ArrayList<Snapshot>());
+		variableSnapshots.add(new Snapshot(name, value));
+		initialSnapshots.put(lineNumber, variableSnapshots);
 	}
 	
 	public void addSnapshot(int lineNumber, String name, String value) {
@@ -56,8 +58,8 @@ class ScottReport {
 		return Collections.unmodifiableList(snapshotsForLineNumbers.getOrDefault(lineNumber, new ArrayList<Snapshot>()));
 	}
 	
-	public List<Snapshot> getInitialSnapshots() {
-		return Collections.unmodifiableList(initialSnapshots);
+	public List<Snapshot> getInitialSnapshots(int lineNumber) {
+		return Collections.unmodifiableList(initialSnapshots.getOrDefault(lineNumber, new ArrayList<Snapshot>()));
 	}
 	
 	public int getBeginLineNumber() {

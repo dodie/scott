@@ -38,22 +38,20 @@ public class CalculatorSteps {
 		assertThat(result, equalTo(number));
 	}
 
-	@Then("^I should see 20, 40 and 80 if I repeat the operation three times$")
-	public void i_should_see_the_following_numbers() throws Throwable {
-		int result;
-		
+	@Then("^I should see (\\d+), (\\d+) and (\\d+) if I repeat the operation three times$")
+	public void i_should_see_the_following_numbers(int first, int second, int third) throws Throwable {
 		calculator.pressEnter();
-		result = calculator.getResult();
-		assertThat(result, equalTo(20));
+		int result = calculator.getResult();
+		assertThat(result, equalTo(first));
 
 		calculator.pressEnter();
 		result = calculator.getResult();
-		assertThat(result, equalTo(40));
+		assertThat(result, equalTo(second));
 		
 		calculator.pressEnter();
 		// Oops. Accidentally pressing the button twice.
 		calculator.pressEnter();
 		result = calculator.getResult();
-		assertThat(result, equalTo(80));
+		assertThat(result, equalTo(third));
 	}
 }

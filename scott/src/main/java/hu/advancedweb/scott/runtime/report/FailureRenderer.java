@@ -66,7 +66,11 @@ public class FailureRenderer {
 		for (LocalVariableState event : LocalVariableStateRegistry.getLocalVariableStates()) {
 			String lastValue = trackedValue.get(event.key);
 			if (!event.value.equals(lastValue)) {
-				scottReport.addSnapshot(event.lineNumber, LocalVariableStateRegistry.getLocalVariableName(event.key, event.lineNumber), event.value);
+				if (event.lineNumber == 0) {
+					scottReport.addInitialSnapshot(getInitLine(event), LocalVariableStateRegistry.getLocalVariableName(event.key, event.lineNumber), event.value);
+				} else {
+					scottReport.addSnapshot(event.lineNumber, LocalVariableStateRegistry.getLocalVariableName(event.key, event.lineNumber), event.value);
+				}
 				trackedValue.put(event.key, event.value);
 			}
 		}
@@ -77,13 +81,23 @@ public class FailureRenderer {
 			String lastValue = trackedValue.get(event.key);
 			if (!event.value.equals(lastValue)) {
 				if (event.lineNumber == 0) {
-					scottReport.addInitialSnapshot(event.key, event.value);
+					scottReport.addInitialSnapshot(0, event.key, event.value);
 				} else {
 					scottReport.addSnapshot(event.lineNumber, event.key, event.value);
 				}
 			}
 			trackedValue.put(event.key, event.value);
 		}
+	}
+
+	private static int getInitLine(LocalVariableState event) {
+		int initLine = 0;
+		for (Map.Entry<String, Integer> methodStart: LocalVariableStateRegistry.getMethodStartLine().entrySet()) {
+			if (event.key.endsWith(methodStart.getKey())) {
+				initLine = methodStart.getValue();
+			}
+		}
+		return initLine;
 	}
 	
 	private static void fillException(ScottReport scottReport, MethodSource methodSource, Throwable throwable) {
@@ -112,27 +126,43 @@ public class FailureRenderer {
 		for (Map.Entry<Integer, String> line : scottReport.getSourceLines().entrySet()) {
 			int lineNumber = line.getKey();
 			String lineText = line.getValue().replaceAll("\t", "    ");
+			boolean initialAdded = false;
 			
 			if (firstLineWithBraketAppended && initialReportAppended == false) {
 				initialReportAppended = true;
-				if (!scottReport.getInitialSnapshots().isEmpty()) {
+				if (!scottReport.getInitialSnapshots(0).isEmpty()) {
 					String blankLine = lineText.replaceFirst("[^\\s].*$", "");
-					sb.append("    ");
-					sb.append("|  ");
-					sb.append(blankLine);
-					sb.append("\n");
-					for (Snapshot snapshot : scottReport.getInitialSnapshots()) {
+					for (Snapshot snapshot : scottReport.getInitialSnapshots(0)) {
 						sb.append("    ");
 						sb.append("|  ");
 						sb.append(blankLine);
-						sb.append("//    -> ");
+						sb.append("//    => ");
 						sb.append(snapshot.name + "=" + snapshot.value.trim());
 						sb.append("\n");
+						initialAdded = true;
 					}
+				}
+			}
+			
+			if (!scottReport.getInitialSnapshots(lineNumber).isEmpty()) {
+				String blankLine = lineText.replaceFirst("[^\\s].*$", "");
+				for (Snapshot snapshot : scottReport.getInitialSnapshots(lineNumber)) {
 					sb.append("    ");
 					sb.append("|  ");
+					sb.append(blankLine);
+					sb.append("//    => ");
+					sb.append(snapshot.name + "=" + snapshot.value.trim());
 					sb.append("\n");
+					initialAdded = true;
 				}
+			}
+			
+			if (initialAdded) {
+				String blankLine = lineText.replaceFirst("[^\\s].*$", "");
+				sb.append("    ");
+				sb.append("|  ");
+				sb.append(blankLine);
+				sb.append("\n");
 			}
 			
 			sb.append(String.format("%1$4s", lineNumber));

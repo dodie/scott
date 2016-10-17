@@ -3,7 +3,9 @@ package hu.advancedweb.scott.runtime.track;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Track local variable changes.
@@ -23,6 +25,8 @@ public class LocalVariableStateRegistry {
 	private static String METHOD_NAME;
 
 	private static String CLASS_NAME;
+	
+	private static Map<String, Integer> METHOD_START_LINES = new HashMap<String, Integer>();
 	
 	public static void startTracking(String className, String methodName) {
 		CLASS_NAME = className;
@@ -53,6 +57,10 @@ public class LocalVariableStateRegistry {
 		return METHOD_NAME;
 	}
 	
+	public static Map<String, Integer> getMethodStartLine() {
+		return METHOD_START_LINES;
+	}
+	
 	public static String getLocalVariableName(String key, int lineNumber) {
 		String name = null;
 		for (LocalVariableName localVariableName : LOCAL_VARIABLE_NAMES) {
@@ -64,8 +72,11 @@ public class LocalVariableStateRegistry {
 				}	
 			}
 		}
-		
 		return name;
+	}
+	
+	public static void trackMethodStart(int lineNumber, String methodName) {
+		METHOD_START_LINES.put(methodName, lineNumber);
 	}
 	
 	public static void trackFieldState(String value, String name, int lineNumber, boolean isStatic, String owner) {

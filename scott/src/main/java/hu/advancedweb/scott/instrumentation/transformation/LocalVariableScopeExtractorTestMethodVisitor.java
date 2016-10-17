@@ -96,7 +96,7 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 		List<LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope> localVariableScopes = new ArrayList<>();
 		for (LocalVariableScopeLabels range : scopes) {
 
-			int prevLine = lines.firstKey();
+			int prevLine = 0; // if the LocalVariableScope start line is 0 it means input parameter
 			int startLine = lines.firstKey();
 			int endLine = lines.lastKey();
 			
@@ -133,10 +133,10 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 			}
 			
 			if (startLine <= endLine) {
-				localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, range.desc, startLine, endLine));
+				localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, VariableType.getByDesc(range.desc), startLine, endLine));
 			} else {
 				// Sometimes the end label is for an earlier line number than the start label, see Issue #17.
-				localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, range.desc, endLine, startLine));
+				localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, VariableType.getByDesc(range.desc), endLine, startLine));
 			}
 				
 		}

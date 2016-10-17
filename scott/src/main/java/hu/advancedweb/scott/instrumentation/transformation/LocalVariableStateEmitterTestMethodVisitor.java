@@ -2,9 +2,9 @@ package hu.advancedweb.scott.instrumentation.transformation;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.objectweb.asm.AnnotationVisitor;
@@ -19,13 +19,10 @@ import org.objectweb.asm.Opcodes;
  */
 public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 
-	/** The current line number to determine variables in scope. */
 	private int lineNumber;
 	
-	/** Current variable to type map. */
-	private Map<Integer, VariableType> localVariables = new HashMap<Integer, VariableType>();
+	private Set<Integer> localVariables = new HashSet<>();
 	
-	/** Variable scopes in the method. */
 	private List<LocalVariableScope> localVariableScopes = new ArrayList<>();
 
 	private Set<AccessedField> accessedFields;
@@ -35,6 +32,8 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	private String className;
 
 	private boolean clearTrackedDataAtStart;
+	
+	private boolean methodStartTracked;
 
 
 	public LocalVariableStateEmitterTestMethodVisitor(MethodVisitor mv, String className, String methodName, boolean clearTrackedDataAtStart) {
@@ -47,6 +46,8 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	@Override
 	public void visitCode() {
 		super.visitCode();
+		
+		// clear previously tracked data
 		if (clearTrackedDataAtStart) {
 			instrumentToClearTrackedDataAndSignalStartOfRecording();
 		}
@@ -55,11 +56,24 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		for (AccessedField accessedField : accessedFields) {
 			instrumentToTrackFieldState(accessedField);
 		}
+		
+		// track method arguments
+		for (LocalVariableScope localVariableScope : localVariableScopes) {
+			if (localVariableScope.start == 0) {
+				instrumentToTrackVariableName(localVariableScope);
+				instrumentToTrackVariableState(localVariableScope);
+			}
+		}
 	}
-
+	
 	@Override
 	public void visitLineNumber(int lineNumber, Label label) {
 		this.lineNumber = lineNumber;
+		
+		if (!methodStartTracked) {
+			methodStartTracked = true;
+			instrumentToTrackMethodStart(lineNumber);
+		}
 		super.visitLineNumber(lineNumber, label);
 	}
 	
@@ -73,10 +87,11 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 		super.visitMethodInsn(opcode, owner, name, desc, itf);
 
-		// track every in-scope variable state after method calls
-		for (Integer var : localVariables.keySet()) {
-			if (isVariableInScope(var)) {
-				instrumentToTrackVariableState(var);
+		for (LocalVariableScope localVariableScope : localVariableScopes) {
+			if (!localVariables.contains(localVariableScope.var)) continue;
+			
+			if (isVariableInScope(localVariableScope.var)) {
+				instrumentToTrackVariableState(localVariableScope);
 			}
 		}
 		
@@ -91,11 +106,20 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitVarInsn(opcode, var);
 		
 		// Track variable state and name at variable stores. (Typical variable assignments.)
-		VariableType variableType = VariableType.getByStoreOpCode(opcode);
-		if (variableType != null) {
-			localVariables.put(var, variableType);
-			instrumentToTrackVariableName(var);
-			instrumentToTrackVariableState(var);
+		if (VariableType.isStoreOperation(opcode)) {
+			localVariables.add(var);
+			
+			LocalVariableScope lvs = getLocalVariableScope(var);
+			if (lvs != null) {
+				/* 
+				 * This null-check is the workaround for issue #15:
+				 * If a variable declaration is the last statement in a code block,
+				 * then the variable name is not present in the compiled bytecode.
+				 * With this workaround Scott can still track the assigned value to such variables.
+				 */
+				instrumentToTrackVariableName(lvs);
+				instrumentToTrackVariableState(lvs);
+			}
 		}
 	}
 	
@@ -104,8 +128,9 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitIincInsn(var, increment);
 		
 		// Track variable state and name at variable stores. (At variable increases.)
-		instrumentToTrackVariableName(var);
-		instrumentToTrackVariableState(var);
+		LocalVariableScope lvs = getLocalVariableScope(var);
+		instrumentToTrackVariableName(lvs);
+		instrumentToTrackVariableState(lvs);
 	}
 	
 	private void instrumentToClearTrackedDataAndSignalStartOfRecording() {
@@ -127,28 +152,18 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		}
 	}
 	
-	private void instrumentToTrackVariableState(int var) {
-		super.visitVarInsn(localVariables.get(var).loadOpcode, var);
+	private void instrumentToTrackVariableState(LocalVariableScope localVariableScope) {
+		super.visitVarInsn(localVariableScope.variableType.loadOpcode, localVariableScope.var);
 		super.visitLdcInsn(lineNumber);
-		super.visitLdcInsn(var);
+		super.visitLdcInsn(localVariableScope.var);
 		super.visitLdcInsn(methodName);
-		LocalVariableScope lvs = null;
-		for (LocalVariableScope localVariableScope : localVariableScopes) {
-			if (localVariableScope.var == var) {
-				lvs = localVariableScope;
-			}
-		}
-		
-		if (lvs != null) {
-			String desc = lvs.desc;
-			if (desc.startsWith("L") || desc.startsWith("[")) {
-				desc = VariableType.REFERENCE.signature;
-			}
-			super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackLocalVariableState", "(" + desc + "IILjava/lang/String;)V", false);
-		} else {
-			// If no variable declaration found for this variable, use the description from the load opcode.
-			super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackLocalVariableState", "(" + localVariables.get(var).signature + "IILjava/lang/String;)V", false);
-		}
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackLocalVariableState", "(" + localVariableScope.variableType.desc + "IILjava/lang/String;)V", false);
+	}
+	
+	private void instrumentToTrackMethodStart(int lineNumber) {
+		super.visitLdcInsn(lineNumber);
+		super.visitLdcInsn(methodName);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackMethodStart", "(ILjava/lang/String;)V", false);
 	}
 	
 	private void instrumentToTrackFieldState(AccessedField accessedField) {
@@ -162,7 +177,7 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 
 		String desc = accessedField.desc;
 		if (desc.startsWith("L") || desc.startsWith("[")) {
-			desc = VariableType.REFERENCE.signature;
+			desc = VariableType.REFERENCE.desc;
 		}
 		
 		super.visitFieldInsn(opcode, accessedField.owner, accessedField.name, accessedField.desc);
@@ -173,45 +188,42 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackFieldState", "(" + desc + "Ljava/lang/String;IZLjava/lang/String;)V", false);
 	}
 	
-	private void instrumentToTrackVariableName(int var) {
-		String variableName = getVariableNameInCurrentScope(var);
-		if (variableName != null) { 
-			/* 
-			 * This null-check is the workaround for issue #15:
-			 * If a variable declaration is the last statement in a code block,
-			 * then the variable name is not present in the compiled bytecode.
-			 * With this workaround Scott can still track the assigned value to such variables.
-			 */
-			
-			super.visitLdcInsn(variableName);
-			super.visitLdcInsn(lineNumber);
-			super.visitLdcInsn(var);
-			super.visitLdcInsn(methodName);
-			super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackVariableName", "(Ljava/lang/String;IILjava/lang/String;)V", false);
-		}
+	private void instrumentToTrackVariableName(LocalVariableScope localVariableScope) {
+		super.visitLdcInsn(localVariableScope.name);
+		super.visitLdcInsn(lineNumber);
+		super.visitLdcInsn(localVariableScope.var);
+		super.visitLdcInsn(methodName);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackVariableName", "(Ljava/lang/String;IILjava/lang/String;)V", false);
 	}
 	
 	private boolean isVariableInScope(int var) {
-		return getVariableNameInCurrentScope(var) != null;
+		return getLocalVariableScope(var) != null;
 	}
 	
-	private String getVariableNameInCurrentScope(int var) {
+	private LocalVariableScope getLocalVariableScope(int var) {
 		// check the scopes in reverse order in case of multiple var declarations on the same line
-		List<LocalVariableScope> localVariableScopesReversed = localVariableScopes;
-		
+		List<LocalVariableScope> localVariableScopesReversed = new ArrayList<>(localVariableScopes);
 		Collections.reverse(localVariableScopesReversed);
 		
-		for (LocalVariableScope localVariableRange : localVariableScopesReversed) {
-			if (localVariableRange.var == var &&
-					localVariableRange.start <= lineNumber &&
-					localVariableRange.end >= lineNumber) {
-				return localVariableRange.name;
+		for (LocalVariableScope localVariableScope : localVariableScopes) {
+			if (localVariableScope.var == var &&
+					localVariableScope.start <= lineNumber &&
+					localVariableScope.end >= lineNumber) {
+				return localVariableScope;
 			}
 		}
 		return null;
 	}
-
+	
 	public void setLocalVariableScopes(List<LocalVariableScope> localVariableScopes) {
+		for (Iterator<LocalVariableScope> iterator = localVariableScopes.iterator(); iterator.hasNext();) {
+			LocalVariableScope localVariableScope = iterator.next();
+			
+			if (localVariableScope.name.equals("this")) {
+				iterator.remove();
+			}
+		}
+		
 		this.localVariableScopes = localVariableScopes;
 	}
 	
@@ -261,20 +273,19 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 				return false;
 			return true;
 		}
-
 	}
 	
 	static class LocalVariableScope {
 		final int var;
 		final String name;
-		final String desc;
+		final VariableType variableType;
 		final int start;
 		final int end;
 		
-		LocalVariableScope(int var, String name, String desc, int start, int end) {
+		LocalVariableScope(int var, String name, VariableType variableType, int start, int end) {
 			this.var = var;
 			this.name = name;
-			this.desc = desc;
+			this.variableType = variableType;
 			this.start = start;
 			this.end = end;
 		}
@@ -282,34 +293,6 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		@Override
 		public String toString() {
 			return "LocalVariableScope [var=" + var + ", name=" + name + ", start=" + start + ", end=" + end + "]";
-		}
-	}
-	
-	private static enum VariableType {
-		INTEGER(Opcodes.ILOAD, Opcodes.ISTORE, "I"),
-		LONG(Opcodes.LLOAD, Opcodes.LSTORE, "J"),
-		FLOAT(Opcodes.FLOAD, Opcodes.FSTORE, "F"),
-		DOUBLE(Opcodes.DLOAD, Opcodes.DSTORE, "D"),
-		REFERENCE(Opcodes.ALOAD, Opcodes.ASTORE, "Ljava/lang/Object;");
-
-		final int loadOpcode;
-		final int storeOpcode;
-		final String signature;
-		
-		VariableType(int loadOpcode, int storeOpcode, String signature) {
-			this.loadOpcode = loadOpcode;
-			this.storeOpcode = storeOpcode;
-			this.signature = signature;
-		}
-		
-		static VariableType getByStoreOpCode(final int opcode) {
-			for (int i = 0; i < VariableType.values().length; i++) {
-				VariableType variableType = VariableType.values()[i];
-				if (variableType.storeOpcode == opcode) {
-					return variableType;
-				}
-			}
-			return null;
 		}
 	}
 	
