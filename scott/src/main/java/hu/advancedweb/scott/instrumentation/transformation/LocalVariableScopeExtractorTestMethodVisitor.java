@@ -31,7 +31,7 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	
 	private Set<AccessedField> accessedFields = new LinkedHashSet<>();
 	
-	private Set<TryCatchBlock> tryCatchBlocks = new HashSet<>();
+	private Set<TryCatchBlockLabels> tryCatchBlocks = new HashSet<>();
 	
 	/** Next MethodVisitor to be accepted at method end. */
 	private LocalVariableStateEmitterTestMethodVisitor next;
@@ -60,7 +60,7 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	@Override
 	public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
 		super.visitTryCatchBlock(start, end, handler, type);
-		tryCatchBlocks.add(new TryCatchBlock(start, handler));
+		tryCatchBlocks.add(new TryCatchBlockLabels(start, handler));
 	}
 	
 	@Override
@@ -95,54 +95,68 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	public void visitEnd() {
 		List<LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope> localVariableScopes = new ArrayList<>();
 		for (LocalVariableScopeLabels range : scopes) {
-
-			int prevLine = 0; // if the LocalVariableScope start line is 0 it means input parameter
-			int startLine = lines.firstKey();
-			int endLine = lines.lastKey();
-			
-			TryCatchBlock inTry = null;
-			Stack<TryCatchBlock> tryCatchBlockScopes = new Stack<>();
-			for (Map.Entry<Integer, Label> entry : lines.entrySet()) {
-				Label label = entry.getValue();
-				
-				if (label == range.start) {
-					startLine = prevLine;
-					
-					if (!tryCatchBlockScopes.isEmpty()) {
-						inTry = tryCatchBlockScopes.peek();
-					}
-				} else if (inTry == null && label == range.end) {
-					endLine = prevLine;
-				} else if (inTry != null && label == inTry.handler) {
-					endLine = prevLine;
-				}
-				
-				/*
-				 * Fix for issue #14: Variable scopes in Try blocks previously had wrong end line number, 
-				 * as they pointied to the end of the catch block, even if they were declared in the try block.
-				 */
-				for (TryCatchBlock tryCatchBlock : tryCatchBlocks) {
-					if (label == tryCatchBlock.start) {
-						tryCatchBlockScopes.push(tryCatchBlock);
-					} else if (label == tryCatchBlock.handler) {
-						tryCatchBlockScopes.pop();
-					}
-				}
-				
-				prevLine = entry.getKey();
+			if (range.name.equals("this")) {
+				continue;
 			}
 			
-			if (startLine <= endLine) {
-				localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, VariableType.getByDesc(range.desc), startLine, endLine));
-			} else {
-				// Sometimes the end label is for an earlier line number than the start label, see Issue #17.
-				localVariableScopes.add(new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, VariableType.getByDesc(range.desc), endLine, startLine));
-			}
-				
+			localVariableScopes.add(calculateScope(range));
 		}
 		next.setLocalVariableScopes(localVariableScopes);
 		next.setAccessedFields(accessedFields);
 		accept(next);
+	}
+	
+	/**
+	 * Calculate the start and end line numbers for variable scopes.
+	 * If the LocalVariableScope start line is 0, then it is an input parameter,
+	 * as it's scope start label appeared before the method body.
+	 */
+	private LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope calculateScope(LocalVariableScopeLabels range) {
+		int prevLine = 0;
+		int startLine = lines.firstKey();
+		int endLine = lines.lastKey();
+		
+		TryCatchBlockLabels inTry = null;
+		Stack<TryCatchBlockLabels> tryCatchBlockScopes = new Stack<>();
+		for (Map.Entry<Integer, Label> entry : lines.entrySet()) {
+			Label label = entry.getValue();
+			
+			if (label == range.start) {
+				startLine = prevLine;
+				
+				if (!tryCatchBlockScopes.isEmpty()) {
+					inTry = tryCatchBlockScopes.peek();
+				}
+			} else if (inTry == null && label == range.end) {
+				endLine = prevLine;
+			} else if (inTry != null && label == inTry.handler) {
+				endLine = prevLine;
+			}
+			
+			/*
+			 * Fix for issue #14: Variable scopes in Try blocks previously had wrong end line number, 
+			 * as they pointied to the end of the catch block, even if they were declared in the try block.
+			 */
+			for (TryCatchBlockLabels tryCatchBlock : tryCatchBlocks) {
+				if (label == tryCatchBlock.start) {
+					tryCatchBlockScopes.push(tryCatchBlock);
+				} else if (label == tryCatchBlock.handler) {
+					tryCatchBlockScopes.pop();
+				}
+			}
+			
+			prevLine = entry.getKey();
+		}
+		
+		final LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope localScope;
+		if (startLine <= endLine) {
+			localScope = new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, VariableType.getByDesc(range.desc), startLine, endLine);
+		} else {
+			// Sometimes the end label is for an earlier line number than the start label, see Issue #17.
+			localScope = new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, VariableType.getByDesc(range.desc), endLine, startLine);
+		}
+		
+		return localScope;
 	}
 	
 	private static class LocalVariableScopeLabels {
@@ -161,11 +175,11 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 		}
 	}
 	
-	private static class TryCatchBlock {
+	private static class TryCatchBlockLabels {
 		final Label start;
 		final Label handler;
 		
-		public TryCatchBlock(Label start, Label handler) {
+		public TryCatchBlockLabels(Label start, Label handler) {
 			this.start = start;
 			this.handler = handler;
 		}

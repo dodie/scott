@@ -87,6 +87,7 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 		super.visitMethodInsn(opcode, owner, name, desc, itf);
 
+		// track every variable state after method calls
 		for (LocalVariableScope localVariableScope : localVariableScopes) {
 			if (!localVariables.contains(localVariableScope.var)) continue;
 			
@@ -152,18 +153,18 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 		}
 	}
 	
+	private void instrumentToTrackMethodStart(int lineNumber) {
+		super.visitLdcInsn(lineNumber);
+		super.visitLdcInsn(methodName);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackMethodStart", "(ILjava/lang/String;)V", false);
+	}
+	
 	private void instrumentToTrackVariableState(LocalVariableScope localVariableScope) {
 		super.visitVarInsn(localVariableScope.variableType.loadOpcode, localVariableScope.var);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(localVariableScope.var);
 		super.visitLdcInsn(methodName);
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackLocalVariableState", "(" + localVariableScope.variableType.desc + "IILjava/lang/String;)V", false);
-	}
-	
-	private void instrumentToTrackMethodStart(int lineNumber) {
-		super.visitLdcInsn(lineNumber);
-		super.visitLdcInsn(methodName);
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/LocalVariableStateRegistry", "trackMethodStart", "(ILjava/lang/String;)V", false);
 	}
 	
 	private void instrumentToTrackFieldState(AccessedField accessedField) {
@@ -216,14 +217,6 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	}
 	
 	public void setLocalVariableScopes(List<LocalVariableScope> localVariableScopes) {
-		for (Iterator<LocalVariableScope> iterator = localVariableScopes.iterator(); iterator.hasNext();) {
-			LocalVariableScope localVariableScope = iterator.next();
-			
-			if (localVariableScope.name.equals("this")) {
-				iterator.remove();
-			}
-		}
-		
 		this.localVariableScopes = localVariableScopes;
 	}
 	

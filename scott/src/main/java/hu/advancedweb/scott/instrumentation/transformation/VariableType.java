@@ -2,6 +2,10 @@ package hu.advancedweb.scott.instrumentation.transformation;
 
 import org.objectweb.asm.Opcodes;
 
+/**
+ * Opcodes and descriptions for each variable type.
+ * @author David Csakvari
+ */
 enum VariableType {
 	INTEGER(Opcodes.ILOAD, Opcodes.ISTORE, "I"),
 	LONG(Opcodes.LLOAD, Opcodes.LSTORE, "J"),
