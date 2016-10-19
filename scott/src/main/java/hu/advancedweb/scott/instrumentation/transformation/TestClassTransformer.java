@@ -13,7 +13,7 @@ import hu.advancedweb.scott.instrumentation.transformation.param.TransformationP
 
 
 /**
- * Transform classes for detailed failure test reports.
+ * Transforms test classes for detailed failure test reports.
  * 
  * @author David Csakvari
  */
@@ -40,7 +40,7 @@ public class TestClassTransformer implements ClassFileTransformer {
 	private byte[] transform(byte[] classfileBuffer, TransformationParameters transformationParameters) {
 		ClassReader classReader = new ClassReader(classfileBuffer);
 		ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_FRAMES);
-		ClassVisitor localVariableStateEmitterTestClassVisitor = new LocalVariableStateEmitterTestClassVisitor(classWriter, transformationParameters);
+		ClassVisitor localVariableStateEmitterTestClassVisitor = new StateTrackingTestClassVisitor(classWriter, transformationParameters);
 		classReader.accept(localVariableStateEmitterTestClassVisitor, 0);
 		return classWriter.toByteArray();
 	}

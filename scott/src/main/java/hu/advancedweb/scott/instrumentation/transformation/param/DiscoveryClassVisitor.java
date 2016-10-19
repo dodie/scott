@@ -6,8 +6,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 /**
- * Determines what classes and methods to instrument,
- * and fills the passed TransformationParameters.Builder object.
+ * Determines what classes and methods to instrument.
  * 
  * @author David Csakvari
  */
@@ -35,4 +34,5 @@ public class DiscoveryClassVisitor extends ClassVisitor {
 		MethodVisitor testDiscoveryMethodVisitor = new TestDiscoveryMethodVisitor(methodVisitor, transformationParameters, name, desc, signature);
 		return testDiscoveryMethodVisitor;
 	}
+	
 }

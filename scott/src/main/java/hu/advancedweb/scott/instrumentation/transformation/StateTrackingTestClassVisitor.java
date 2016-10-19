@@ -12,18 +12,18 @@ import hu.advancedweb.scott.runtime.ScottReportingRule;
 
 /**
  * Manitpulates the class through the appropriate MethodVisitors.
- * It is done in two traversals, hence it uses two method visitors:
- *  - the first round extracts local variable scopes
- *  - the second one does the instrumentation
- *  
+ * 
+ * @see ConstructorTransformerMethodVisitor
+ * @see ScopeExtractorTestMethodVisitor
+ * @see StateEmitterTestMethodVisitor
  * @author David Csakvari
  */
-public class LocalVariableStateEmitterTestClassVisitor extends ClassVisitor {
+public class StateTrackingTestClassVisitor extends ClassVisitor {
 	
 	private String className;
 	private TransformationParameters transformationParameters;
 	
-	public LocalVariableStateEmitterTestClassVisitor(ClassVisitor cv, TransformationParameters transformationParameters) {
+	public StateTrackingTestClassVisitor(ClassVisitor cv, TransformationParameters transformationParameters) {
 		super(Opcodes.ASM5, cv);
 		this.transformationParameters = transformationParameters;
 	}
@@ -46,8 +46,8 @@ public class LocalVariableStateEmitterTestClassVisitor extends ClassVisitor {
 				return methodVisitor;
 			}
 		} else if (transformationParameters.isMethodTrackingRequired(name, desc, signature)) {
-		    LocalVariableStateEmitterTestMethodVisitor variableMutationEventEmitter = new LocalVariableStateEmitterTestMethodVisitor(methodVisitor, className, name, transformationParameters.isClearingTrackedDataInTheBeginningOfThisMethodRequired(name, desc, signature));
-		    MethodVisitor variableExtractor = new LocalVariableScopeExtractorTestMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions, className);
+		    StateEmitterTestMethodVisitor variableMutationEventEmitter = new StateEmitterTestMethodVisitor(methodVisitor, className, name, transformationParameters.isClearingTrackedDataInTheBeginningOfThisMethodRequired(name, desc, signature));
+		    MethodVisitor variableExtractor = new ScopeExtractorTestMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions, className);
 		    return variableExtractor;
 		} else {
 			return methodVisitor;

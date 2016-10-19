@@ -3,7 +3,6 @@ package hu.advancedweb.scott.instrumentation.transformation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -17,7 +16,7 @@ import org.objectweb.asm.Opcodes;
  * 
  * @author David Csakvari
  */
-public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
+public class StateEmitterTestMethodVisitor extends MethodVisitor {
 
 	private int lineNumber;
 	
@@ -36,7 +35,7 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	private boolean methodStartTracked;
 
 
-	public LocalVariableStateEmitterTestMethodVisitor(MethodVisitor mv, String className, String methodName, boolean clearTrackedDataAtStart) {
+	public StateEmitterTestMethodVisitor(MethodVisitor mv, String className, String methodName, boolean clearTrackedDataAtStart) {
 		super(Opcodes.ASM5, mv);
 		this.className = className;
 		this.methodName = methodName;
@@ -222,71 +221,6 @@ public class LocalVariableStateEmitterTestMethodVisitor extends MethodVisitor {
 	
 	public void setAccessedFields(Set<AccessedField> accessedFields) {
 		this.accessedFields = accessedFields;
-	}
-	
-	static class AccessedField {
-		final String owner;
-		final String name;
-		final String desc;
-		final boolean isStatic;
-		
-		public AccessedField(String owner, String name, String desc, boolean isStatic) {
-			this.owner = owner;
-			this.name = name;
-			this.desc = desc;
-			this.isStatic = isStatic;
-		}
-
-		@Override
-		public String toString() {
-			return "AccessedField [owner=" + owner + ", name=" + name + ", desc=" + desc + ", isStatic=" + isStatic + "]";
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((name == null) ? 0 : name.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			AccessedField other = (AccessedField) obj;
-			if (name == null) {
-				if (other.name != null)
-					return false;
-			} else if (!name.equals(other.name))
-				return false;
-			return true;
-		}
-	}
-	
-	static class LocalVariableScope {
-		final int var;
-		final String name;
-		final VariableType variableType;
-		final int start;
-		final int end;
-		
-		LocalVariableScope(int var, String name, VariableType variableType, int start, int end) {
-			this.var = var;
-			this.name = name;
-			this.variableType = variableType;
-			this.start = start;
-			this.end = end;
-		}
-
-		@Override
-		public String toString() {
-			return "LocalVariableScope [var=" + var + ", name=" + name + ", start=" + start + ", end=" + end + "]";
-		}
 	}
 	
 }

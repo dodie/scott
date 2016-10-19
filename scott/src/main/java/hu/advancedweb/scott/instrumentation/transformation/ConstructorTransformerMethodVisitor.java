@@ -27,7 +27,7 @@ public class ConstructorTransformerMethodVisitor extends MethodNode {
 	}
 	
 	@Override
-    public void visitInsn(int opcode) {
+	public void visitInsn(int opcode) {
 		if ((opcode == Opcodes.ARETURN) || (opcode == Opcodes.IRETURN)
 				|| (opcode == Opcodes.LRETURN)
 				|| (opcode == Opcodes.FRETURN)
@@ -45,8 +45,8 @@ public class ConstructorTransformerMethodVisitor extends MethodNode {
 					Type.getDescriptor(ScottReportingRule.class));
 		}
 		
-        super.visitInsn(opcode);
-    }
+		super.visitInsn(opcode);
+	}
 	
 	@Override
 	public void visitEnd() {

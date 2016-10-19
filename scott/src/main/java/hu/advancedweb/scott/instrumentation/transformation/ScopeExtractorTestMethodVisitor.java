@@ -14,31 +14,27 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.MethodNode;
 
-import hu.advancedweb.scott.instrumentation.transformation.LocalVariableStateEmitterTestMethodVisitor.AccessedField;
-
 /**
- * Tracks local variable scopes in test methods and passes this information to the next visitor.
+ * Tracks local variable scopes and field accesses in test methods
+ * and passes this information to the next visitor.
  * 
  * @author David Csakvari
  */
-public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
+public class ScopeExtractorTestMethodVisitor extends MethodNode {
 	
-	/** Map line numbers to labels, as we got labels at local variable visits */
 	private TreeMap<Integer, Label> lines = new TreeMap<>();
 	
-	/** Data collected from local variable visits. */
 	private List<LocalVariableScopeLabels> scopes = new ArrayList<>();
 	
 	private Set<AccessedField> accessedFields = new LinkedHashSet<>();
 	
 	private Set<TryCatchBlockLabels> tryCatchBlocks = new HashSet<>();
 	
-	/** Next MethodVisitor to be accepted at method end. */
-	private LocalVariableStateEmitterTestMethodVisitor next;
+	private StateEmitterTestMethodVisitor next;
 	
 	private String className;
 	
-	public LocalVariableScopeExtractorTestMethodVisitor(LocalVariableStateEmitterTestMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions, String className) {
+	public ScopeExtractorTestMethodVisitor(StateEmitterTestMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions, String className) {
 		super(Opcodes.ASM5, access, name, desc, signature, exceptions);
 		this.next = next;
 		this.className = className;
@@ -93,7 +89,7 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	
 	@Override
 	public void visitEnd() {
-		List<LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope> localVariableScopes = new ArrayList<>();
+		List<LocalVariableScope> localVariableScopes = new ArrayList<>();
 		for (LocalVariableScopeLabels range : scopes) {
 			if (range.name.equals("this")) {
 				continue;
@@ -111,7 +107,7 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 	 * If the LocalVariableScope start line is 0, then it is an input parameter,
 	 * as it's scope start label appeared before the method body.
 	 */
-	private LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope calculateScope(LocalVariableScopeLabels range) {
+	private LocalVariableScope calculateScope(LocalVariableScopeLabels range) {
 		int prevLine = 0;
 		int startLine = lines.firstKey();
 		int endLine = lines.lastKey();
@@ -148,12 +144,12 @@ public class LocalVariableScopeExtractorTestMethodVisitor extends MethodNode {
 			prevLine = entry.getKey();
 		}
 		
-		final LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope localScope;
+		final LocalVariableScope localScope;
 		if (startLine <= endLine) {
-			localScope = new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, VariableType.getByDesc(range.desc), startLine, endLine);
+			localScope = new LocalVariableScope(range.var, range.name, VariableType.getByDesc(range.desc), startLine, endLine);
 		} else {
 			// Sometimes the end label is for an earlier line number than the start label, see Issue #17.
-			localScope = new LocalVariableStateEmitterTestMethodVisitor.LocalVariableScope(range.var, range.name, VariableType.getByDesc(range.desc), endLine, startLine);
+			localScope = new LocalVariableScope(range.var, range.name, VariableType.getByDesc(range.desc), endLine, startLine);
 		}
 		
 		return localScope;
