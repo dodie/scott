@@ -1,4 +1,4 @@
-package hu.advancedweb.scott.runtime.javasource;
+package hu.advancedweb.scott.runtime.report.javasource;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +14,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 
-import hu.advancedweb.scott.runtime.javasource.MethodBoundaryExtractor.Bounderies;
+import hu.advancedweb.scott.runtime.report.javasource.MethodBoundaryExtractor.Bounderies;
 
 /**
  * Contains the source code of a test method.

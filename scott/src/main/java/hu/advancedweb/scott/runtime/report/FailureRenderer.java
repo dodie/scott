@@ -5,7 +5,8 @@ import java.util.Map;
 
 import org.junit.runner.Description;
 
-import hu.advancedweb.scott.runtime.javasource.MethodSource;
+import hu.advancedweb.scott.runtime.report.javasource.MethodSource;
+import hu.advancedweb.scott.runtime.report.javasource.SourcePathResolver;
 import hu.advancedweb.scott.runtime.track.StateData;
 import hu.advancedweb.scott.runtime.track.StateRegistry;
 

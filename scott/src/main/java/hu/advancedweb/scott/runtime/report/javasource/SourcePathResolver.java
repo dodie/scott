@@ -1,4 +1,4 @@
-package hu.advancedweb.scott.runtime.report;
+package hu.advancedweb.scott.runtime.report.javasource;
 
 
 import java.io.IOException;

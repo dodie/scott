@@ -1,9 +1,9 @@
-package hu.advancedweb.scott.runtime.javasource;
+package hu.advancedweb.scott.runtime.report.javasource;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-import hu.advancedweb.scott.runtime.javasource.MethodBoundaryExtractor.Bounderies;
+import hu.advancedweb.scott.runtime.report.javasource.MethodBoundaryExtractor.Bounderies;
 
 /**
  * Extracts the begin and the end line for a method.
