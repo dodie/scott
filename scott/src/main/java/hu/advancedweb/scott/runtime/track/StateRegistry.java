@@ -8,19 +8,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Track local variable changes.
+ * Track state changes in a test case.
  * This class is called by the instrumented test methods to record stuff,
  * and queried by the test reporter.
  * 
  * @author David Csakvari
  */
-public class LocalVariableStateRegistry {
+public class StateRegistry {
 	
-	private static List<LocalVariableState> LOCAL_VARIABLE_STATES = new ArrayList<LocalVariableState>();
+	/*
+	 * Variable data recording and method start line recording is based on the fact that
+	 * in a single test case there can be multiple lambdas, thus multiple methods.
+	 */
 	
-	private static List<LocalVariableState> FIELD_STATES = new ArrayList<LocalVariableState>();
+	private static List<StateData> LOCAL_VARIABLE_STATES = new ArrayList<StateData>();
 	
-	private static List<LocalVariableName> LOCAL_VARIABLE_NAMES = new ArrayList<LocalVariableName>();
+	private static List<StateData> LOCAL_VARIABLE_NAMES = new ArrayList<StateData>();
+	
+	private static List<StateData> FIELD_STATES = new ArrayList<StateData>();
 
 	private static String METHOD_NAME;
 
@@ -37,15 +42,15 @@ public class LocalVariableStateRegistry {
 		FIELD_STATES.clear();
 	}
 	
-	public static List<LocalVariableState> getLocalVariableStates() {
+	public static List<StateData> getLocalVariableStates() {
 		return Collections.unmodifiableList(LOCAL_VARIABLE_STATES);
 	}
 	
-	public static List<LocalVariableName> getLocalVariableNames() {
+	public static List<StateData> getLocalVariableNames() {
 		return Collections.unmodifiableList(LOCAL_VARIABLE_NAMES);
 	}
 	
-	public static List<LocalVariableState> getFieldStates() {
+	public static List<StateData> getFieldStates() {
 		return Collections.unmodifiableList(FIELD_STATES);
 	}
 	
@@ -63,12 +68,12 @@ public class LocalVariableStateRegistry {
 	
 	public static String getLocalVariableName(String key, int lineNumber) {
 		String name = null;
-		for (LocalVariableName localVariableName : LOCAL_VARIABLE_NAMES) {
+		for (StateData localVariableName : LOCAL_VARIABLE_NAMES) {
 			if (key.equals(localVariableName.key)) {
 				if (localVariableName.lineNumber > lineNumber) {
 					break;
 				} else {
-					name = localVariableName.name;
+					name = localVariableName.value;
 				}	
 			}
 		}
@@ -81,51 +86,51 @@ public class LocalVariableStateRegistry {
 	
 	public static void trackFieldState(String value, String name, int lineNumber, boolean isStatic, String owner) {
 		final String key = getFieldKey(name, isStatic, owner);
-		FIELD_STATES.add(new LocalVariableState(lineNumber, value, key));
+		FIELD_STATES.add(new StateData(lineNumber, value, key));
 	}
 	
 	public static void trackFieldState(byte value, String name, int lineNumber, boolean isStatic, String owner) {
 		final String key = getFieldKey(name, isStatic, owner);
-		FIELD_STATES.add(new LocalVariableState(lineNumber, Byte.toString(value), key));
+		FIELD_STATES.add(new StateData(lineNumber, Byte.toString(value), key));
 	}
 	
 	public static void trackFieldState(short value, String name, int lineNumber, boolean isStatic, String owner) {
 		final String key = getFieldKey(name, isStatic, owner);
-		FIELD_STATES.add(new LocalVariableState(lineNumber, Short.toString(value), key));
+		FIELD_STATES.add(new StateData(lineNumber, Short.toString(value), key));
 	}
 	
 	public static void trackFieldState(int value, String name, int lineNumber, boolean isStatic, String owner) {
 		final String key = getFieldKey(name, isStatic, owner);
-		FIELD_STATES.add(new LocalVariableState(lineNumber, Integer.toString(value), key));
+		FIELD_STATES.add(new StateData(lineNumber, Integer.toString(value), key));
 	}
 	
 	public static void trackFieldState(long value, String name, int lineNumber, boolean isStatic, String owner) {
 		final String key = getFieldKey(name, isStatic, owner);
-		FIELD_STATES.add(new LocalVariableState(lineNumber, Long.toString(value), key));
+		FIELD_STATES.add(new StateData(lineNumber, Long.toString(value), key));
 	}
 	
 	public static void trackFieldState(float value, String name, int lineNumber, boolean isStatic, String owner) {
 		final String key = getFieldKey(name, isStatic, owner);
-		FIELD_STATES.add(new LocalVariableState(lineNumber, Float.toString(value), key));
+		FIELD_STATES.add(new StateData(lineNumber, Float.toString(value), key));
 	}
 	
 	public static void trackFieldState(double value, String name, int lineNumber, boolean isStatic, String owner) {
 		final String key = getFieldKey(name, isStatic, owner);
-		FIELD_STATES.add(new LocalVariableState(lineNumber, Double.toString(value), key));
+		FIELD_STATES.add(new StateData(lineNumber, Double.toString(value), key));
 	}
 	public static void trackFieldState(boolean value, String name, int lineNumber, boolean isStatic, String owner) {
 		final String key = getFieldKey(name, isStatic, owner);
-		FIELD_STATES.add(new LocalVariableState(lineNumber, Boolean.toString(value), key));
+		FIELD_STATES.add(new StateData(lineNumber, Boolean.toString(value), key));
 	}
 	
 	public static void trackFieldState(char value, String name, int lineNumber, boolean isStatic, String owner) {
 		final String key = getFieldKey(name, isStatic, owner);
-		FIELD_STATES.add(new LocalVariableState(lineNumber, Character.toString(value), key));
+		FIELD_STATES.add(new StateData(lineNumber, Character.toString(value), key));
 	}
 	
 	public static void trackFieldState(Object value, String name, int lineNumber, boolean isStatic, String owner) {
 		final String key = getFieldKey(name, isStatic, owner);
-		FIELD_STATES.add(new LocalVariableState(lineNumber, objectToString(value), key));
+		FIELD_STATES.add(new StateData(lineNumber, objectToString(value), key));
 	}
 
 	private static String getFieldKey(String name, boolean isStatic, String owner) {
@@ -139,43 +144,43 @@ public class LocalVariableStateRegistry {
 	}
 
 	public static void trackVariableName(String name, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_NAMES.add(new LocalVariableName(lineNumber, name, var + methodName));
+		LOCAL_VARIABLE_NAMES.add(new StateData(lineNumber, name, var + methodName));
 	}
 	
 	public static void trackLocalVariableState(byte value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new LocalVariableState(lineNumber, Byte.toString(value), var + methodName));
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Byte.toString(value), var + methodName));
 	}
 
 	public static void trackLocalVariableState(short value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new LocalVariableState(lineNumber, Short.toString(value), var + methodName));
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Short.toString(value), var + methodName));
 	}
 
 	public static void trackLocalVariableState(int value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new LocalVariableState(lineNumber, Integer.toString(value), var + methodName));
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Integer.toString(value), var + methodName));
 	}
 
 	public static void trackLocalVariableState(long value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new LocalVariableState(lineNumber, Long.toString(value), var + methodName));
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Long.toString(value), var + methodName));
 	}
 
 	public static void trackLocalVariableState(float value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new LocalVariableState(lineNumber, Float.toString(value), var + methodName));
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Float.toString(value), var + methodName));
 	}
 
 	public static void trackLocalVariableState(double value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new LocalVariableState(lineNumber, Double.toString(value), var + methodName));
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Double.toString(value), var + methodName));
 	}
 
 	public static void trackLocalVariableState(boolean value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new LocalVariableState(lineNumber, Boolean.toString(value), var + methodName));
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Boolean.toString(value), var + methodName));
 	}
 
 	public static void trackLocalVariableState(char value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new LocalVariableState(lineNumber, Character.toString(value), var + methodName));
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Character.toString(value), var + methodName));
 	}
 	
 	public static void trackLocalVariableState(Object value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new LocalVariableState(lineNumber, objectToString(value), var + methodName));
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, objectToString(value), var + methodName));
 	}
 
 	private static String objectToString(Object value) {

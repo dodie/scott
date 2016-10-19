@@ -6,8 +6,8 @@ import java.util.Map;
 import org.junit.runner.Description;
 
 import hu.advancedweb.scott.runtime.javasource.MethodSource;
-import hu.advancedweb.scott.runtime.track.LocalVariableState;
-import hu.advancedweb.scott.runtime.track.LocalVariableStateRegistry;
+import hu.advancedweb.scott.runtime.track.StateData;
+import hu.advancedweb.scott.runtime.track.StateRegistry;
 
 /**
  * Renders the pretty-printed report optimized for terminals.
@@ -41,9 +41,9 @@ public class FailureRenderer {
 		} catch (Exception e) {
 			try {
 				// As a fallback, look for the currently tracked method, and try to take its source.
-				String testClassName = LocalVariableStateRegistry.getTestClassType().replace("/", ".");
+				String testClassName = StateRegistry.getTestClassType().replace("/", ".");
 				String testSourcePath = sourcePathResolver.getSourcePath(testClassName);
-				String testMethodName = LocalVariableStateRegistry.getTestMethodName();
+				String testMethodName = StateRegistry.getTestMethodName();
 				return new MethodSource(testSourcePath, testClassName, testMethodName);
 			} catch (Exception e2) {
 				// Ignore, we simply don't fill the test source for the report.
@@ -63,13 +63,13 @@ public class FailureRenderer {
 	private static void fillTrackedData(ScottReport scottReport) {
 		Map<String, String> trackedValue = new HashMap<>();
 		
-		for (LocalVariableState event : LocalVariableStateRegistry.getLocalVariableStates()) {
+		for (StateData event : StateRegistry.getLocalVariableStates()) {
 			String lastValue = trackedValue.get(event.key);
 			if (!event.value.equals(lastValue)) {
 				if (event.lineNumber == 0) {
-					scottReport.addInitialSnapshot(getInitLine(event), LocalVariableStateRegistry.getLocalVariableName(event.key, event.lineNumber), event.value);
+					scottReport.addInitialSnapshot(getInitLine(event), StateRegistry.getLocalVariableName(event.key, event.lineNumber), event.value);
 				} else {
-					scottReport.addSnapshot(event.lineNumber, LocalVariableStateRegistry.getLocalVariableName(event.key, event.lineNumber), event.value);
+					scottReport.addSnapshot(event.lineNumber, StateRegistry.getLocalVariableName(event.key, event.lineNumber), event.value);
 				}
 				trackedValue.put(event.key, event.value);
 			}
@@ -77,7 +77,7 @@ public class FailureRenderer {
 		
 		trackedValue = new HashMap<>();
 		
-		for (LocalVariableState event : LocalVariableStateRegistry.getFieldStates()) {
+		for (StateData event : StateRegistry.getFieldStates()) {
 			String lastValue = trackedValue.get(event.key);
 			if (!event.value.equals(lastValue)) {
 				if (event.lineNumber == 0) {
@@ -90,9 +90,9 @@ public class FailureRenderer {
 		}
 	}
 
-	private static int getInitLine(LocalVariableState event) {
+	private static int getInitLine(StateData event) {
 		int initLine = 0;
-		for (Map.Entry<String, Integer> methodStart: LocalVariableStateRegistry.getMethodStartLine().entrySet()) {
+		for (Map.Entry<String, Integer> methodStart: StateRegistry.getMethodStartLine().entrySet()) {
 			if (event.key.endsWith(methodStart.getKey())) {
 				initLine = methodStart.getValue();
 			}

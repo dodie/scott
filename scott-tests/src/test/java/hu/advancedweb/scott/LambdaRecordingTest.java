@@ -14,17 +14,17 @@ public class LambdaRecordingTest {
 	@Test
 	public void test_with_lambda() throws Exception {
 		Function<String, String> lambda = input -> {
-			assertThat(TestHelper.getLastRecordedStateFor("input"), equalTo(input));
+			assertThat(TestHelper.getLastRecordedStateForVariable("input"), equalTo(input));
 			String inner = "inner";
-			assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
 			return inner;
 		};
-		assertThat(TestHelper.getLastRecordedStateFor("lambda"), equalTo(lambda.toString()));
+		assertThat(TestHelper.getLastRecordedStateForVariable("lambda"), equalTo(lambda.toString()));
 		
 		String outer = "outer";
-		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
 		String result = lambda.apply(outer);
-		assertThat(TestHelper.getLastRecordedStateFor("result"), equalTo(result));
+		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo(result));
 	}
 
 }

@@ -12,79 +12,79 @@ public class VariableRecordingTest {
 	@Test
 	public void recordInteger() throws Exception {
 		int i = 5;
-		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("i"), equalTo(Integer.toString(i)));
 	}
 	
 	@Test
 	public void recordShort() throws Exception {
 		short s = 500;
-		assertThat(TestHelper.getLastRecordedStateFor("s"), equalTo(Short.toString(s)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("s"), equalTo(Short.toString(s)));
 	}
 
 	@Test
 	public void recordLong() throws Exception {
 		long l = 1000L;
-		assertThat(TestHelper.getLastRecordedStateFor("l"), equalTo(Long.toString(l)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("l"), equalTo(Long.toString(l)));
 	}
 	
 	@Test
 	public void recordDouble() throws Exception {
 		double d = 5.5D;
-		assertThat(TestHelper.getLastRecordedStateFor("d"), equalTo(Double.toString(d)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("d"), equalTo(Double.toString(d)));
 	}
 	
 	@Test
 	public void recordFloat() throws Exception {
 		float f = 5.5F;
-		assertThat(TestHelper.getLastRecordedStateFor("f"), equalTo(Float.toString(f)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("f"), equalTo(Float.toString(f)));
 	}
 	
 	@Test
 	public void recordBoolean() throws Exception {
 		boolean bt = true;
-		assertThat(TestHelper.getLastRecordedStateFor("bt"), equalTo(Boolean.toString(bt)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("bt"), equalTo(Boolean.toString(bt)));
 		
 		boolean bf = false;
-		assertThat(TestHelper.getLastRecordedStateFor("bf"), equalTo(Boolean.toString(bf)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("bf"), equalTo(Boolean.toString(bf)));
 		
 		boolean bot = Boolean.TRUE;
-		assertThat(TestHelper.getLastRecordedStateFor("bot"), equalTo(Boolean.toString(bot)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("bot"), equalTo(Boolean.toString(bot)));
 		
 		boolean bof = Boolean.FALSE;
-		assertThat(TestHelper.getLastRecordedStateFor("bof"), equalTo(Boolean.toString(bof)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("bof"), equalTo(Boolean.toString(bof)));
 	}
 	
 	@Test
 	public void recordString() throws Exception {
 		String s = "Hello World!";
-		assertThat(TestHelper.getLastRecordedStateFor("s"), equalTo(s));
+		assertThat(TestHelper.getLastRecordedStateForVariable("s"), equalTo(s));
 	}
 	
 	@Test
 	public void recordNull() throws Exception {
 		@SuppressWarnings("unused")
 		String s = null;
-		assertThat(TestHelper.getLastRecordedStateFor("s"), equalTo("null"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("s"), equalTo("null"));
 	}
 	
 	@Test
 	public void recordArray() throws Exception {
 		@SuppressWarnings("unused")
 		String[] array = {"a", "b"};
-		assertThat(TestHelper.getLastRecordedStateFor("array"), equalTo("[a, b]"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("array"), equalTo("[a, b]"));
 	}
 
 	@Test
 	public void recordEmptyArray() throws Exception {
 		@SuppressWarnings("unused")
 		String[] array = {};
-		assertThat(TestHelper.getLastRecordedStateFor("array"), equalTo("[]"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("array"), equalTo("[]"));
 	}
 
 	@Test
 	public void recordCustomObject() throws Exception {
 		CustomClass myClass = new CustomClass(5);
-		assertThat(TestHelper.getLastRecordedStateFor("myClass"), equalTo(myClass.toString()));
+		assertThat(TestHelper.getLastRecordedStateForVariable("myClass"), equalTo(myClass.toString()));
 	}
 	
 	public static class CustomClass {
@@ -104,8 +104,8 @@ public class VariableRecordingTest {
 	public void recordConsecutiveDeclarations() {
 		String inner = "inner";
 		String inner2 = "inner2";
-		assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner));
-		assertThat(TestHelper.getLastRecordedStateFor("inner2"), equalTo(inner2));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner2"), equalTo(inner2));
 	}
 	
 	@Test
@@ -120,16 +120,16 @@ public class VariableRecordingTest {
 		String inner8 = "inner8";
 		String inner9 = "inner9";
 		String inner10 = "inner10";
-		assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner));
-		assertThat(TestHelper.getLastRecordedStateFor("inner2"), equalTo(inner2));
-		assertThat(TestHelper.getLastRecordedStateFor("inner3"), equalTo(inner3));
-		assertThat(TestHelper.getLastRecordedStateFor("inner4"), equalTo(inner4));
-		assertThat(TestHelper.getLastRecordedStateFor("inner5"), equalTo(inner5));
-		assertThat(TestHelper.getLastRecordedStateFor("inner6"), equalTo(inner6));
-		assertThat(TestHelper.getLastRecordedStateFor("inner7"), equalTo(inner7));
-		assertThat(TestHelper.getLastRecordedStateFor("inner8"), equalTo(inner8));
-		assertThat(TestHelper.getLastRecordedStateFor("inner9"), equalTo(inner9));
-		assertThat(TestHelper.getLastRecordedStateFor("inner10"), equalTo(inner10));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner2"), equalTo(inner2));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner3"), equalTo(inner3));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner4"), equalTo(inner4));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner5"), equalTo(inner5));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner6"), equalTo(inner6));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner7"), equalTo(inner7));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner8"), equalTo(inner8));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner9"), equalTo(inner9));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner10"), equalTo(inner10));
 	}
 
 	@SuppressWarnings("unused")
@@ -141,14 +141,14 @@ public class VariableRecordingTest {
 	@Test
 	public void recordMethodWithJustADeclaration() {
 		String outer = "outer!";
-		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
 	}
 	
 	@Test
 	public void recordMethodWithJustADeclarationInABlock() {
 		{
 			String inner = "inner";
-			assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
 		}
 	}
 

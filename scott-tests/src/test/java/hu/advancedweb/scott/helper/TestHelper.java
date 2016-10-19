@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import hu.advancedweb.scott.runtime.track.LocalVariableState;
-import hu.advancedweb.scott.runtime.track.LocalVariableStateRegistry;
+import hu.advancedweb.scott.runtime.track.StateData;
+import hu.advancedweb.scott.runtime.track.StateRegistry;
 
 public class TestHelper {
 	
-	public static String getLastRecordedStateFor(String variableName) {
-		List<LocalVariableState> states = new ArrayList<LocalVariableState>(LocalVariableStateRegistry.getLocalVariableStates());
+	public static String getLastRecordedStateForVariable(String variableName) {
+		List<StateData> states = new ArrayList<StateData>(StateRegistry.getLocalVariableStates());
 		Collections.reverse(states);
 		
-		for (LocalVariableState localVariableState : states) {
-			String nameOfLocalVariableState = LocalVariableStateRegistry.getLocalVariableName(localVariableState.key, localVariableState.lineNumber);
+		for (StateData localVariableState : states) {
+			String nameOfLocalVariableState = StateRegistry.getLocalVariableName(localVariableState.key, localVariableState.lineNumber);
 			if (nameOfLocalVariableState.equals(variableName)) {
 				return localVariableState.value;
 			}
@@ -24,10 +24,10 @@ public class TestHelper {
 	}
 	
 	public static String getLastRecordedStateForField(String fieldName) {
-		List<LocalVariableState> states = new ArrayList<LocalVariableState>(LocalVariableStateRegistry.getFieldStates());
+		List<StateData> states = new ArrayList<StateData>(StateRegistry.getFieldStates());
 		Collections.reverse(states);
 		
-		for (LocalVariableState localVariableState : states) {
+		for (StateData localVariableState : states) {
 			if (localVariableState.key.equals(fieldName)) {
 				return localVariableState.value;
 			}

@@ -12,49 +12,49 @@ public class RecordMutationTest {
 	@Test
 	public void simpleMutation() throws Exception {
 		int i = 5;
-		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("i"), equalTo(Integer.toString(i)));
 		
 		i = 10;
-		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("i"), equalTo(Integer.toString(i)));
 		
 		i = 15;
-		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("i"), equalTo(Integer.toString(i)));
 	}
 	
 	@Test
 	public void mutateToNull() throws Exception {
 		String s = "Hello World!";
-		assertThat(TestHelper.getLastRecordedStateFor("s"), equalTo(s));
+		assertThat(TestHelper.getLastRecordedStateForVariable("s"), equalTo(s));
 		
 		s = null;
-		assertThat(TestHelper.getLastRecordedStateFor("s"), equalTo("null"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("s"), equalTo("null"));
 	}
 	
 	@Test
 	public void mutationWithIfBranch() throws Exception {
 		int i = 5;
-		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("i"), equalTo(Integer.toString(i)));
 		
 		if (i < 5) {
 			i = 10;
 		}
-		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("i"), equalTo(Integer.toString(i)));
 		
 		i = 15;
-		assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("i"), equalTo(Integer.toString(i)));
 	}
 	
 	@Test
 	public void mutationWithBlock() throws Exception {
 		String outer = "outer";
-		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
 		{
 			String inner = "inner";
-			assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
 		}
 		
 		outer = "outer_changed";
-		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class RecordMutationTest {
 		{
 			outer.length();
 		}
-		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo("outer"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo("outer"));
 	}
 	
 	@Test
@@ -73,7 +73,7 @@ public class RecordMutationTest {
 		{
 			// This is an empty block.
 		}
-		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo("outer"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo("outer"));
 	}
 	
 	@Test
@@ -82,46 +82,46 @@ public class RecordMutationTest {
 		
 		for (int j = 0; j < 10; j++) {
 			i = j*2;
-			assertThat(TestHelper.getLastRecordedStateFor("i"), equalTo(Integer.toString(i)));
-			assertThat(TestHelper.getLastRecordedStateFor("j"), equalTo(Integer.toString(j)));
+			assertThat(TestHelper.getLastRecordedStateForVariable("i"), equalTo(Integer.toString(i)));
+			assertThat(TestHelper.getLastRecordedStateForVariable("j"), equalTo(Integer.toString(j)));
 		}
 	}
 	
 	@Test
 	public void objectMutation() throws Exception {
 		Mutable mutable = new Mutable(10);
-		assertThat(TestHelper.getLastRecordedStateFor("mutable"), equalTo(mutable.toString()));
+		assertThat(TestHelper.getLastRecordedStateForVariable("mutable"), equalTo(mutable.toString()));
 		
 		mutable.set(15);
-		assertThat(TestHelper.getLastRecordedStateFor("mutable"), equalTo(mutable.toString()));
+		assertThat(TestHelper.getLastRecordedStateForVariable("mutable"), equalTo(mutable.toString()));
 		
 		mutable.set(20);
-		assertThat(TestHelper.getLastRecordedStateFor("mutable"), equalTo(mutable.toString()));
+		assertThat(TestHelper.getLastRecordedStateForVariable("mutable"), equalTo(mutable.toString()));
 	}
 	
 	@Test
 	public void indirectObjectMutation() throws Exception {
 		Mutable mutable = new Mutable(10);
-		assertThat(TestHelper.getLastRecordedStateFor("mutable"), equalTo(mutable.toString()));
+		assertThat(TestHelper.getLastRecordedStateForVariable("mutable"), equalTo(mutable.toString()));
 		
 		Mutator mutator = new Mutator(mutable);
 		mutator.mutate(15);
 
-		assertThat(TestHelper.getLastRecordedStateFor("mutable"), equalTo(mutable.toString()));
+		assertThat(TestHelper.getLastRecordedStateForVariable("mutable"), equalTo(mutable.toString()));
 	}
 	
 	@Test
 	public void multipleIndirectObjectMutation() throws Exception {
 		Mutable mutable1 = new Mutable(10);
 		Mutable mutable2 = new Mutable(20);
-		assertThat(TestHelper.getLastRecordedStateFor("mutable1"), equalTo(mutable1.toString()));
-		assertThat(TestHelper.getLastRecordedStateFor("mutable2"), equalTo(mutable2.toString()));
+		assertThat(TestHelper.getLastRecordedStateForVariable("mutable1"), equalTo(mutable1.toString()));
+		assertThat(TestHelper.getLastRecordedStateForVariable("mutable2"), equalTo(mutable2.toString()));
 		
 		MultiMutator multiMutator = new MultiMutator(mutable1, mutable2);
 		multiMutator.mutate(15);
 		
-		assertThat(TestHelper.getLastRecordedStateFor("mutable1"), equalTo(mutable1.toString()));
-		assertThat(TestHelper.getLastRecordedStateFor("mutable2"), equalTo(mutable2.toString()));
+		assertThat(TestHelper.getLastRecordedStateForVariable("mutable1"), equalTo(mutable1.toString()));
+		assertThat(TestHelper.getLastRecordedStateForVariable("mutable2"), equalTo(mutable2.toString()));
 	}
 
 	

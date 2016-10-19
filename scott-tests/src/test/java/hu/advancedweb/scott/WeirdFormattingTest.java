@@ -18,44 +18,44 @@ public class WeirdFormattingTest {
 	@Test
 	public void simpleFormatting() throws Exception {
 		String outer = "outer1";
-		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
 		{
 			String inner = "inner1";
-			assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
 		}
 		outer = "outer2";
-		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
 	}
 	
 	@Test
 	public void inlineFormatting_1() throws Exception {
 		String outer = "outer1";
-		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
-		{String inner = "inner1"; assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner)); }
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
+		{String inner = "inner1"; assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner)); }
 		outer = "outer2";
-		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
 	}
 	
 	@Test
 	public void inlineFormatting_2() throws Exception {
-		String outer = "outer1"; assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer)); {
+		String outer = "outer1"; assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer)); {
 			String inner = "inner1";
-			assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
 		}
 		outer = "outer2";
-		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
 	}
 
 	@Test
 	public void inlineFormatting_3() throws Exception {
 		String outer = "outer1"; 
-		assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
-		{ String inner = "inner1"; assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner)); } outer = "outer2"; assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
+		{ String inner = "inner1"; assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner)); } outer = "outer2"; assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
 	}
 	
 	@Test
 	public void inlineFormatting_4() throws Exception {
-		String outer = "outer1"; assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer)); { String inner = "inner1"; assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner)); } outer = "outer2"; assertThat(TestHelper.getLastRecordedStateFor("outer"), equalTo(outer));
+		String outer = "outer1"; assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer)); { String inner = "inner1"; assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner)); } outer = "outer2"; assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
 	}
 	
 	@SuppressWarnings("null")
@@ -65,12 +65,12 @@ public class WeirdFormattingTest {
 		
 		try {
 			String inner = "inner";
-			assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
 			o.length();
 		} catch (Exception e) {
 			o = "fallback";
-			assertThat(TestHelper.getLastRecordedStateFor("e"), equalTo(e.toString()));
-			assertThat(TestHelper.getLastRecordedStateFor("o"), equalTo(o));
+			assertThat(TestHelper.getLastRecordedStateForVariable("e"), equalTo(e.toString()));
+			assertThat(TestHelper.getLastRecordedStateForVariable("o"), equalTo(o));
 		}	
 	}
 
@@ -78,7 +78,7 @@ public class WeirdFormattingTest {
 	@Test
 	@Ignore // FIXME: See issue 19: multiple variable declarations in different scopes on the same line cause problems.
 	public void inlineFormattingWithTryCatch() {
-		String o = null; try { String inner = "inner";	assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner)); o.length(); } catch (Exception e) { o = "fallback"; assertThat(TestHelper.getLastRecordedStateFor("e"), equalTo(e.toString())); assertThat(TestHelper.getLastRecordedStateFor("o"), equalTo(o)); }	
+		String o = null; try { String inner = "inner";	assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner)); o.length(); } catch (Exception e) { o = "fallback"; assertThat(TestHelper.getLastRecordedStateForVariable("e"), equalTo(e.toString())); assertThat(TestHelper.getLastRecordedStateForVariable("o"), equalTo(o)); }	
 	}
 	
 	@SuppressWarnings("null")
@@ -89,14 +89,14 @@ public class WeirdFormattingTest {
 		try 
 		{
 			String inner = "inner";
-			assertThat(TestHelper.getLastRecordedStateFor("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
 			o.length();
 		}
 		catch (Exception e)
 		{
 			o = "fallback";
-			assertThat(TestHelper.getLastRecordedStateFor("e"), equalTo(e.toString()));
-			assertThat(TestHelper.getLastRecordedStateFor("o"), equalTo(o));
+			assertThat(TestHelper.getLastRecordedStateForVariable("e"), equalTo(e.toString()));
+			assertThat(TestHelper.getLastRecordedStateForVariable("o"), equalTo(o));
 		}	
 	}
 }
