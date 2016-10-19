@@ -1,5 +1,10 @@
 package hu.advancedweb.scott.instrumentation.transformation;
 
+/**
+ * Metadata of a field accessed by a test case.
+ * 
+ * @author David Csakvari
+ */
 class AccessedField {
 	
 	final String owner;

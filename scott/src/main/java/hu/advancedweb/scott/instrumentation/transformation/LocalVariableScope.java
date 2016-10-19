@@ -1,5 +1,10 @@
 package hu.advancedweb.scott.instrumentation.transformation;
 
+/**
+ * Metadata of a local variable declared in a test case.
+ * 
+ * @author David Csakvari
+ */
 class LocalVariableScope {
 
 	final int var;

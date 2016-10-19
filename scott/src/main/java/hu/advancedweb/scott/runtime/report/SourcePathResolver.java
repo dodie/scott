@@ -28,7 +28,6 @@ public class SourcePathResolver {
 	private String cacheKey = null;
 	private String cacheValue = null;
 	
-
 	public String getSourcePath(final String fqn) throws IOException {
 		if (fqn.equals(cacheKey)) {
 			return cacheValue;
@@ -64,4 +63,5 @@ public class SourcePathResolver {
 			return cacheValue;
 		}
 	}
+	
 }

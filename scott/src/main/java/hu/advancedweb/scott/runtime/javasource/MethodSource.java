@@ -16,6 +16,11 @@ import com.github.javaparser.ast.CompilationUnit;
 
 import hu.advancedweb.scott.runtime.javasource.MethodBoundaryExtractor.Bounderies;
 
+/**
+ * Contains the source code of a test method.
+ * 
+ * @author David Csakvari
+ */
 public class MethodSource {
 	
 	private final String path;

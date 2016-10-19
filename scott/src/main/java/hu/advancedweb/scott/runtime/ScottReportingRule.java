@@ -12,6 +12,7 @@ import hu.advancedweb.scott.runtime.report.FailureRenderer;
  * @author David Csakvari
  */
 public class ScottReportingRule implements TestRule {
+	
 	public Statement apply(final Statement base, final Description description) {
 		return new Statement() {
 			@Override
@@ -33,4 +34,5 @@ public class ScottReportingRule implements TestRule {
 			}
 		};
 	}
+	
 }
