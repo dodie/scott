@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hu.advancedweb</groupId>
 	<artifactId>scott-example-junit</artifactId>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -72,7 +72,7 @@
 		<dependency>
 			<groupId>hu.advancedweb</groupId>
 			<artifactId>scott</artifactId>
-			<version>1.1.0-SNAPSHOT</version>
+			<version>2.0.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
