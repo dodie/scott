@@ -58,6 +58,8 @@ myTest(hu.advancedweb.example.ListTest) FAILED!
 
 Notice that even without sophisticated assertions the required information is present in the test report.
 
+For a more demos check out the [JUnit examples](https://github.com/dodie/scott/tree/master/scott-examples/junit),
+or the [Cucumber showcase](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
 
 Features
 --------
@@ -149,5 +151,4 @@ but until then add this to your *pom.xml* file:
 For a demo check out and ```mvn install``` the [scott-example](https://github.com/dodie/scott/tree/master/scott-examples/junit) project
 that contains the required setup configuration to use Scott (see [pom.xml](https://github.com/dodie/scott/tree/master/scott-examples/junit/pom.xml))
 and a bunch of failing tests for the show.
-
 
