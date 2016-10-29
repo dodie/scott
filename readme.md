@@ -153,4 +153,6 @@ that contains the required setup configuration to use Scott (see [pom.xml](https
 and a bunch of failing tests for the show.
 
 
-More to read: [blog post](https://advancedweb.hu/2015/08/26/scott-detailed-failure-reports/).
+More to read
+------------
+[Blog post](https://advancedweb.hu/2015/08/26/scott-detailed-failure-reports/).
