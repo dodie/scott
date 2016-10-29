@@ -152,3 +152,5 @@ For a demo check out and ```mvn install``` the [scott-example](https://github.co
 that contains the required setup configuration to use Scott (see [pom.xml](https://github.com/dodie/scott/tree/master/scott-examples/junit/pom.xml))
 and a bunch of failing tests for the show.
 
+
+More to read: [blog post](https://advancedweb.hu/2015/08/26/scott-detailed-failure-reports/).
