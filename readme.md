@@ -1,18 +1,24 @@
 Scott Test Reporter
 ===================
 
-Scott provides detailed failure messages for tests written in Java
-based on their runtime behaviour and source code.
+Scott provides **detailed failure messages** for tests written in Java,
+**without the use of complex assertion libraries** to aid developers in rapid development,
+troubleshooting and debugging of tests.
 
-With Scott even simple assertions provide the details needed to
-trace the cause of the failure and to comprehend the context of the test case.
-It provides details about local variables to reduce the need to debug tests.
+It automatically tracks the state of the test to provide the important details for a failing scenario,
+favoring simple assertions expressed mostly in plain Java over the extensive use of test libraries,
+such as Hamcrest or AssertJ.
+(Although it plays nicely with other testing tools and frameworks.)
 
-It does not intend to be a testing framework. Instead, it aims to be a simple tool
-that can be used in an existing project without requiring to change the tests or
-learn a new testing API, favoring simple assertions expressed mostly in plain old Java.
+Scott does not intend to be a testing framework, nor does it provide an API to use in the tests.
+Instead, it aims to be a small tool that can be dropped into a project to do its job automatically,
+so you can worry much less about expressing assertions,
+and still have meaningful failure messages. 
 
-Supports Java 6, 7 and 8.
+Supports Java 7 and above.
+
+> Scott: All systems automated and ready. A chimpanzee and two trainees could run her. 
+> Kirk: Thank you, Mr. Scott. I'll try not to take that personally. 
 
 
 Example
@@ -49,15 +55,18 @@ myTest(hu.advancedweb.example.ListTest) FAILED!
   31|      }
 ```
 
-Notice that even without using sophisticated assertions the required information is present in the test report.
+Notice that even without sophisticated assertions the required information is present in the test report.
 
 
 Features
 --------
-For every failing test it reports the
+For every failing test it reports the following:
 - assignments to local variables
-- and changes made to objects referenced by local variables,
-- visualised on the source code of the test method.
+- changes made to objects referenced by local variables and fields
+- input parameters
+- relevant fields that the test accesses, but does not modify
+
+All information is nicely visualized on the source code of the test method.
 
 
 How to use
@@ -71,7 +80,7 @@ but until then add this to your *pom.xml* file:
 
 		...
 
-		<!-- Use the Maven Dependency Plugin to copy Scott's JAR from the dependency to a directory. -->
+		<!-- Use the Maven Dependency Plugin to copy Scott's JAR from the dependency to the target directory. -->
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-dependency-plugin</artifactId>
@@ -97,21 +106,15 @@ but until then add this to your *pom.xml* file:
 			</executions>
 		</plugin>
 
-		<!-- Modify the Maven Surefire Plugin's configuration that runs the tests
-		     to load Scott's Java Agent for instrumentation
-		     and to use Scott's JUnit listener to produce the test reports. -->
+		<!-- Modify the Maven Surefire Plugin's configuration
+		     to load Scott's Java Agent for instrumentation.
+		     (Works with Failsafe Plugin too.) -->
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-surefire-plugin</artifactId>
 			<configuration>
 				<argLine>-javaagent:${project.build.directory}/agents/scott-agent.jar</argLine>
 				<workingDirectory>${basedir}/target</workingDirectory>
-				<properties>
-					<property>
-						<name>listener</name>
-						<value>hu.advancedweb.scott.runtime.ScottRunListener</value>
-					</property>
-				</properties>
 			</configuration>
 		</plugin>
 
@@ -123,16 +126,17 @@ but until then add this to your *pom.xml* file:
 
 	...
 
+	<!-- Add Scott and JUnit as dependencies. -->
+	<dependency>
+		<groupId>hu.advancedweb</groupId>
+		<artifactId>scott</artifactId>
+		<version>2.0.0</version>
+		<scope>test</scope>
+	</dependency>
 	<dependency>
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
 		<version>4.12</version>
-		<scope>test</scope>
-	</dependency>
-	<dependency>
-		<groupId>hu.advancedweb</groupId>
-		<artifactId>scott</artifactId>
-		<version>1.0.0</version>
 		<scope>test</scope>
 	</dependency>
 

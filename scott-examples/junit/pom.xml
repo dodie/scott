@@ -12,7 +12,7 @@
 	<build>
 		<plugins>
 
-			<!-- Use the Maven Dependency Plugin to copy Scott's JAR to a directory. -->
+			<!-- Use the Maven Dependency Plugin to copy Scott's JAR to the target directory. -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -38,9 +38,8 @@
 				</executions>
 			</plugin>
 
-			<!-- Modify the Maven Surefire Plugin's configuration that runs the tests
-			     to load Scott's Java Agent for instrumentation
-			     and to use Scott's JUnit listener to produce the test reports. -->
+			<!-- Modify the Maven Surefire Plugin's configuration
+			     to load Scott's Java Agent for instrumentation. -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -61,18 +60,17 @@
 			</plugin>
 		</plugins>
 	</build>
-
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>hu.advancedweb</groupId>
 			<artifactId>scott</artifactId>
 			<version>2.0.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
