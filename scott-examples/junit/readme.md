@@ -15,7 +15,7 @@ Demo
 ----
 
 **Tracking object state:**
-```
+```java
   CounterTest.test_1 
    9|      @Test
   10|      public void test_1() {
@@ -32,7 +32,7 @@ Demo
 
 
 **Reporting the current values of the related fields:**
-```
+```java
   ParameterizedTest.testAddition[3] 
   37|      @Test
   38|      public void testAddition() {
@@ -48,7 +48,7 @@ Demo
 
 
 **Lambda support:**
-```
+```java
   LambdaTest.test_with_lambda 
   12|      @Test
   13|      public void test_with_lambda() throws Exception {
@@ -76,7 +76,7 @@ Demo
 
 
 **Oh no, sorting the collection mutates the backing array!**
-```
+```java
   ListTest.test_2 
   39|      @Test
   40|      public void test_2() throws Throwable {
