@@ -26,7 +26,7 @@ Example
 -------
 Consider this failing test case:
 
-```
+```java
 @Test
 public void myTest() {
 	Integer[] myArray = new Integer[] { 1, 4, 2, 4 };
@@ -42,7 +42,7 @@ public void myTest() {
 Normally it just produces an assertion error without a meaningful message.
 But **with Scott**, it shows additional information:
 
-```
+```java
 myTest(hu.advancedweb.example.ListTest) FAILED!
   22|      @Test
   23|      public void myTest() {
@@ -77,7 +77,7 @@ How to use
 A Maven Plugin is on it's way to make it even easier,
 but until then add this to your *pom.xml* file:
 
-```
+```xml
 <build>
 	<plugins>
 
