@@ -11,8 +11,8 @@ Usage
 Run ``` mvn install ``` to see the tests failing.
 
 
-Demo:
------
+Demo
+----
 
 **Tracking object state:**
 ```
