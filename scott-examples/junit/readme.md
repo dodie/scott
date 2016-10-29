@@ -31,6 +31,22 @@ Demo:
 ```
 
 
+**Reporting the current values of the related fields:**
+```
+  ParameterizedTest.testAddition[3] 
+  37|      @Test
+  38|      public void testAddition() {
+    |          //    => this.a=2
+    |          //    => this.b=2
+    |          //    => this.expectedSum=4
+    |          
+  39|          int sum = FaultyAdder.add(a, b);  // sum=5
+  40|*         assertThat(sum, equalTo(expectedSum));  // AssertionError: Expected: <4>
+    |                                                  //      but: was <5>
+  41|      }
+```
+
+
 **Lambda support:**
 ```
   LambdaTest.test_with_lambda 
@@ -59,7 +75,7 @@ Demo:
 ```
 
 
-**Oh no, sorting an array mutates the backing array!**
+**Oh no, sorting the collection mutates the backing array!**
 ```
   ListTest.test_2 
   39|      @Test
@@ -73,17 +89,3 @@ Demo:
   46|      }
 ```
 
-**Failing parameterized test reports the current values of the related fields:**
-```
-  ParameterizedTest.testAddition[3] 
-  37|      @Test
-  38|      public void testAddition() {
-    |          //    => this.a=2
-    |          //    => this.b=2
-    |          //    => this.expectedSum=4
-    |          
-  39|          int sum = FaultyAdder.add(a, b);  // sum=5
-  40|*         assertThat(sum, equalTo(expectedSum));  // AssertionError: Expected: <4>
-    |                                                  //      but: was <5>
-  41|      }
-```
