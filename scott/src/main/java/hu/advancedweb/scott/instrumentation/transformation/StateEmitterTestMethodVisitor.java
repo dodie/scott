@@ -37,6 +37,9 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 
 	public StateEmitterTestMethodVisitor(MethodVisitor mv, String className, String methodName, boolean clearTrackedDataAtStart) {
 		super(Opcodes.ASM5, mv);
+		
+		Logger.log("Visiting: " + className + "." + methodName);
+		
 		this.className = className;
 		this.methodName = methodName;
 		this.clearTrackedDataAtStart = clearTrackedDataAtStart;
@@ -134,6 +137,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	}
 	
 	private void instrumentToClearTrackedDataAndSignalStartOfRecording() {
+		Logger.log(" - instrumentToClearTrackedDataAndSignalStartOfRecording");
 		super.visitLdcInsn(className);
 		super.visitLdcInsn(methodName);
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "startTracking", "(Ljava/lang/String;Ljava/lang/String;)V", false);
@@ -153,12 +157,14 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	}
 	
 	private void instrumentToTrackMethodStart(int lineNumber) {
+		Logger.log(" - instrumentToTrackMethodStart at line " + lineNumber);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(methodName);
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackMethodStart", "(ILjava/lang/String;)V", false);
 	}
 	
 	private void instrumentToTrackVariableState(LocalVariableScope localVariableScope) {
+		Logger.log(" - instrumentToTrackVariableState of variable " + localVariableScope);
 		super.visitVarInsn(localVariableScope.variableType.loadOpcode, localVariableScope.var);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(localVariableScope.var);
@@ -167,6 +173,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	}
 	
 	private void instrumentToTrackFieldState(AccessedField accessedField) {
+		Logger.log(" - instrumentToTrackFieldState " + accessedField);
 		final int opcode;
 		if (accessedField.isStatic) {
 			opcode = Opcodes.GETSTATIC;
@@ -189,6 +196,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	}
 	
 	private void instrumentToTrackVariableName(LocalVariableScope localVariableScope) {
+		Logger.log(" - instrumentToTrackVariableName" + localVariableScope);
 		super.visitLdcInsn(localVariableScope.name);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(localVariableScope.var);
