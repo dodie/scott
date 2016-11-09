@@ -20,14 +20,18 @@ import hu.advancedweb.scott.instrumentation.transformation.param.TransformationP
 public class TestClassTransformer implements ClassFileTransformer {
 
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-		try {
-			TransformationParameters transformationParameters = calculateTransformationParameters(classfileBuffer);
-		    return transform(classfileBuffer, transformationParameters);
-		} catch (Exception e) {
-			System.err.println("Scott: test instrumentation failed for " + className + "!");
-			e.printStackTrace();
-			throw e;
-		}
+//		if (loader == null) { // FIXME: See Issue #22
+//			return classfileBuffer;
+//		} else {
+			try {
+				TransformationParameters transformationParameters = calculateTransformationParameters(classfileBuffer);
+			    return transform(classfileBuffer, transformationParameters);
+			} catch (Exception e) {
+				System.err.println("Scott: test instrumentation failed for " + className + "!");
+				e.printStackTrace();
+				throw e;
+			}
+//		}
 	}
 
 	private TransformationParameters calculateTransformationParameters(byte[] classfileBuffer) {
