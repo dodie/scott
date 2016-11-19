@@ -29,4 +29,12 @@ public class LambdaTest {
 		assertThat(palindromized, equalTo(word + word));
 	}
 	
+	@Test
+	public void lambda_with_single_expression() throws Exception {
+		System.out.println("hello");
+		Function<String, String> lambda = a -> a + a;
+		String result = lambda.apply("1");
+		assertThat(result, equalTo("2"));
+	}
+	
 }
