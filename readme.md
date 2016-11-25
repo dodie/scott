@@ -22,8 +22,8 @@ Supports Java 7 and above.
 > **Kirk**: Thank you, Mr. Scott. I'll try not to take that personally.
 
 
-Example
--------
+Features
+--------
 Consider this failing test case:
 
 ```java
@@ -58,18 +58,16 @@ myTest(hu.advancedweb.example.ListTest) FAILED!
 
 Notice that even without sophisticated assertions the required information is present in the test report.
 
-For a more demos check out the [JUnit examples](https://github.com/dodie/scott/tree/master/scott-examples/junit),
-or the [Cucumber showcase](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
-
-Features
---------
-For every failing test it reports the following:
-- assignments to local variables
-- changes made to objects referenced by local variables and fields
-- input parameters
-- relevant fields that the test accesses, but does not modify
+For every failing test Scott reports the
+- assignments to local variables,
+- changes made to objects referenced by local variables and fields,
+- input parameters and
+- relevant fields that the test accesses, but does not modify.
 
 All information is nicely visualized on the source code of the test method.
+
+For a more demos check out the [JUnit examples](https://github.com/dodie/scott/tree/master/scott-examples/junit),
+or the [Cucumber showcase](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
 
 
 How to use
