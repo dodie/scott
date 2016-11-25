@@ -90,15 +90,15 @@ public class FailureRenderer {
 			trackedValue.put(event.key, event.value);
 		}
 	}
-
+	
 	private static int getInitLine(StateData event) {
-		int initLine = 0;
-		for (Map.Entry<String, Integer> methodStart: StateRegistry.getMethodStartLine().entrySet()) {
-			if (event.key.endsWith(methodStart.getKey())) {
-				initLine = methodStart.getValue();
-			}
+		final String methodScope = event.key.substring(0, event.key.indexOf("\\"));
+		
+		if (methodScope.startsWith("lambda$")) {
+			return StateRegistry.getMethodStartLine().get(methodScope);
+		} else {
+			return 0;
 		}
-		return initLine;
 	}
 	
 	private static void fillException(ScottReport scottReport, MethodSource methodSource, Throwable throwable) {
@@ -124,6 +124,7 @@ public class FailureRenderer {
 		StringBuilder sb = new StringBuilder();
 		sb.append("\n");
 		
+		int lastLineNumber = scottReport.getSourceLines().lastKey();
 		for (Map.Entry<Integer, String> line : scottReport.getSourceLines().entrySet()) {
 			int lineNumber = line.getKey();
 			String lineText = line.getValue().replaceAll("\t", "    ");
@@ -145,9 +146,9 @@ public class FailureRenderer {
 				}
 			}
 			
-			if (!scottReport.getInitialSnapshots(lineNumber).isEmpty()) {
+			if (!scottReport.getInitialSnapshots(lineNumber - 1).isEmpty()) {
 				String blankLine = lineText.replaceFirst("[^\\s].*$", "");
-				for (Snapshot snapshot : scottReport.getInitialSnapshots(lineNumber)) {
+				for (Snapshot snapshot : scottReport.getInitialSnapshots(lineNumber - 1)) {
 					sb.append("    ");
 					sb.append("|  ");
 					sb.append(blankLine);
@@ -155,6 +156,21 @@ public class FailureRenderer {
 					sb.append(snapshot.name + "=" + snapshot.value.trim());
 					sb.append("\n");
 					initialAdded = true;
+				}
+			}
+			
+			if (lineNumber == lastLineNumber) {
+				if (!scottReport.getInitialSnapshots(lineNumber).isEmpty()) {
+					String blankLine = lineText.replaceFirst("[^\\s].*$", "");
+					for (Snapshot snapshot : scottReport.getInitialSnapshots(lineNumber)) {
+						sb.append("    ");
+						sb.append("|  ");
+						sb.append(blankLine);
+						sb.append("//    => ");
+						sb.append(snapshot.name + "=" + snapshot.value.trim());
+						sb.append("\n");
+						initialAdded = true;
+					}
 				}
 			}
 			

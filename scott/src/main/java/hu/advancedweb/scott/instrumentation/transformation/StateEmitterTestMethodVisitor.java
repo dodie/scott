@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -32,8 +33,6 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 
 	private boolean clearTrackedDataAtStart;
 	
-	private boolean methodStartTracked;
-
 
 	public StateEmitterTestMethodVisitor(MethodVisitor mv, String className, String methodName, boolean clearTrackedDataAtStart) {
 		super(Opcodes.ASM5, mv);
@@ -71,11 +70,6 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	@Override
 	public void visitLineNumber(int lineNumber, Label label) {
 		this.lineNumber = lineNumber;
-		
-		if (!methodStartTracked) {
-			methodStartTracked = true;
-			instrumentToTrackMethodStart(lineNumber);
-		}
 		super.visitLineNumber(lineNumber, label);
 	}
 	
@@ -86,9 +80,27 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	}
 	
 	@Override
+	public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
+		/*
+		 * Track where lambda expressions are defined.
+		 */
+		if ("java/lang/invoke/LambdaMetafactory".equals(bsm.getOwner())) {
+			if (bsmArgs[1] instanceof Handle) {
+				Handle handle = (Handle)bsmArgs[1];
+				String methodName = handle.getName();
+				if (methodName.startsWith("lambda$")) {
+					instrumentToTrackMethodStart(handle.getName(), lineNumber);
+				}
+			}
+		}
+		
+		super.visitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
+	}
+	
+	@Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 		super.visitMethodInsn(opcode, owner, name, desc, itf);
-
+		
 		// track every variable state after method calls
 		for (LocalVariableScope localVariableScope : localVariableScopes) {
 			if (!localVariables.contains(localVariableScope.var)) continue;
@@ -156,15 +168,15 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		}
 	}
 	
-	private void instrumentToTrackMethodStart(int lineNumber) {
-		Logger.log(" - instrumentToTrackMethodStart at line " + lineNumber);
+	private void instrumentToTrackMethodStart(String methodName, int lineNumber) {
+		Logger.log(" - instrumentToTrackMethodStart of " + methodName + " at " + lineNumber);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(methodName);
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackMethodStart", "(ILjava/lang/String;)V", false);
 	}
 	
 	private void instrumentToTrackVariableState(LocalVariableScope localVariableScope) {
-		Logger.log(" - instrumentToTrackVariableState of variable " + localVariableScope);
+		Logger.log(" - instrumentToTrackVariableState of variable at " + lineNumber + ": " + localVariableScope);
 		super.visitVarInsn(localVariableScope.variableType.loadOpcode, localVariableScope.var);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(localVariableScope.var);
@@ -173,7 +185,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	}
 	
 	private void instrumentToTrackFieldState(AccessedField accessedField) {
-		Logger.log(" - instrumentToTrackFieldState " + accessedField);
+		Logger.log(" - instrumentToTrackFieldState at " + lineNumber + ": " + accessedField);
 		final int opcode;
 		if (accessedField.isStatic) {
 			opcode = Opcodes.GETSTATIC;
@@ -196,7 +208,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	}
 	
 	private void instrumentToTrackVariableName(LocalVariableScope localVariableScope) {
-		Logger.log(" - instrumentToTrackVariableName" + localVariableScope);
+		Logger.log(" - instrumentToTrackVariableName at " + lineNumber + ": " + localVariableScope);
 		super.visitLdcInsn(localVariableScope.name);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(localVariableScope.var);

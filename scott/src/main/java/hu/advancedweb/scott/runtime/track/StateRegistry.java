@@ -118,6 +118,7 @@ public class StateRegistry {
 		final String key = getFieldKey(name, isStatic, owner);
 		FIELD_STATES.add(new StateData(lineNumber, Double.toString(value), key));
 	}
+	
 	public static void trackFieldState(boolean value, String name, int lineNumber, boolean isStatic, String owner) {
 		final String key = getFieldKey(name, isStatic, owner);
 		FIELD_STATES.add(new StateData(lineNumber, Boolean.toString(value), key));
@@ -144,43 +145,57 @@ public class StateRegistry {
 	}
 
 	public static void trackVariableName(String name, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_NAMES.add(new StateData(lineNumber, name, var + methodName));
+		final String key = getVariableKey(var, methodName);
+		LOCAL_VARIABLE_NAMES.add(new StateData(lineNumber, name, key));
 	}
 	
 	public static void trackLocalVariableState(byte value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Byte.toString(value), var + methodName));
+		final String key = getVariableKey(var, methodName);
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Byte.toString(value), key));
 	}
 
 	public static void trackLocalVariableState(short value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Short.toString(value), var + methodName));
+		final String key = getVariableKey(var, methodName);
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Short.toString(value), key));
 	}
 
 	public static void trackLocalVariableState(int value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Integer.toString(value), var + methodName));
+		final String key = getVariableKey(var, methodName);
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Integer.toString(value), key));
 	}
 
 	public static void trackLocalVariableState(long value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Long.toString(value), var + methodName));
+		final String key = getVariableKey(var, methodName);
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Long.toString(value), key));
 	}
 
 	public static void trackLocalVariableState(float value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Float.toString(value), var + methodName));
+		final String key = getVariableKey(var, methodName);
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Float.toString(value), key));
 	}
 
 	public static void trackLocalVariableState(double value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Double.toString(value), var + methodName));
+		final String key = getVariableKey(var, methodName);
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Double.toString(value), key));
 	}
 
 	public static void trackLocalVariableState(boolean value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Boolean.toString(value), var + methodName));
+		final String key = getVariableKey(var, methodName);
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Boolean.toString(value), key));
 	}
 
 	public static void trackLocalVariableState(char value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Character.toString(value), var + methodName));
+		final String key = getVariableKey(var, methodName);
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, Character.toString(value), key));
 	}
 	
 	public static void trackLocalVariableState(Object value, int lineNumber, int var, String methodName) {
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, objectToString(value), var + methodName));
+		final String key = getVariableKey(var, methodName);
+		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, objectToString(value), key));
+	}
+	
+	private static String getVariableKey(int var, String methodName) {
+		return methodName + "\\" + var;
 	}
 
 	private static String objectToString(Object value) {
