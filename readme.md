@@ -13,13 +13,13 @@ such as Hamcrest or AssertJ.
 Scott does not intend to be a testing framework, nor does it provide an API to use in the tests.
 Instead, it aims to be a small tool that can be dropped into a project to do its job automatically,
 so you can worry much less about expressing assertions,
-and still have meaningful failure messages. 
+and still have meaningful failure messages.
 
 Supports Java 7 and above.
 
-> **Scott**: All systems automated and ready. A chimpanzee and two trainees could run her. 
+> **Scott**: All systems automated and ready. A chimpanzee and two trainees could run her.
 
-> **Kirk**: Thank you, Mr. Scott. I'll try not to take that personally. 
+> **Kirk**: Thank you, Mr. Scott. I'll try not to take that personally.
 
 
 Example
@@ -31,7 +31,7 @@ Consider this failing test case:
 public void myTest() {
 	Integer[] myArray = new Integer[] { 1, 4, 2, 4 };
 	List<Integer> myList = Arrays.asList(myArray);
-	
+
 	Set<Integer> mySet = new HashSet<>(myList);
 	mySet.remove(4);
 
@@ -48,10 +48,10 @@ myTest(hu.advancedweb.example.ListTest) FAILED!
   23|      public void myTest() {
   24|          Integer[] myArray = new Integer[] { 1, 4, 2, 4 };  // myArray=[1, 4, 2, 4]
   25|          List<Integer> myList = Arrays.asList(myArray);  // myList=[1, 4, 2, 4]
-  26|          
+  26|
   27|          Set<Integer> mySet = new HashSet<>(myList);  // mySet=[1, 2, 4]
   28|          mySet.remove(4);  // mySet=[1, 2]
-  29|  
+  29|
   30|*         assertTrue(mySet.contains(4));  // AssertionError
   31|      }
 ```
@@ -133,7 +133,7 @@ but until then add this to your *pom.xml* file:
 	<dependency>
 		<groupId>hu.advancedweb</groupId>
 		<artifactId>scott</artifactId>
-		<version>2.0.0</version>
+		<version>2.0.1</version>
 		<scope>test</scope>
 	</dependency>
 	<dependency>
