@@ -20,9 +20,13 @@ import hu.advancedweb.scott.instrumentation.transformation.param.TransformationP
 public class TestClassTransformer implements ClassFileTransformer {
 
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-//		if (loader == null) { // FIXME: See Issue #22
-//			return classfileBuffer;
-//		} else {
+		if (loader == null) {
+			/*
+			 * Leave the class alone, if it is being loaded by the Bootstrap classloader,
+			 * as we don't want to do anything with JDK libs. See Issue #22.
+			 */
+			return classfileBuffer;
+		} else {
 			try {
 				TransformationParameters transformationParameters = calculateTransformationParameters(classfileBuffer);
 			    return transform(classfileBuffer, transformationParameters);
@@ -31,7 +35,7 @@ public class TestClassTransformer implements ClassFileTransformer {
 				e.printStackTrace();
 				throw e;
 			}
-//		}
+		}
 	}
 
 	private TransformationParameters calculateTransformationParameters(byte[] classfileBuffer) {
