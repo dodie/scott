@@ -64,7 +64,7 @@ For every failing test Scott reports the
 - **input parameters** and
 - **relevant fields** that the test accesses, but does not modify.
 
-All information is nicely visualized on the source code of the test method.
+All information is nicely **visualized on the source code** of the test method.
 
 For a more demos check out the [JUnit examples](https://github.com/dodie/scott/tree/master/scott-examples/junit),
 or the [Cucumber showcase](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
