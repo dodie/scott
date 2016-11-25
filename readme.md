@@ -83,7 +83,8 @@ but until then add this to your *pom.xml* file:
 
 		...
 
-		<!-- Use the Maven Dependency Plugin to copy Scott's JAR from the dependency to the target directory. -->
+		<!-- Use the Maven Dependency Plugin to copy Scott's JAR
+		     from the dependency to the target directory. -->
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-dependency-plugin</artifactId>
