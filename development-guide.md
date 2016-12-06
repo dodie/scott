@@ -26,7 +26,7 @@ Debug mode
 ----------
 Scott can be started in debug mode to make it easier to see what instrumentations happen during the
 test execution. To activate it, just set the ```scottDebug``` environment variable to true when running
-your tests (for example on unix: ```export scottDebug="true"```), then Scott shows the visited and modified classes.
+your tests (for example on Unix: ```export scottDebug="true"```), then Scott shows the visited and modified classes.
 
 For example:
 ```
@@ -39,5 +39,6 @@ Scott instrumentation:  - instrumentToTrackVariableState of variable at 83: Loca
 Scott instrumentation:  - instrumentToTrackVariableName at 84: LocalVariableScope [var=1, name=i, start=81, end=88]
 Scott instrumentation:  - instrumentToTrackVariableState of variable at 84: LocalVariableScope [var=1, name=i, start=81, end=88]
 Scott instrumentation:  - instrumentToTrackVariableState of variable at 85: LocalVariableScope [var=2, name=j, start=81, end=86]
+...
 ```
 
