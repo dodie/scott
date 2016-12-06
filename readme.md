@@ -60,7 +60,7 @@ myTest(hu.advancedweb.example.ListTest) FAILED!
   31|      }
 ```
 
-Notice that even without sophisticated assertions the required information is present in the test report.
+Notice that even **without sophisticated** assertions the required information is present in the test report.
 
 For every failing test Scott reports the
 - assignments to **local variables**,
@@ -154,6 +154,12 @@ but until then add this to your *pom.xml* file:
 For a demo check out and ```mvn install``` the [scott-example](https://github.com/dodie/scott/tree/master/scott-examples/junit) project
 that contains the required setup configuration to use Scott (see [pom.xml](https://github.com/dodie/scott/tree/master/scott-examples/junit/pom.xml))
 and a bunch of failing tests for the show.
+
+
+Contributing
+------------
+Contributions are welcome! Please make sure to visit the
+[development guide](https://github.com/dodie/scott/tree/master/development-guide.md).
 
 
 More to read
