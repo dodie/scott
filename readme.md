@@ -169,4 +169,5 @@ Contributions are welcome! Please make sure to visit the
 
 More to read
 ------------
-[Blog post](https://advancedweb.hu/2015/08/26/scott-detailed-failure-reports/).
+[Blog post](https://advancedweb.hu/2015/08/26/scott-detailed-failure-reports/) from 2015 that describes
+the motivations behind Scott.
