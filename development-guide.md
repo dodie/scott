@@ -5,6 +5,24 @@ Required software for development
 - *Maven 3.0.5*
 
 
+How it works
+------------
+Data about variables, parameters and fields have to be collected at runtime. To achieve this Scott
+instruments the bytecode of the test methods during class loading with a
+[Java Agent](http://docs.oracle.com/javase/8/docs/api/java/lang/instrument/package-summary.html),
+and manipulates them with with [ASM](http://asm.ow2.org/).
+
+The instrumentation happens really fast, many other tools use this technique in the industry, such
+as the [JaCoCo Java Code Coverage Library](http://www.eclemma.org/jacoco/).
+
+Scott inserts code to the test methods that has no effect but to record the interesting stuff
+happens at runtime (line number, variable name, new value, etc.).
+
+These events are saved in a store object, and queried in case of failure, for example by a JUnit Rule.
+Before every test it clears the event store, and after a failing test it constructs the report based
+on the runtime information and the source code of the test.
+
+
 Project layout
 --------------
 The core module where you can find all the instrumentation and rendering parts is ```scott```,
