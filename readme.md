@@ -78,10 +78,10 @@ How to use
 ----------
 
 After including Scott to the build flow, it automatically creates the detailed failure messages for failing tests.
-All you have to do is to write tests in Java with simple assertions or using your favourite testing library
-and run them as you would do normally. Scott will do it's magic behind the scenes.
+All you have to do is to write tests in Java with simple assertions or using your favorite testing library
+and run them as you would do normally. Scott will do its magic behind the scenes.
 
-A Maven Plugin is on it's way to make it even easier,
+A Maven Plugin is on its way to make it even easier,
 but until then add this to your *pom.xml* file:
 
 ```xml
