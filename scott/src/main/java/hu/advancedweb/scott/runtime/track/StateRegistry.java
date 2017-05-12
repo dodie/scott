@@ -191,11 +191,39 @@ public class StateRegistry {
 	
 	public static void trackLocalVariableState(Object value, int lineNumber, int var, String methodName) {
 		final String key = getVariableKey(var, methodName);
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, objectToString(value), key));
+		
+		String stringValue = objectToStringIgnoreMockitoExceptions(value);
+		
+		if (stringValue != null) {
+			LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, stringValue, key));
+		}
 	}
-	
+
 	private static String getVariableKey(int var, String methodName) {
 		return methodName + "\\" + var;
+	}
+	
+	private static String objectToStringIgnoreMockitoExceptions(Object value) {
+		try {
+			return objectToString(value);
+		} catch (Throwable t) {
+			if (t.getClass().getName().startsWith("org.mockito")) {
+				/*
+				 * Calling toString on mocks might result in a MockitoException.
+				 * Under normal circumstances it might happen when we try
+				 * to verify toString (see: https://github.com/mockito/mockito/wiki/FAQ):
+				 * verify(foo, times(1)).toString();
+				 * 
+				 * Due to Scott's bytecode instrumentation, the tests
+				 * might accidentally call toString on mocks during the construction
+				 * of normal verify() as well.
+				 * See Issue #25.
+				 */
+				return null;
+			} else {
+				throw t;
+			}
+		}
 	}
 
 	private static String objectToString(Object value) {
@@ -221,7 +249,7 @@ public class StateRegistry {
 			return Arrays.toString((double[])value);
 		} else {
 			return value.toString();
-		}	
+		}
 	}
 
 }

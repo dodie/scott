@@ -22,6 +22,13 @@ public class RecordMutationTest {
 	}
 	
 	@Test
+	public void simpleMutationInc() throws Exception {
+		int i = 0;
+		i++;
+		assertThat(TestHelper.getLastRecordedStateForVariable("i"), equalTo(Integer.toString(i)));
+	}
+	
+	@Test
 	public void mutateToNull() throws Exception {
 		String s = "Hello World!";
 		assertThat(TestHelper.getLastRecordedStateForVariable("s"), equalTo(s));

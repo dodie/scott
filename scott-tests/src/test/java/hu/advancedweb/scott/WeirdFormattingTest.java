@@ -2,10 +2,16 @@ package hu.advancedweb.scott;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Ignore;
 import org.junit.Test;
 
+import hu.advancedweb.scott.MockitoTest.Foo;
+import hu.advancedweb.scott.MockitoTest.MockHolder;
 import hu.advancedweb.scott.helper.TestHelper;
 
 /**
@@ -98,5 +104,32 @@ public class WeirdFormattingTest {
 			assertThat(TestHelper.getLastRecordedStateForVariable("e"), equalTo(e.toString()));
 			assertThat(TestHelper.getLastRecordedStateForVariable("o"), equalTo(o));
 		}	
+	}
+
+	@Test
+	public void weirdFormattedMockitoTest() throws Exception {
+		Foo foo = mock(
+				Foo.class
+				);
+		MockHolder<Foo> holder = new MockHolder<>(foo);
+		when(
+				foo
+				.bar())
+		.thenReturn("42");
+
+		String result = foo.bar();
+		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo("42"));
+
+		assertEquals(
+				"42",
+				result);
+		verify(
+				foo,
+				times(1))
+		.bar();
+		verify(
+				holder.t,
+				times(1))
+		.bar();
 	}
 }

@@ -1,6 +1,7 @@
 package hu.advancedweb.scott.instrumentation.transformation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -34,10 +35,15 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 	
 	private String className;
 	
+	private int lineNumber;
+	
+	private Map<Integer, Integer> lineNumerToFirstOccurrenceOfVariables;
+	
 	public ScopeExtractorTestMethodVisitor(StateEmitterTestMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions, String className) {
 		super(Opcodes.ASM5, access, name, desc, signature, exceptions);
 		this.next = next;
 		this.className = className;
+		lineNumerToFirstOccurrenceOfVariables = new HashMap<>();
 	}
 	
 	@Override
@@ -60,11 +66,20 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 	}
 	
 	@Override
-	public void visitLineNumber(int line, Label start) {
-		super.visitLineNumber(line, start);
-		lines.put(line, start);
+	public void visitLineNumber(int lineNumber, Label start) {
+		this.lineNumber = lineNumber;
+		super.visitLineNumber(lineNumber, start);
+		lines.put(lineNumber, start);
 	}
-
+	
+	@Override
+	public void visitVarInsn(int opcode, int var) {
+		if (VariableType.isStoreOperation(opcode)) {
+			lineNumerToFirstOccurrenceOfVariables.putIfAbsent(var, this.lineNumber);
+		}
+		super.visitVarInsn(opcode, var);
+	}
+	
 	@Override
 	public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
 		super.visitLocalVariable(name, desc, signature, start, end, index);
@@ -144,15 +159,26 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 			prevLine = entry.getKey();
 		}
 		
-		final LocalVariableScope localScope;
-		if (startLine <= endLine) {
-			localScope = new LocalVariableScope(range.var, range.name, VariableType.getByDesc(range.desc), startLine, endLine);
-		} else {
+		if (startLine > endLine) {
 			// Sometimes the end label is for an earlier line number than the start label, see Issue #17.
-			localScope = new LocalVariableScope(range.var, range.name, VariableType.getByDesc(range.desc), endLine, startLine);
+			int tmp = startLine;
+			startLine = endLine;
+			endLine = tmp;
 		}
 		
-		return localScope;
+		if (lineNumerToFirstOccurrenceOfVariables.containsKey(range.var)) {
+			if (startLine < lineNumerToFirstOccurrenceOfVariables.get(range.var)) {
+				/*
+				 *  For variables in nested scopes the start Label sometimes points to an earlier line,
+				 *  e.g. to the start of the method.
+				 *  In these cases the start line of the scope has to be corrected.
+				 */
+				startLine = lineNumerToFirstOccurrenceOfVariables.get(range.var);
+			}
+		}
+		
+		
+		return new LocalVariableScope(range.var, range.name, VariableType.getByDesc(range.desc), startLine, endLine);
 	}
 	
 	private static class LocalVariableScopeLabels {

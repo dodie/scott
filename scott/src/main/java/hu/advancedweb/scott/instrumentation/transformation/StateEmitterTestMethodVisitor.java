@@ -20,6 +20,7 @@ import org.objectweb.asm.Opcodes;
 public class StateEmitterTestMethodVisitor extends MethodVisitor {
 
 	private int lineNumber;
+	private int lineNumberForMethodCallTrack;
 	
 	private Set<Integer> localVariables = new HashSet<>();
 	
@@ -55,20 +56,21 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		
 		// track initial field states
 		for (AccessedField accessedField : accessedFields) {
-			instrumentToTrackFieldState(accessedField);
+			instrumentToTrackFieldState(accessedField, lineNumber);
 		}
 		
 		// track method arguments
 		for (LocalVariableScope localVariableScope : localVariableScopes) {
 			if (localVariableScope.start == 0) {
-				instrumentToTrackVariableName(localVariableScope);
-				instrumentToTrackVariableState(localVariableScope);
+				instrumentToTrackVariableName(localVariableScope, lineNumber);
+				instrumentToTrackVariableState(localVariableScope, lineNumber);
 			}
 		}
 	}
 	
 	@Override
 	public void visitLineNumber(int lineNumber, Label label) {
+		this.lineNumberForMethodCallTrack = this.lineNumber;
 		this.lineNumber = lineNumber;
 		super.visitLineNumber(lineNumber, label);
 	}
@@ -99,21 +101,35 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	
 	@Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-		super.visitMethodInsn(opcode, owner, name, desc, itf);
+		if (this.lineNumberForMethodCallTrack == 0) {
+			this.lineNumberForMethodCallTrack = this.lineNumber;
+		}
 		
-		// track every variable state after method calls
-		for (LocalVariableScope localVariableScope : localVariableScopes) {
-			if (!localVariables.contains(localVariableScope.var)) continue;
+		if (!owner.startsWith("org/mockito")) {
+			// track every variable state after method calls
+			for (LocalVariableScope localVariableScope : localVariableScopes) {
+				if (!localVariables.contains(localVariableScope.var)) continue;
+				
+				if (isVariableInScope(localVariableScope.var)) {
+					instrumentToTrackVariableState(localVariableScope, lineNumberForMethodCallTrack);
+				}
+			}
 			
-			if (isVariableInScope(localVariableScope.var)) {
-				instrumentToTrackVariableState(localVariableScope);
+			// track every field state after method calls
+			for (AccessedField accessedField : accessedFields) {
+				instrumentToTrackFieldState(accessedField, lineNumberForMethodCallTrack);
 			}
 		}
 		
-		// track every field state after method calls
-		for (AccessedField accessedField : accessedFields) {
-			instrumentToTrackFieldState(accessedField);
-		}
+		this.lineNumberForMethodCallTrack = this.lineNumber;
+		
+		/*
+		 * Visit the method instruction after placing the tracking code
+		 * because otherwise we might confuse Mockito, see Issue #25.
+		 * Because of this, the tracking code has to book the values to the previous line
+		 * for the first method call for every line.
+		 */
+		super.visitMethodInsn(opcode, owner, name, desc, itf);
     }
 	
 	@Override
@@ -132,8 +148,8 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 				 * then the variable name is not present in the compiled bytecode.
 				 * With this workaround Scott can still track the assigned value to such variables.
 				 */
-				instrumentToTrackVariableName(lvs);
-				instrumentToTrackVariableState(lvs);
+				instrumentToTrackVariableName(lvs, lineNumber);
+				instrumentToTrackVariableState(lvs, lineNumber);
 			}
 		}
 	}
@@ -142,10 +158,9 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	public void visitIincInsn(int var, int increment) {
 		super.visitIincInsn(var, increment);
 		
-		// Track variable state and name at variable stores. (At variable increases.)
+		// Track variable state at variable increases (e.g. i++).
 		LocalVariableScope lvs = getLocalVariableScope(var);
-		instrumentToTrackVariableName(lvs);
-		instrumentToTrackVariableState(lvs);
+		instrumentToTrackVariableState(lvs, lineNumber);
 	}
 	
 	private void instrumentToClearTrackedDataAndSignalStartOfRecording() {
@@ -161,7 +176,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		if (Opcodes.PUTFIELD == opcode|| Opcodes.PUTSTATIC == opcode) {
 			for (AccessedField accessedField : accessedFields) {
 				if (accessedField.name.equals(name)) {
-					instrumentToTrackFieldState(accessedField);
+					instrumentToTrackFieldState(accessedField, lineNumber);
 					break;
 				}
 			}
@@ -175,16 +190,20 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackMethodStart", "(ILjava/lang/String;)V", false);
 	}
 	
-	private void instrumentToTrackVariableState(LocalVariableScope localVariableScope) {
-		Logger.log(" - instrumentToTrackVariableState of variable at " + lineNumber + ": " + localVariableScope);
+	private void instrumentToTrackVariableState(LocalVariableScope localVariableScope, int lineNumber) {
+		Logger.log(" - instrumentToTrackVariableState of variable at " + getLineNumberBoundedByScope(lineNumber, localVariableScope) + ": " + localVariableScope);
 		super.visitVarInsn(localVariableScope.variableType.loadOpcode, localVariableScope.var);
-		super.visitLdcInsn(lineNumber);
+		super.visitLdcInsn(getLineNumberBoundedByScope(lineNumber, localVariableScope));
 		super.visitLdcInsn(localVariableScope.var);
 		super.visitLdcInsn(methodName);
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackLocalVariableState", "(" + localVariableScope.variableType.desc + "IILjava/lang/String;)V", false);
 	}
 	
-	private void instrumentToTrackFieldState(AccessedField accessedField) {
+	private int getLineNumberBoundedByScope(int lineNumber, LocalVariableScope localVariableScope) {
+		return Math.min(localVariableScope.end, Math.max(lineNumber, localVariableScope.start));
+	}
+	
+	private void instrumentToTrackFieldState(AccessedField accessedField, int lineNumber) {
 		Logger.log(" - instrumentToTrackFieldState at " + lineNumber + ": " + accessedField);
 		final int opcode;
 		if (accessedField.isStatic) {
@@ -207,10 +226,10 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackFieldState", "(" + desc + "Ljava/lang/String;IZLjava/lang/String;)V", false);
 	}
 	
-	private void instrumentToTrackVariableName(LocalVariableScope localVariableScope) {
-		Logger.log(" - instrumentToTrackVariableName at " + lineNumber + ": " + localVariableScope);
+	private void instrumentToTrackVariableName(LocalVariableScope localVariableScope, int lineNumber) {
+		Logger.log(" - instrumentToTrackVariableName at " + getLineNumberBoundedByScope(lineNumber, localVariableScope) + ": " + localVariableScope);
 		super.visitLdcInsn(localVariableScope.name);
-		super.visitLdcInsn(lineNumber);
+		super.visitLdcInsn(getLineNumberBoundedByScope(lineNumber, localVariableScope));
 		super.visitLdcInsn(localVariableScope.var);
 		super.visitLdcInsn(methodName);
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackVariableName", "(Ljava/lang/String;IILjava/lang/String;)V", false);
