@@ -21,11 +21,11 @@
 		context of the test case. It provides details about local
 		variables to reduce the need to debug tests.
 	</description>
-	
+
 	<licenses>
 		<license>
-			<name>The Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
 		</license>
 	</licenses>
 
