@@ -2,7 +2,7 @@ Scott Test Reporter - JUnit Example project
 ===========================================
 
 This project contains the necessary setup configuration to use Scott with JUnit
-(see [pom.xml](https://github.com/dodie/scott/blob/master/scott-examples/junit/pom.xml))
+(see [pom.xml](https://github.com/dodie/scott/blob/master/scott-examples/junit4/pom.xml))
 and a bunch of failing tests to demonstrate the detailed failure messages.
 
 

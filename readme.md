@@ -70,7 +70,7 @@ For every failing test Scott reports the
 
 All information is nicely **visualized on the source code** of the test method.
 
-For a more demos check out the [JUnit examples](https://github.com/dodie/scott/tree/master/scott-examples/junit),
+For a more demos check out the [JUnit examples](https://github.com/dodie/scott/tree/master/scott-examples/junit4),
 or the [Cucumber showcase](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
 
 
@@ -156,8 +156,8 @@ but until then add this to your *pom.xml* file:
 </dependencies>
 ```
 
-For a demo check out and ```mvn install``` the [scott-example](https://github.com/dodie/scott/tree/master/scott-examples/junit) project
-that contains the required setup configuration to use Scott (see [pom.xml](https://github.com/dodie/scott/tree/master/scott-examples/junit/pom.xml))
+For a demo check out and ```mvn install``` the [scott-example](https://github.com/dodie/scott/tree/master/scott-examples/junit4) project
+that contains the required setup configuration to use Scott (see [pom.xml](https://github.com/dodie/scott/tree/master/scott-examples/junit4/pom.xml))
 and a bunch of failing tests for the show.
 
 

@@ -20,7 +20,7 @@ public class AssertionsTest {
 	void standardAssertions() {
 		assertEquals(2, 2);
 		assertEquals(4, 4, "With message.");
-		assertTrue(2 == 2, () -> "With message.");
+		assertTrue(true, () -> "With message.");
 	}
 
 	@Test
