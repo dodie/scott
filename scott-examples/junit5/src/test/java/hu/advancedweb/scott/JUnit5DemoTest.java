@@ -17,6 +17,7 @@ import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("unused")
 @DisplayName("Test with JUnit 5 assertions")
 public class JUnit5DemoTest {
 
