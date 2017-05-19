@@ -38,13 +38,17 @@ public class TestDiscoveryMethodVisitor extends MethodVisitor {
 	@Override
 	public void visitEnd() {
 		for (String annotationDesc : annotations) {
-			if (AnnotationMatcher.match(annotationDesc, "scott.track.method_annotation", new String[] {"org.junit.Test"})) {
+			if (AnnotationMatcher.match(annotationDesc, "scott.track.method_annotation", new String[] {"org.junit.Test", "org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory"})) {
 				transformationParameters.markMethodForTracking(methodName, methodDesc, methodSignature);
 				transformationParameters.markMethodForClearingTrackedData(methodName, methodDesc, methodSignature);
 			}
 			
-			if (AnnotationMatcher.match(annotationDesc, "scott.injectrule.method_annotation", new String[] {"org.junit.Test"})) {
-				transformationParameters.markClassForRuleInjection();
+			if (AnnotationMatcher.match(annotationDesc, "scott.inject_junit4_rule.method_annotation", new String[] {"org.junit.Test"})) {
+				transformationParameters.markClassForJUnit4RuleInjection();
+			}
+			
+			if (AnnotationMatcher.match(annotationDesc, "scott.inject_junit5_extension.method_annotation", new String[] {"org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory"})) {
+				transformationParameters.markClassForJUnit5ExtensionInjection();
 			}
 		}
 		super.visitEnd();

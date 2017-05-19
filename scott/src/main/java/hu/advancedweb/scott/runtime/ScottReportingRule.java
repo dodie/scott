@@ -17,6 +17,9 @@ public class ScottReportingRule implements TestRule {
 		return new Statement() {
 			@Override
 			public void evaluate() throws Throwable {
+				String testClassName = description.getTestClass() != null ? description.getTestClass().getTypeName() : null;
+				String testMethodName = description.getMethodName();
+				
 				/*
 				 * Evaluate test and in case of a failure 
 				 * throw a new error with the correct exception type
@@ -25,11 +28,11 @@ public class ScottReportingRule implements TestRule {
 				try {
 					base.evaluate();
 				} catch (AssertionError assertionError) {
-					throw new AssertionError(FailureRenderer.render(description, assertionError), assertionError);
+					throw new AssertionError(FailureRenderer.render(testClassName, testMethodName, assertionError), assertionError);
 				} catch (Error error) {
-					throw new Error(FailureRenderer.render(description, error), error);
+					throw new Error(FailureRenderer.render(testClassName, testMethodName, error), error);
 				} catch (Throwable throwable) {
-					throw new Throwable(FailureRenderer.render(description, throwable), throwable);
+					throw new Throwable(FailureRenderer.render(testClassName, testMethodName, throwable), throwable);
 				}
 			}
 		};

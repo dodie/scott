@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import hu.advancedweb.scott.helper.TestHelper;
-
 public class JdkLibTest {
 	
 	/*

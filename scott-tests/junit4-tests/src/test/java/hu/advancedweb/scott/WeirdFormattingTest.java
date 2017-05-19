@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import hu.advancedweb.scott.MockitoTest.Foo;
 import hu.advancedweb.scott.MockitoTest.MockHolder;
-import hu.advancedweb.scott.helper.TestHelper;
 
 /**
  * Note that this file is sensitive to formatting.

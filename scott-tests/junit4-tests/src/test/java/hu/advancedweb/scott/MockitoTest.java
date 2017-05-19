@@ -17,8 +17,6 @@ import java.util.Iterator;
 
 import org.junit.Test;
 
-import hu.advancedweb.scott.helper.TestHelper;
-
 public class MockitoTest {
 
 	@Test

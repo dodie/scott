@@ -204,26 +204,76 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	}
 	
 	private void instrumentToTrackFieldState(AccessedField accessedField, int lineNumber) {
-		Logger.log(" - instrumentToTrackFieldState at " + lineNumber + ": " + accessedField);
-		final int opcode;
 		if (accessedField.isStatic) {
-			opcode = Opcodes.GETSTATIC;
+			instrumentToTrackStaticFieldState(accessedField, lineNumber);
 		} else {
-			opcode = Opcodes.GETFIELD;
-			super.visitVarInsn(Opcodes.ALOAD, 0);
+			instrumentToTrackInstanceFieldState(accessedField, lineNumber);
 		}
-
-		String desc = accessedField.desc;
-		if (desc.startsWith("L") || desc.startsWith("[")) {
-			desc = VariableType.REFERENCE.desc;
+	}
+	
+	private void instrumentToTrackInstanceFieldState(AccessedField accessedField, int lineNumber) {
+		if (!isCurrentClassIsFieldOwnerOrInnerClassOfFieldOwner(accessedField.owner)) {
+			return;
 		}
 		
-		super.visitFieldInsn(opcode, accessedField.owner, accessedField.name, accessedField.desc);
+		Logger.log(" - instrumentToTrackFieldState at " + lineNumber + ": " + accessedField);
+		
+		/*
+		 * Put owner to the stack.
+		 * To do this, first put the current object ("this") to the stack.
+		 * Then check if the field is owned by the class of this object. If it is, then we are done.
+		 * Else, put the enclosing object to the stack, and check again.
+		 * Repeat the last step until the owner is found and on the stack.
+		 */
+		super.visitVarInsn(Opcodes.ALOAD, 0);
+		
+		String currentNestedClassName = className;
+		while(!currentNestedClassName.equals(accessedField.owner)) {
+			String enclosingClassName = currentNestedClassName.substring(0, currentNestedClassName.lastIndexOf("$"));
+			int nestingLevel = currentNestedClassName.length() - currentNestedClassName.replace("$", "").length() - 1;
+			super.visitFieldInsn(Opcodes.GETFIELD, currentNestedClassName, "this$" + nestingLevel, "L" + enclosingClassName + ";");
+			currentNestedClassName = enclosingClassName;
+		}
+		
+		// Put field value to the stack
+		super.visitFieldInsn(Opcodes.GETFIELD, accessedField.owner, accessedField.name, accessedField.desc);
+		
+		// Put other params to the stack
 		super.visitLdcInsn(accessedField.name);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(accessedField.isStatic);
 		super.visitLdcInsn(accessedField.owner);
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackFieldState", "(" + desc + "Ljava/lang/String;IZLjava/lang/String;)V", false);
+		
+		// Call tracking code
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;IZLjava/lang/String;)V", false);
+	}
+	
+	private boolean isCurrentClassIsFieldOwnerOrInnerClassOfFieldOwner(String owner) {
+		return className.equals(owner) || className.startsWith(owner + "$");
+	}
+
+	private void instrumentToTrackStaticFieldState(AccessedField accessedField, int lineNumber) {
+		Logger.log(" - instrumentToTrackFieldState (static) at " + lineNumber + ": " + accessedField);
+		
+		// Put field value to the stack
+		super.visitFieldInsn(Opcodes.GETSTATIC, accessedField.owner, accessedField.name, accessedField.desc);
+		
+		// Put other params to the stack
+		super.visitLdcInsn(accessedField.name);
+		super.visitLdcInsn(lineNumber);
+		super.visitLdcInsn(accessedField.isStatic);
+		super.visitLdcInsn(accessedField.owner);
+		
+		// Call tracking code
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;IZLjava/lang/String;)V", false);
+	}
+
+	private String getFieldDescriptor(AccessedField accessedField) {
+		if (accessedField.desc.startsWith("L") || accessedField.desc.startsWith("[")) {
+			return VariableType.REFERENCE.desc;
+		} else {
+			return accessedField.desc;
+		}
 	}
 	
 	private void instrumentToTrackVariableName(LocalVariableScope localVariableScope, int lineNumber) {

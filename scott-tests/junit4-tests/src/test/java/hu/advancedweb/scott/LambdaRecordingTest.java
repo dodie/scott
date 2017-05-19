@@ -7,8 +7,6 @@ import java.util.function.Function;
 
 import org.junit.Test;
 
-import hu.advancedweb.scott.helper.TestHelper;
-
 public class LambdaRecordingTest {
 	
 	@Test
@@ -45,7 +43,6 @@ public class LambdaRecordingTest {
 	
 	@Test
 	public void lambda_with_single_expression() throws Exception {
-		System.out.println("hello");
 		Function<String, String> lambda = a -> a + a;
 		String result = lambda.apply("1");
 		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo(result));

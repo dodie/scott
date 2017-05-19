@@ -139,7 +139,18 @@ public class StateRegistry {
 		if (isStatic) {
 			key = owner.substring(owner.lastIndexOf("/") + 1) + "." + name;
 		} else {
-			key = "this." + name;
+			final String prefix;
+			if (CLASS_NAME.equals(owner)) {
+				prefix = "this.";
+			} else if (owner.contains("$")) {
+				prefix = "(in enclosing " + owner.substring(owner.lastIndexOf("$") + 1) + ") ";
+			} else if (owner.contains("/")) {
+				prefix = "(in enclosing " + owner.substring(owner.lastIndexOf("/") + 1) + ") ";
+			} else {
+				prefix = "(in enclosing " + owner + ") ";
+			}
+			
+			key = prefix + name;
 		}
 		return key;
 	}

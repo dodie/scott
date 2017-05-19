@@ -33,16 +33,13 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 	
 	private StateEmitterTestMethodVisitor next;
 	
-	private String className;
-	
 	private int lineNumber;
 	
 	private Map<Integer, Integer> lineNumerToFirstOccurrenceOfVariables;
 	
-	public ScopeExtractorTestMethodVisitor(StateEmitterTestMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions, String className) {
+	public ScopeExtractorTestMethodVisitor(StateEmitterTestMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
 		super(Opcodes.ASM5, access, name, desc, signature, exceptions);
 		this.next = next;
-		this.className = className;
 		lineNumerToFirstOccurrenceOfVariables = new HashMap<>();
 	}
 	
@@ -97,9 +94,11 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 			isStatic = false;
 		}
 		
-		if (className.equals(owner)) {
-			accessedFields.add(new AccessedField(owner, name, desc, isStatic));
+		if (name.startsWith("this$")) {
+			return;
 		}
+		
+		accessedFields.add(new AccessedField(owner, name, desc, isStatic));
 	}
 	
 	@Override
@@ -109,7 +108,6 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 			if (range.name.equals("this")) {
 				continue;
 			}
-			
 			localVariableScopes.add(calculateScope(range));
 		}
 		next.setLocalVariableScopes(localVariableScopes);

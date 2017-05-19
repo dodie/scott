@@ -29,15 +29,32 @@ public class MethodSource {
 	private List<String> reportLines = new ArrayList<String>();
 	private String className;
 
-	
-	public MethodSource(String path, String className, String methodName) throws IOException {
-		this.path = path;
+	public MethodSource(String className, String methodName) throws IOException {
+		if (className == null || methodName == null) {
+			throw new NullPointerException();
+		}
+		
+		final String containerClassFileName;
+		if (className.contains("$")) {
+			containerClassFileName = className.substring(0, className.indexOf("$"));
+		} else {
+			containerClassFileName = className;
+		}
+		
+		final String scopedClassName;
+		if (className.contains(".")) {
+			scopedClassName = className.substring(className.lastIndexOf(".") + 1);
+		} else {
+			scopedClassName = className;
+		}
+		
+		this.path = new SourcePathResolver().getSourcePath(containerClassFileName);
 		this.className = className;
 		this.methodName = methodName;
 	
 		CompilationUnit cu = getCompilationUnit(path);
 		
-		MethodBoundaryExtractor visitor = new MethodBoundaryExtractor(methodName);
+		MethodBoundaryExtractor visitor = new MethodBoundaryExtractor(scopedClassName, methodName);
 		final Bounderies boundary = new Bounderies();
 		visitor.visit(cu, boundary);
 		

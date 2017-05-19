@@ -5,8 +5,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import hu.advancedweb.scott.helper.TestHelper;
-
 public class ExceptionTest {
 	
 	@SuppressWarnings("null")

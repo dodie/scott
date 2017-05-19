@@ -3,10 +3,7 @@ package hu.advancedweb.scott.runtime.report;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.runner.Description;
-
 import hu.advancedweb.scott.runtime.report.javasource.MethodSource;
-import hu.advancedweb.scott.runtime.report.javasource.SourcePathResolver;
 import hu.advancedweb.scott.runtime.track.StateData;
 import hu.advancedweb.scott.runtime.track.StateRegistry;
 
@@ -17,11 +14,10 @@ import hu.advancedweb.scott.runtime.track.StateRegistry;
  */
 public class FailureRenderer {
 
-	private static SourcePathResolver sourcePathResolver = new SourcePathResolver();
+	public static String render(String testClassName, String testMethodName, Throwable throwable) {
+		MethodSource methodSource = getTestMethodSource(testClassName, testMethodName);
 
-	public static String render(Description description, Throwable throwable) {
 		final ScottReport scottReport = new ScottReport();
-		MethodSource methodSource = getTestMethodSource(description);
 		
 		if (methodSource != null) {
 			fillSource(scottReport, methodSource);
@@ -33,19 +29,15 @@ public class FailureRenderer {
 		return renderPlain(scottReport);
 	}
 	
-	private static MethodSource getTestMethodSource(Description description) {
+	private static MethodSource getTestMethodSource(String testClassName, String testMethodName) {
 		try {
-			String testClassName = description.getTestClass().getCanonicalName();
-			String testSourcePath = sourcePathResolver.getSourcePath(testClassName);
-			String testMethodName = description.getMethodName();
-			return new MethodSource(testSourcePath, testClassName, testMethodName);
+			return new MethodSource(testClassName, testMethodName);
 		} catch (Exception e) {
 			try {
 				// As a fallback, look for the currently tracked method, and try to take its source.
-				String testClassName = StateRegistry.getTestClassType().replace("/", ".");
-				String testSourcePath = sourcePathResolver.getSourcePath(testClassName);
-				String testMethodName = StateRegistry.getTestMethodName();
-				return new MethodSource(testSourcePath, testClassName, testMethodName);
+				testClassName = StateRegistry.getTestClassType().replace("/", ".");
+				testMethodName = StateRegistry.getTestMethodName();
+				return new MethodSource(testClassName, testMethodName);
 			} catch (Exception e2) {
 				// Ignore, we simply don't fill the test source for the report.
 				// It's better than crashing the test run.

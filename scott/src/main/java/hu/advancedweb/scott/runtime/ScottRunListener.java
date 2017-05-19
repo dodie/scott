@@ -35,7 +35,9 @@ public class ScottRunListener extends RunListener {
 	
 	@Override
 	public void testFailure(Failure failure) throws Exception {
-		String scottReport = FailureRenderer.render(description, failure.getException());
+		String testClassName = description.getTestClass() != null ? description.getTestClass().getTypeName() : null;
+		String testMethodName = description.getMethodName();
+		String scottReport = FailureRenderer.render(testClassName, testMethodName, failure.getException());
 		setExceptionMessage(failure.getException(), scottReport);
 		super.testFailure(failure);
 	}
