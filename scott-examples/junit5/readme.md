@@ -1,4 +1,4 @@
-Scott Test Reporter - JUnit Example project
+Scott Test Reporter - JUnit 5 Example project
 ===========================================
 
 This project contains the necessary setup configuration to use Scott with JUnit 5,
@@ -55,18 +55,30 @@ Demo
   46|      }
 ```
 
-**Simple test with message supplier:**
+**Nested classes:**
 ```java
-  23|      @Test
-  24|      public void testWithMessageSupplier() {
-  25|          String first = "Hello";  // first=Hello
-  26|          String last = "World";  // last=World
-  27|  
-  28|          String concatenated = first + " " + last;  // concatenated=Hello World
-  29|  
-  30|*         assertEquals("Goodbye World", concatenated,   // AssertionFailedError: Incorrect message. ==> expected: <Goodbye World> but was: <Hello World>
-  31|                  () -> "Incorrect message.");
-  32|      }
+  NestedClassTest.test 
+  19|      @Test
+  20|      void test() {
+    |          //    => this.value=1
+    |          
+  21|          String dot = ".";  // dot=.
+  22|          value += dot;  // this.value=1.
+  23|*         assertEquals("1", value);  // AssertionFailedError: expected: <1> but was: <1.>
+  24|      }
+
+  NestedClassTest$NestedClass.test 
+  36|          @Test
+  37|          void test() {
+    |              //    => this.nestedValue=a
+    |              //    => (in enclosing NestedClassTest) value=12
+    |              
+  38|              String dot = ".";  // dot=.
+  39|              nestedValue += dot;  // this.nestedValue=a.
+  40|              value += dot + nestedValue;  // (in enclosing NestedClassTest) value=12.a.
+  41|  
+  42|*             assertEquals("12.a", value);  // AssertionFailedError: expected: <12.a> but was: <12.a.>
+  43|          }
 ```
 
 **Exceeding timeout:**
@@ -92,28 +104,16 @@ Demo
   77|      }
 ```
 
-**Nested classes:**
+**Simple test with message supplier:**
 ```java
-  NestedClassTest.test 
-  19|      @Test
-  20|      void test() {
-    |          //    => this.value=1
-    |          
-  21|          String dot = ".";  // dot=.
-  22|          value += dot;  // this.value=1.
-  23|*         assertEquals("1", value);  // AssertionFailedError: expected: <1> but was: <1.>
-  24|      }
-
-  NestedClassTest$NestedClass.test 
-  36|          @Test
-  37|          void test() {
-    |              //    => this.nestedValue=a
-    |              //    => (in enclosing NestedClassTest) value=12
-    |              
-  38|              String dot = ".";  // dot=.
-  39|              nestedValue += dot;  // this.nestedValue=a.
-  40|              value += dot + nestedValue;  // (in enclosing NestedClassTest) value=12.a.
-  41|  
-  42|*             assertEquals("12.a", value);  // AssertionFailedError: expected: <12.a> but was: <12.a.>
-  43|          }
+  23|      @Test
+  24|      public void testWithMessageSupplier() {
+  25|          String first = "Hello";  // first=Hello
+  26|          String last = "World";  // last=World
+  27|  
+  28|          String concatenated = first + " " + last;  // concatenated=Hello World
+  29|  
+  30|*         assertEquals("Goodbye World", concatenated,   // AssertionFailedError: Incorrect message. ==> expected: <Goodbye World> but was: <Hello World>
+  31|                  () -> "Incorrect message.");
+  32|      }
 ```
