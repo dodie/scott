@@ -1,5 +1,5 @@
 Scott Test Reporter - JUnit 5 Test Suite
 ========================================
 
-Ensuring JUnit 5 integration.
+Ensures that the features of JUnit 5 work well with Scott.
 
