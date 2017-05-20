@@ -19,7 +19,9 @@ Instead, it aims to be a small tool that can be dropped into a project to do its
 so you can worry much less about expressing assertions,
 and still have meaningful failure messages.
 
-Supports Java 7 and above.
+Supports [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4),
+[JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5),
+and [Cucumber-JUnit](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
 
 > **Scott**: All systems automated and ready. A chimpanzee and two trainees could run her.
 
@@ -141,7 +143,7 @@ but until then add this to your *pom.xml* file:
 	<dependency>
 		<groupId>hu.advancedweb</groupId>
 		<artifactId>scott</artifactId>
-		<version>2.0.1</version>
+		<version>3.0.0</version>
 		<scope>test</scope>
 	</dependency>
 	<dependency>
@@ -156,8 +158,8 @@ but until then add this to your *pom.xml* file:
 </dependencies>
 ```
 
-For a demo check out and ```mvn install``` the [scott-example](https://github.com/dodie/scott/tree/master/scott-examples/junit4) project
-that contains the required setup configuration to use Scott (see [pom.xml](https://github.com/dodie/scott/tree/master/scott-examples/junit4/pom.xml))
+For a demo check out and ```mvn install``` the [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4) or the [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit4) sample projects
+that contains the required setup configuration to use Scott (see the ```pom.xml``` files)
 and a bunch of failing tests for the show.
 
 
