@@ -163,6 +163,11 @@ that contains the required setup configuration to use Scott (see the ```pom.xml`
 and a bunch of failing tests for the show.
 
 
+Changelog
+---------
+See [Releases](https://github.com/dodie/scott/releases).
+
+
 Contributing
 ------------
 Contributions are welcome! Please make sure to visit the
