@@ -4,13 +4,13 @@ Contributions are welcome! Check the
 [development guide](https://github.com/dodie/scott/tree/master/development-guide.md) for some important notes on how to build and debug Scott.
 If you are looking for issues that can get you started the development, see [Issues marked with the help-wanted tag](https://github.com/dodie/scott/issues?q=is%3Aissue+label%3A%22help+wanted%22+is%3Aopen).
 
-## Step 1. Fork and clone the repo:
+## Step 1. Fork and clone the repo
 
 ```
 git clone git@github.com:your-username/scott.git
 ```
 
-## Step 2. Compile and run the tests to make sure everything works as expected:
+## Step 2. Compile and run the tests to make sure everything works as expected
 
 ```
 cd scott
@@ -42,12 +42,12 @@ myTest(hu.advancedweb.example.ListTest) FAILED!
 ```
 
 
-## Step 4. Make your change.
+## Step 4. Make your change
 Add tests for your modifications where possible.
 Make the whole test suite pass (Step 2), and check the final rendering at the end by building one of the example projects
 described in Step 3.
 
 
 
-## Step 5. Push and [submit a Pull Request](https://github.com/dodie/scott/compare/).
+## Step 5. Push and [submit a Pull Request](https://github.com/dodie/scott/compare/)
 Done! Now it's my turn to review your PR and get in touch with you. :)
