@@ -44,8 +44,7 @@ myTest(hu.advancedweb.example.ListTest) FAILED!
 
 ## Step 4. Make your change
 Add tests for your modifications where possible.
-Make the whole test suite pass (Step 2), and check the final rendering at the end by building one of the example projects
-described in Step 3.
+Make the whole test suite pass (Step 2), and check the final rendering (Step 3).
 
 
 
