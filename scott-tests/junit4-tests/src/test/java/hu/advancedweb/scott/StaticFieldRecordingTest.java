@@ -1,5 +1,6 @@
 package hu.advancedweb.scott;
 
+import static hu.advancedweb.scott.TestHelper.wrapped;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -58,14 +59,14 @@ public class StaticFieldRecordingTest extends StaticFieldRecordingTestHelperSupe
 	@Test
 	public void recordString() throws Exception {
 		OBJECT = "Hello World!";
-		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTest.OBJECT"), equalTo(OBJECT));
+		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTest.OBJECT"), equalTo(wrapped(OBJECT)));
 	}
 	
 	@Test
 	public void recordForeignStaticField() throws Exception {
 		String s = StaticFieldRecordingTestHelper.SOME_VALUE_TO_READ;
 		assertThat(s, equalTo(StaticFieldRecordingTestHelper.SOME_VALUE_TO_READ));
-		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTestHelper.SOME_VALUE_TO_READ"), equalTo("42"));
+		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTestHelper.SOME_VALUE_TO_READ"), equalTo(wrapped("42")));
 	}
 	
 	@Test
@@ -74,10 +75,10 @@ public class StaticFieldRecordingTest extends StaticFieldRecordingTestHelperSupe
 		 * Note that Scott can't track constants (public static final), because they get inlined at compile time.
 		 * The observer static fields in the test are not final.
 		 */
-		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTestHelper.SOME_VALUE_TO_WRITE"), equalTo("before_write"));
+		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTestHelper.SOME_VALUE_TO_WRITE"), equalTo(wrapped("before_write")));
 		StaticFieldRecordingTestHelper.SOME_VALUE_TO_WRITE = "after_write";
 		assertThat(StaticFieldRecordingTestHelper.SOME_VALUE_TO_WRITE, equalTo("after_write"));
-		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTestHelper.SOME_VALUE_TO_WRITE"), equalTo("after_write"));
+		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTestHelper.SOME_VALUE_TO_WRITE"), equalTo(wrapped("after_write")));
 	}
 	
 	@Ignore
@@ -96,15 +97,15 @@ public class StaticFieldRecordingTest extends StaticFieldRecordingTestHelperSupe
 	public void recordSuperClassStaticField() throws Exception {
 		String s = SOME_VALUE_FROM_SUPER_TO_READ;
 		assertThat(s, equalTo(SOME_VALUE_FROM_SUPER_TO_READ));
-		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTest.SOME_VALUE_FROM_SUPER_TO_READ"), equalTo("super"));
+		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTest.SOME_VALUE_FROM_SUPER_TO_READ"), equalTo(wrapped("super")));
 	}
 	
 	@Test
 	public void recordSuperClassStaticFieldModification() throws Exception {
-		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTest.SOME_VALUE_FROM_SUPER_TO_WRITE"), equalTo("before_write"));
+		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTest.SOME_VALUE_FROM_SUPER_TO_WRITE"), equalTo(wrapped("before_write")));
 		SOME_VALUE_FROM_SUPER_TO_WRITE = "after_write";
 		assertThat(SOME_VALUE_FROM_SUPER_TO_WRITE, equalTo("after_write"));
-		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTest.SOME_VALUE_FROM_SUPER_TO_WRITE"), equalTo("after_write"));
+		assertThat(TestHelper.getLastRecordedStateForField("StaticFieldRecordingTest.SOME_VALUE_FROM_SUPER_TO_WRITE"), equalTo(wrapped("after_write")));
 	}
 
 }

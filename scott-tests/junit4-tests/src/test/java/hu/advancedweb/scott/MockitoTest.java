@@ -1,5 +1,6 @@
 package hu.advancedweb.scott;
 
+import static hu.advancedweb.scott.TestHelper.wrapped;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -25,7 +26,7 @@ public class MockitoTest {
 		when(foo.bar()).thenReturn("42");
 
 		String result = foo.bar();
-		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo("42"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo(wrapped("42")));
 
 		assertEquals("42", result);
 		verify(foo, times(1)).bar();
@@ -37,7 +38,7 @@ public class MockitoTest {
 		when(foo.bar("42")).thenReturn("42");
 
 		String result = foo.bar("42");
-		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo("42"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo(wrapped("42")));
 
 		assertEquals("42", result);
 		verify(foo, times(1)).bar("42");
@@ -49,7 +50,7 @@ public class MockitoTest {
 		when(foo.bar(anyString())).thenReturn(anyString());
 
 		String result = foo.bar(anyString());
-		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo("42"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo(wrapped("42")));
 
 		assertEquals("42", result);
 		verify(foo, times(1)).bar(anyString());
@@ -62,7 +63,7 @@ public class MockitoTest {
 		when(foo.bar()).thenReturn("42");
 
 		String result = foo.bar();
-		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo("42"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo(wrapped("42")));
 
 		assertEquals("42", result);
 		verify(foo, times(1)).bar();
@@ -76,7 +77,7 @@ public class MockitoTest {
 		when(holder.t.bar()).thenReturn("42"); // refering to the mock through the holder object
 
 		String result = foo.bar();
-		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo("42"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo(wrapped("42")));
 
 		assertEquals("42", result);
 		verify(foo, times(1)).bar();
@@ -90,7 +91,7 @@ public class MockitoTest {
 		when(foo.bar(anyString())).thenReturn("42");
 
 		String result = foo.bar(anyString());
-		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo("42"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo(wrapped("42")));
 
 		assertEquals("42", result);
 		verify(foo, times(1)).bar(anyString());
@@ -104,7 +105,7 @@ public class MockitoTest {
 		when(i.next()).thenReturn("Hello").thenReturn("Scott");
 
 		String result = i.next() + " " + i.next();
-		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo("Hello Scott"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo(wrapped("Hello Scott")));
 
 		assertEquals("Hello Scott", result);
 	}
@@ -133,8 +134,8 @@ public class MockitoTest {
 
 		String resultOfMockedMethod = fooSpy.bar();
 		String resultOfOriginalMethod = fooSpy.bar("42");
-		assertThat(TestHelper.getLastRecordedStateForVariable("resultOfMockedMethod"), equalTo("spy"));
-		assertThat(TestHelper.getLastRecordedStateForVariable("resultOfOriginalMethod"), equalTo("bar42"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("resultOfMockedMethod"), equalTo(wrapped("spy")));
+		assertThat(TestHelper.getLastRecordedStateForVariable("resultOfOriginalMethod"), equalTo(wrapped("bar42")));
 
 		assertEquals("spy", resultOfMockedMethod);
 		assertEquals("bar42", resultOfOriginalMethod);
@@ -151,8 +152,8 @@ public class MockitoTest {
 
 		String resultOfMockedMethod = fooSpy.bar();
 		String resultOfOriginalMethod = fooSpy.bar("42");
-		assertThat(TestHelper.getLastRecordedStateForVariable("resultOfMockedMethod"), equalTo("spy"));
-		assertThat(TestHelper.getLastRecordedStateForVariable("resultOfOriginalMethod"), equalTo("bar42"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("resultOfMockedMethod"), equalTo(wrapped("spy")));
+		assertThat(TestHelper.getLastRecordedStateForVariable("resultOfOriginalMethod"), equalTo(wrapped("bar42")));
 
 		assertEquals("spy", resultOfMockedMethod);
 		assertEquals("bar42", resultOfOriginalMethod);

@@ -11,7 +11,7 @@ public class FieldRecordingInitialValuesTest {
 	int b = 11;
 	static int A = 12;
 	static int B = 13;
-	
+
 	
 	@Test
 	public void recordFieldAccess() throws Exception {

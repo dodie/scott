@@ -1,5 +1,6 @@
 package hu.advancedweb.scott;
 
+import static hu.advancedweb.scott.TestHelper.wrapped;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -23,44 +24,44 @@ public class WeirdFormattingTest {
 	@Test
 	public void simpleFormatting() throws Exception {
 		String outer = "outer1";
-		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped(outer)));
 		{
 			String inner = "inner1";
-			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(wrapped(inner)));
 		}
 		outer = "outer2";
-		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped(outer)));
 	}
 	
 	@Test
 	public void inlineFormatting_1() throws Exception {
 		String outer = "outer1";
-		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
-		{String inner = "inner1"; assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner)); }
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped(outer)));
+		{String inner = "inner1"; assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(wrapped(inner))); }
 		outer = "outer2";
-		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped(outer)));
 	}
 	
 	@Test
 	public void inlineFormatting_2() throws Exception {
-		String outer = "outer1"; assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer)); {
+		String outer = "outer1"; assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped(outer))); {
 			String inner = "inner1";
-			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(wrapped(inner)));
 		}
 		outer = "outer2";
-		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped(outer)));
 	}
 
 	@Test
 	public void inlineFormatting_3() throws Exception {
 		String outer = "outer1"; 
-		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
-		{ String inner = "inner1"; assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner)); } outer = "outer2"; assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped(outer)));
+		{ String inner = "inner1"; assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(wrapped(inner))); } outer = "outer2"; assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped(outer)));
 	}
 	
 	@Test
 	public void inlineFormatting_4() throws Exception {
-		String outer = "outer1"; assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer)); { String inner = "inner1"; assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner)); } outer = "outer2"; assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
+		String outer = "outer1"; assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped(outer))); { String inner = "inner1"; assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(wrapped(inner))); } outer = "outer2"; assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped(outer)));
 	}
 	
 	@SuppressWarnings("null")
@@ -70,12 +71,12 @@ public class WeirdFormattingTest {
 		
 		try {
 			String inner = "inner";
-			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(wrapped(inner)));
 			o.length();
 		} catch (Exception e) {
 			o = "fallback";
 			assertThat(TestHelper.getLastRecordedStateForVariable("e"), equalTo(e.toString()));
-			assertThat(TestHelper.getLastRecordedStateForVariable("o"), equalTo(o));
+			assertThat(TestHelper.getLastRecordedStateForVariable("o"), equalTo(wrapped(o)));
 		}	
 	}
 
@@ -94,14 +95,14 @@ public class WeirdFormattingTest {
 		try 
 		{
 			String inner = "inner";
-			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(wrapped(inner)));
 			o.length();
 		}
 		catch (Exception e)
 		{
 			o = "fallback";
 			assertThat(TestHelper.getLastRecordedStateForVariable("e"), equalTo(e.toString()));
-			assertThat(TestHelper.getLastRecordedStateForVariable("o"), equalTo(o));
+			assertThat(TestHelper.getLastRecordedStateForVariable("o"), equalTo(wrapped(o)));
 		}	
 	}
 
@@ -117,7 +118,7 @@ public class WeirdFormattingTest {
 		.thenReturn("42");
 
 		String result = foo.bar();
-		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo("42"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo(wrapped("42")));
 
 		assertEquals(
 				"42",

@@ -1,5 +1,6 @@
 package hu.advancedweb.scott;
 
+import static hu.advancedweb.scott.TestHelper.wrapped;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
@@ -29,7 +30,7 @@ public class RecordMutationTest {
 	@Test
 	public void mutateToNull() throws Exception {
 		String s = "Hello World!";
-		assertThat(TestHelper.getLastRecordedStateForVariable("s"), equalTo(s));
+		assertThat(TestHelper.getLastRecordedStateForVariable("s"), equalTo(wrapped(s)));
 		
 		s = null;
 		assertThat(TestHelper.getLastRecordedStateForVariable("s"), equalTo("null"));
@@ -52,14 +53,14 @@ public class RecordMutationTest {
 	@Test
 	public void mutationWithBlock() throws Exception {
 		String outer = "outer";
-		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped(outer)));
 		{
 			String inner = "inner";
-			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(wrapped(inner)));
 		}
 		
 		outer = "outer_changed";
-		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped(outer)));
 	}
 
 	@Test
@@ -68,7 +69,7 @@ public class RecordMutationTest {
 		{
 			outer.length();
 		}
-		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo("outer"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped("outer")));
 	}
 	
 	@Test
@@ -78,7 +79,7 @@ public class RecordMutationTest {
 		{
 			// This is an empty block.
 		}
-		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo("outer"));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped("outer")));
 	}
 	
 	@Test

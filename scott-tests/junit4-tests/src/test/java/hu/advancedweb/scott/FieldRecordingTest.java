@@ -1,5 +1,6 @@
 package hu.advancedweb.scott;
 
+import static hu.advancedweb.scott.TestHelper.wrapped;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -57,7 +58,7 @@ public class FieldRecordingTest {
 	@Test
 	public void recordString() throws Exception {
 		object = "Hello World!";
-		assertThat(TestHelper.getLastRecordedStateForField("this.object"), equalTo(object));
+		assertThat(TestHelper.getLastRecordedStateForField("this.object"), equalTo(wrapped(object)));
 	}
 
 }

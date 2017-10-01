@@ -1,5 +1,6 @@
 package hu.advancedweb.scott;
 
+import static hu.advancedweb.scott.helper.TestHelper.wrapped;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +22,8 @@ class NestedClassTest {
 	void test() {
 		String dot = ".";
 		value += dot;
-		assertEquals(dot, TestHelper.getLastRecordedStateForVariable("dot"));
-		assertEquals(value, TestHelper.getLastRecordedStateForField("this.value"));
+		assertEquals(wrapped(dot), TestHelper.getLastRecordedStateForVariable("dot"));
+		assertEquals(wrapped(value), TestHelper.getLastRecordedStateForField("this.value"));
 		assertEquals("1.", value);
 	}
 
@@ -42,9 +43,9 @@ class NestedClassTest {
 			outerNestedValue += dot;
 			value += dot + outerNestedValue;
 
-			assertEquals(dot, TestHelper.getLastRecordedStateForVariable("dot"));
-			assertEquals(value, TestHelper.getLastRecordedStateForField("(in enclosing NestedClassTest) value"));
-			assertEquals(outerNestedValue, TestHelper.getLastRecordedStateForField("this.outerNestedValue"));
+			assertEquals(wrapped(dot), TestHelper.getLastRecordedStateForVariable("dot"));
+			assertEquals(wrapped(value), TestHelper.getLastRecordedStateForField("(in enclosing NestedClassTest) value"));
+			assertEquals(wrapped(outerNestedValue), TestHelper.getLastRecordedStateForField("this.outerNestedValue"));
 			assertEquals("12.a.", value);
 		}
 
@@ -64,10 +65,10 @@ class NestedClassTest {
 				outerNestedValue += dot;
 				value += dot + outerNestedValue + middleNestedValue;
 
-				assertEquals(dot, TestHelper.getLastRecordedStateForVariable("dot"));
-				assertEquals(value, TestHelper.getLastRecordedStateForField("(in enclosing NestedClassTest) value"));
-				assertEquals(outerNestedValue, TestHelper.getLastRecordedStateForField("(in enclosing OuterNested) outerNestedValue"));
-				assertEquals(middleNestedValue, TestHelper.getLastRecordedStateForField("this.middleNestedValue"));
+				assertEquals(wrapped(dot), TestHelper.getLastRecordedStateForVariable("dot"));
+				assertEquals(wrapped(value), TestHelper.getLastRecordedStateForField("(in enclosing NestedClassTest) value"));
+				assertEquals(wrapped(outerNestedValue), TestHelper.getLastRecordedStateForField("(in enclosing OuterNested) outerNestedValue"));
+				assertEquals(wrapped(middleNestedValue), TestHelper.getLastRecordedStateForField("this.middleNestedValue"));
 				assertEquals("123.a.I.", value);
 			}
 			
@@ -88,11 +89,11 @@ class NestedClassTest {
 					outerNestedValue += dot;
 					value += dot + outerNestedValue + middleNestedValue + innerNestedValue;
 
-					assertEquals(dot, TestHelper.getLastRecordedStateForVariable("dot"));
-					assertEquals(value, TestHelper.getLastRecordedStateForField("(in enclosing NestedClassTest) value"));
-					assertEquals(outerNestedValue, TestHelper.getLastRecordedStateForField("(in enclosing OuterNested) outerNestedValue"));
-					assertEquals(middleNestedValue, TestHelper.getLastRecordedStateForField("(in enclosing MiddleNested) middleNestedValue"));
-					assertEquals(innerNestedValue, TestHelper.getLastRecordedStateForField("this.innerNestedValue"));
+					assertEquals(wrapped(dot), TestHelper.getLastRecordedStateForVariable("dot"));
+					assertEquals(wrapped(value), TestHelper.getLastRecordedStateForField("(in enclosing NestedClassTest) value"));
+					assertEquals(wrapped(outerNestedValue), TestHelper.getLastRecordedStateForField("(in enclosing OuterNested) outerNestedValue"));
+					assertEquals(wrapped(middleNestedValue), TestHelper.getLastRecordedStateForField("(in enclosing MiddleNested) middleNestedValue"));
+					assertEquals(wrapped(innerNestedValue), TestHelper.getLastRecordedStateForField("this.innerNestedValue"));
 					assertEquals("1234.a.I.x.", value);
 				}
 			}

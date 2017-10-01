@@ -36,4 +36,9 @@ public class TestHelper {
 		return null;
 	}
 
+	public static String wrapped(String original) {
+		char wrappingChar = '"';
+		return new StringBuilder().append(wrappingChar).append(original).append(wrappingChar).toString();
+	}
+
 }
