@@ -1,5 +1,6 @@
 package hu.advancedweb.scott;
 
+import static hu.advancedweb.scott.helper.TestHelper.wrapped;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
@@ -15,7 +16,7 @@ public class AssumptionsTest {
 		assumeTrue("CI".equals(env()));
 		String s = "value";
 		assertEquals("value", s);
-		assertEquals("value", TestHelper.getLastRecordedStateForVariable("s"));
+		assertEquals(wrapped("value"), TestHelper.getLastRecordedStateForVariable("s"));
 	}
 
 	@Test
@@ -23,12 +24,12 @@ public class AssumptionsTest {
 		assumingThat("CI".equals(env()), () -> {
 			String s = "value";
 			assertEquals("value", s);
-			assertEquals("value", TestHelper.getLastRecordedStateForVariable("s"));
+			assertEquals(wrapped("value"), TestHelper.getLastRecordedStateForVariable("s"));
 		});
 
 		String s = "value";
 		assertEquals("value", s);
-		assertEquals("value", TestHelper.getLastRecordedStateForVariable("s"));
+		assertEquals(wrapped("value"), TestHelper.getLastRecordedStateForVariable("s"));
 	}
 
 	public String env() {

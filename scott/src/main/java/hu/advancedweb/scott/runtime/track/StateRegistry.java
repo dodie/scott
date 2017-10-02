@@ -257,10 +257,16 @@ public class StateRegistry {
 		} else if (value instanceof float[]) {
 			return Arrays.toString((float[])value);
 		} else if (value instanceof double[]) {
-			return Arrays.toString((double[])value);
+			return Arrays.toString((double[]) value);
+		} else if (value instanceof String) {
+			return wrapped(value.toString(), '"');
 		} else {
 			return value.toString();
 		}
+	}
+
+	private static String wrapped(String original, char wrappingChar) {
+		return new StringBuilder().append(wrappingChar).append(original).append(wrappingChar).toString();
 	}
 
 }

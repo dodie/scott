@@ -5,25 +5,36 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class StringTest {
-	
-	@Test
-	public void test_1() {
-		String first = "Hello";
-		String last = "World";
 
-		String concatenated = first + " " + last;
+    @Test
+    public void test_1() {
+        String first = "Hello";
+        String last = "World";
 
-		assertEquals("Goodbye World", concatenated);
-	}
+        String concatenated = first + " " + last;
 
-	@Test
-	public void test_2() {
-		String hello = "Hello World";
+        assertEquals("Goodbye World", concatenated);
+    }
 
-		int indexOfSpace = hello.indexOf(" ");
-		String lastPart = hello.substring(indexOfSpace);
+    @Test
+    public void test_2() {
+        String hello = "Hello World";
 
-		assertEquals("World", lastPart);
-	}
+        int indexOfSpace = hello.indexOf(" ");
+        String lastPart = hello.substring(indexOfSpace);
+
+        assertEquals("World", lastPart);
+    }
+
+    @Test
+    public void test_3() {
+        String empty = "";
+        String first = "1";
+        String last = "2";
+
+        String concatenated = first + last;
+
+        assertEquals(12, concatenated);
+    }
 
 }

@@ -1,5 +1,6 @@
 package hu.advancedweb.scott;
 
+import static hu.advancedweb.scott.TestHelper.wrapped;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -55,7 +56,7 @@ public class VariableRecordingTest {
 	@Test
 	public void recordString() throws Exception {
 		String s = "Hello World!";
-		assertThat(TestHelper.getLastRecordedStateForVariable("s"), equalTo(s));
+		assertThat(TestHelper.getLastRecordedStateForVariable("s"), equalTo(wrapped(s)));
 	}
 	
 	@Test
@@ -102,8 +103,8 @@ public class VariableRecordingTest {
 	public void recordConsecutiveDeclarations() {
 		String inner = "inner";
 		String inner2 = "inner2";
-		assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
-		assertThat(TestHelper.getLastRecordedStateForVariable("inner2"), equalTo(inner2));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(wrapped(inner)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner2"), equalTo(wrapped(inner2)));
 	}
 	
 	@Test
@@ -118,16 +119,16 @@ public class VariableRecordingTest {
 		String inner8 = "inner8";
 		String inner9 = "inner9";
 		String inner10 = "inner10";
-		assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
-		assertThat(TestHelper.getLastRecordedStateForVariable("inner2"), equalTo(inner2));
-		assertThat(TestHelper.getLastRecordedStateForVariable("inner3"), equalTo(inner3));
-		assertThat(TestHelper.getLastRecordedStateForVariable("inner4"), equalTo(inner4));
-		assertThat(TestHelper.getLastRecordedStateForVariable("inner5"), equalTo(inner5));
-		assertThat(TestHelper.getLastRecordedStateForVariable("inner6"), equalTo(inner6));
-		assertThat(TestHelper.getLastRecordedStateForVariable("inner7"), equalTo(inner7));
-		assertThat(TestHelper.getLastRecordedStateForVariable("inner8"), equalTo(inner8));
-		assertThat(TestHelper.getLastRecordedStateForVariable("inner9"), equalTo(inner9));
-		assertThat(TestHelper.getLastRecordedStateForVariable("inner10"), equalTo(inner10));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(wrapped(inner)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner2"), equalTo(wrapped(inner2)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner3"), equalTo(wrapped(inner3)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner4"), equalTo(wrapped(inner4)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner5"), equalTo(wrapped(inner5)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner6"), equalTo(wrapped(inner6)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner7"), equalTo(wrapped(inner7)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner8"), equalTo(wrapped(inner8)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner9"), equalTo(wrapped(inner9)));
+		assertThat(TestHelper.getLastRecordedStateForVariable("inner10"), equalTo(wrapped(inner10)));
 	}
 
 	@SuppressWarnings("unused")
@@ -139,14 +140,14 @@ public class VariableRecordingTest {
 	@Test
 	public void recordMethodWithJustADeclaration() {
 		String outer = "outer!";
-		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(outer));
+		assertThat(TestHelper.getLastRecordedStateForVariable("outer"), equalTo(wrapped(outer)));
 	}
 	
 	@Test
 	public void recordMethodWithJustADeclarationInABlock() {
 		{
 			String inner = "inner";
-			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner));
+			assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(wrapped(inner)));
 		}
 	}
 

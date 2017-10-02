@@ -1,5 +1,6 @@
 package hu.advancedweb.scott;
 
+import static hu.advancedweb.scott.TestHelper.wrapped;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -52,7 +53,7 @@ public class JdkLibTest {
 		assertThat(TestHelper.getLastRecordedStateForVariable("sortedStrings"), equalTo(sortedStrings.toString()));
 		
 		String mergedStrings = strings.stream().filter(string -> !string.isEmpty()).collect(Collectors.joining(", "));
-		assertThat(TestHelper.getLastRecordedStateForVariable("mergedStrings"), equalTo(mergedStrings.toString()));
+		assertThat(TestHelper.getLastRecordedStateForVariable("mergedStrings"), equalTo(wrapped(mergedStrings.toString())));
 		
 		boolean hasX = strings.stream().anyMatch(s -> s.contains("x"));
 		assertThat(TestHelper.getLastRecordedStateForVariable("hasX"), equalTo(Boolean.toString(hasX)));
