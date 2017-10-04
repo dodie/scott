@@ -62,8 +62,8 @@ Demo
   20|      void test() {
     |          //    => this.value=1
     |          
-  21|          String dot = ".";  // dot=.
-  22|          value += dot;  // this.value=1.
+  21|          String dot = ".";  // dot="."
+  22|          value += dot;  // this.value="1."
   23|*         assertEquals("1", value);  // AssertionFailedError: expected: <1> but was: <1.>
   24|      }
 
@@ -73,9 +73,9 @@ Demo
     |              //    => this.nestedValue=a
     |              //    => (in enclosing NestedClassTest) value=12
     |              
-  38|              String dot = ".";  // dot=.
-  39|              nestedValue += dot;  // this.nestedValue=a.
-  40|              value += dot + nestedValue;  // (in enclosing NestedClassTest) value=12.a.
+  38|              String dot = ".";  // dot="."
+  39|              nestedValue += dot;  // this.nestedValue="a."
+  40|              value += dot + nestedValue;  // (in enclosing NestedClassTest) value="12.a."
   41|  
   42|*             assertEquals("12.a", value);  // AssertionFailedError: expected: <12.a> but was: <12.a.>
   43|          }
@@ -86,8 +86,8 @@ Demo
   61|      @Test
   62|      void timeoutExceedingTest() {
   63|*         assertTimeout(ofMillis(2), () -> {  // AssertionFailedError: execution exceeded timeout of 2 ms by 9998 ms
-  64|              String calculate = "slow";  // calculate=slow
-  65|              calculate += "operation";  // calculate=slowoperation
+  64|              String calculate = "slow";  // calculate="slow"
+  65|              calculate += "operation";  // calculate="slowoperation"
   66|              Thread.sleep(10000L);
   67|          });
   68|      }
@@ -97,7 +97,7 @@ Demo
 ```java
   71|      @Test
   72|      void timeoutNotExceededWithResult() {
-  73|          String actualResult = assertTimeout(ofMinutes(2), () -> {  // actualResult=result
+  73|          String actualResult = assertTimeout(ofMinutes(2), () -> {  // actualResult="result"
   74|              return "result";
   75|          });
   76|*         assertEquals("no result", actualResult);  // AssertionFailedError: expected: <no result> but was: <result>
@@ -108,10 +108,10 @@ Demo
 ```java
   23|      @Test
   24|      public void testWithMessageSupplier() {
-  25|          String first = "Hello";  // first=Hello
-  26|          String last = "World";  // last=World
+  25|          String first = "Hello";  // first="Hello"
+  26|          String last = "World";  // last="World"
   27|  
-  28|          String concatenated = first + " " + last;  // concatenated=Hello World
+  28|          String concatenated = first + " " + last;  // concatenated="Hello World"
   29|  
   30|*         assertEquals("Goodbye World", concatenated,   // AssertionFailedError: Incorrect message. ==> expected: <Goodbye World> but was: <Hello World>
   31|                  () -> "Incorrect message.");
