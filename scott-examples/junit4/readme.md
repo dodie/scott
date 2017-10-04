@@ -53,21 +53,21 @@ Demo
   12|      @Test
   13|      public void test_with_lambda() throws Exception {
   14|          Function<String, String> generatePalindrome = input -> {  // generatePalindrome=hu.advancedweb.example.LambdaTest$$Lambda$1/1486371051@402a079c
-    |              //    => input=cat
+    |              //    => input="cat"
     |              
   15|              StringBuilder sb = new StringBuilder();  // sb=
   16|              sb.append(input);  // sb=cat
   17|              sb.reverse();  // sb=tac
   18|              
-  19|              String reversed = sb.toString();  // reversed=tac
+  19|              String reversed = sb.toString();  // reversed="tac"
   20|              
-  21|              String palindrome = input + reversed;  // palindrome=cattac
+  21|              String palindrome = input + reversed;  // palindrome="cattac"
   22|              return palindrome;
   23|          };
   24|          
-  25|          String word = "cat";  // word=cat
+  25|          String word = "cat";  // word="cat"
   26|          
-  27|          String palindromized = generatePalindrome.apply(word);  // palindromized=cattac
+  27|          String palindromized = generatePalindrome.apply(word);  // palindromized="cattac"
   28|          
   29|*         assertThat(palindromized, equalTo(word + word));  // AssertionError: Expected: "catcat"
     |                                                            //      but: was "cattac"
