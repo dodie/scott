@@ -2,7 +2,6 @@ package hu.advancedweb.scott.runtime.report;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -58,25 +57,6 @@ class ScottReport {
 	public List<Snapshot> getVariableSnapshots(int lineNumber) {
 		return Collections.unmodifiableList(snapshotsForLineNumbers.getOrDefault(lineNumber, new ArrayList<Snapshot>()));
 	}
-
-	public Map<String, List<Snapshot>> getVariableMapSnapshot(int lineNumber) {
-		Map<String, List<Snapshot>> theMap = new HashMap<>();
-		List<Snapshot> originals = getVariableSnapshots(lineNumber);
-		if(originals != null) {
-			for (Snapshot original : originals) {
-				String name = original.name;
-				if (theMap.containsKey(name)) {
-					theMap.get(name).add(original);
-				} else {
-					List<Snapshot> snapshots = new ArrayList<>();
-					snapshots.add(original);
-					theMap.put(name, snapshots);
-				}
-			}
-		}
-		return theMap;
-	}
-
 	
 	public List<Snapshot> getInitialSnapshots(int lineNumber) {
 		return Collections.unmodifiableList(initialSnapshots.getOrDefault(lineNumber, new ArrayList<Snapshot>()));
