@@ -1,3 +1,4 @@
+
 package hu.advancedweb.scott.runtime.report;
 
 import org.junit.Test;
@@ -19,6 +20,18 @@ public class FailureRendererTest {
 
     private void assertPlusPlus(String resultText) {
         assertThat("variable loop", resultText, containsString("i=1;2;3...;8;9;[10] =>10"));
+    }
+
+    @Test
+    public void verifySingleInt() {
+        int i = 42;
+        String resultText = FailureRenderer.render("xxxxx", "yyyyy", new RuntimeException("bar"));
+        assertSingleInt(resultText);
+    }
+
+    private void assertSingleInt(String resultText) {
+        System.out.println(resultText);
+        assertThat("variable loop", resultText, containsString("i=42"));
     }
 
     @Test

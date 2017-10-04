@@ -214,7 +214,7 @@ public class FailureRenderer {
 							variableSnapshotText += ";";
 						}
 
-						if (counter==lastItem) {
+						if (counter>1 && counter==lastItem) {
 							variableSnapshotText += "["+snapshot.value.trim()+"]";
 						} else {
 							variableSnapshotText += snapshot.value.trim();
