@@ -42,7 +42,7 @@ myTest(hu.advancedweb.example.ListTest) FAILED!
 ```
 
 
-## Step 4. Make your change
+## Step 4. Implement your changes
 Please use the following guidelines:
 
 - Make sure to respect existing formatting conventions. (Follow the same coding style as the code that you are modifying.)
