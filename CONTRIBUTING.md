@@ -43,9 +43,14 @@ myTest(hu.advancedweb.example.ListTest) FAILED!
 
 
 ## Step 4. Make your change
-Add tests for your modifications where possible.
-Make the whole test suite pass (Step 2), and check the final rendering (Step 3).
+Please use the following guidelines:
 
+- Make sure to respect existing formatting conventions. (Follow the same coding style as the code that you are modifying.)
+- Update documentation for the change you are making.
+- Add tests for your modifications where possible.
+- Write descriptive commit messages and add each logical change to a separate commit to make code review easier.
+
+Make the whole test suite pass (Step 2), and check the final rendering (Step 3).
 
 
 ## Step 5. Push and [submit a Pull Request](https://github.com/dodie/scott/compare/)
