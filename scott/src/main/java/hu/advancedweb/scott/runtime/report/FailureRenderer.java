@@ -16,17 +16,24 @@ import hu.advancedweb.scott.runtime.track.StateRegistry;
  */
 public class FailureRenderer {
 
+	public static String render(String testClassName, String testMethodName) {
+		return render(testClassName, testMethodName, null);
+	}
+
 	public static String render(String testClassName, String testMethodName, Throwable throwable) {
 		MethodSource methodSource = getTestMethodSource(testClassName, testMethodName);
 
 		final ScottReport scottReport = new ScottReport();
-		
+
 		if (methodSource != null) {
 			fillSource(scottReport, methodSource);
 		}
-		
+
 		fillTrackedData(scottReport);
-		fillException(scottReport, methodSource, throwable);
+
+		if (throwable != null) {
+			fillException(scottReport, methodSource, throwable);
+		}
 
 		return renderPlain(scottReport);
 	}
@@ -214,7 +221,7 @@ public class FailureRenderer {
 							variableSnapshotText += ";";
 						}
 
-						if (counter>1 && counter==lastItem) {
+						if (counter==lastItem) {
 							variableSnapshotText += "["+snapshot.value.trim()+"]";
 						} else {
 							variableSnapshotText += snapshot.value.trim();
