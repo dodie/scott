@@ -16,15 +16,15 @@ public class ScottCucumberEnricher {
 
     public Result result(Result result) {
         String errorMessage = result.getErrorMessage();
+        String dummyFailure = FailureRenderer.render(null, null);
         if (result.getStatus().equals(Result.FAILED)) {
             StringBuilder builder = new StringBuilder();
             for (String dummy : informationList) {
                 builder.append(dummy);
             }
-            builder.append(errorMessage);
+            builder.append(dummyFailure).append(errorMessage);
             errorMessage = builder.toString();
         } else {
-            String dummyFailure = FailureRenderer.render(null, null);
             informationList.add(dummyFailure);
         }
         return new Result(result.getStatus(), result.getDuration(), errorMessage);
