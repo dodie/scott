@@ -1,6 +1,8 @@
 package hu.advancedweb.scott.runtime.report;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import hu.advancedweb.scott.runtime.report.javasource.MethodSource;
@@ -191,15 +193,51 @@ public class FailureRenderer {
 			sb.append(lineText);
 			
 			boolean isFirstCommentInThisLine = true;
-			for (Snapshot variableSnapshot : scottReport.getVariableSnapshots(lineNumber)) {
-				String[] variableSnapshotTextLines = getVariableSnapshotComment(variableSnapshot);
-				
-				for (String comment : variableSnapshotTextLines) {
-					renderComment(sb, lineText, comment, isFirstCommentInThisLine);
-					isFirstCommentInThisLine = false;
+
+			int size = 3;
+			for (Map.Entry<String, List<Snapshot>> entry : scottReport.getVariableMapSnapshot(lineNumber).entrySet()){
+				String variableSnapshotText = entry.getKey();
+
+				if (!entry.getValue().isEmpty()) {
+					variableSnapshotText += "=";
+					int all = entry.getValue().size();
+					int lowerLimit = size;
+					int upperLimit = all - size;
+					int lastItem = all - 1;
+					boolean hide = all > (size*2);
+					int counter = 0;
+					for (Snapshot snapshot : entry.getValue()) {
+						if (hide) {
+							if(counter>lowerLimit && counter<upperLimit) {
+								counter++;
+								continue;
+							} else if (counter==lowerLimit) {
+								variableSnapshotText += "...";
+								counter++;
+								continue;
+							}
+						}
+						if (counter>0) {
+							variableSnapshotText += ";";
+						}
+
+						if (counter==lastItem) {
+							variableSnapshotText += "["+snapshot.value.trim()+"]";
+						} else {
+							variableSnapshotText += snapshot.value.trim();
+						}
+						counter++;
+					}
+
+					if (hide) {
+						variableSnapshotText += " =>"+all;
+					}
 				}
+				renderComment(sb, lineText, variableSnapshotText, isFirstCommentInThisLine);
+				isFirstCommentInThisLine = false;
+
 			}
-			
+
 			if (scottReport.getExceptionLineNumber() == lineNumber) {
 				String[] exceptionMessageLines = getExceptionComment(scottReport);
 				
