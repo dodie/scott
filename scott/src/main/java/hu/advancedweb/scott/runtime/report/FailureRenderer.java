@@ -1,6 +1,5 @@
 package hu.advancedweb.scott.runtime.report;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -266,17 +265,6 @@ public class FailureRenderer {
 		return exceptionMessageLines;
 	}
 
-	private static String[] getVariableSnapshotComment(Snapshot variableSnapshot) {
-		final String variableSnapshotText;
-		if (variableSnapshot.name != null) {
-			variableSnapshotText = variableSnapshot.name + "=" + variableSnapshot.value.trim();
-		} else {
-			variableSnapshotText = variableSnapshot.value.trim();
-		}
-		String[] variableSnapshotTextLines = variableSnapshotText.split("\\n");
-		return variableSnapshotTextLines;
-	}
-	
 	private static void renderComment(StringBuilder sb, String lineText, String comment, boolean isFirstCommentInThisLine) {
 		if (!isFirstCommentInThisLine) {
 			addBlankLine(sb, lineText);
