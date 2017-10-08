@@ -32,7 +32,7 @@ public class StringTest {
         String first = "1";
         String last = "2";
 
-        String concatenated = first + last;
+        String concatenated = empty + first + last;
 
         assertEquals(12, concatenated);
     }
