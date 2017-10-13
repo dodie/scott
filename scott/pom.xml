@@ -150,7 +150,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.0.0-M4</version>
+			<version>5.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
