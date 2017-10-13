@@ -10,6 +10,7 @@
 
 	<modules>
 		<module>scott</module>
+		<module>scott-maven-plugin</module>
 		<module>scott-tests</module>
 	</modules>
 </project>
