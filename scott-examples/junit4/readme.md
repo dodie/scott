@@ -1,5 +1,5 @@
 Scott Test Reporter - JUnit 4 Example project
-===========================================
+=============================================
 
 This project contains the necessary setup configuration to use Scott with JUnit 4
 (see [pom.xml](https://github.com/dodie/scott/blob/master/scott-examples/junit4/pom.xml))
