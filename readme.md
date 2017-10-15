@@ -158,7 +158,7 @@ but until then add this to your *pom.xml* file:
 </dependencies>
 ```
 
-For a demo check out and ```mvn install``` the [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4) or the [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit4) sample projects
+For a demo check out and ```mvn install``` the [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4) or the [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5) sample projects
 that contains the required setup configuration to use Scott (see the ```pom.xml``` files)
 and a bunch of failing tests for the show.
 
