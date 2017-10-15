@@ -7,7 +7,27 @@ Scott Test Reporter
 
 Scott provides **detailed failure messages** for tests written in Java,
 **without the use of complex assertion libraries** to aid developers in rapid development,
-troubleshooting and debugging of tests.
+troubleshooting and debugging of tests. All information is **presented on the source code of the test method**:
+
+```java
+test_1(hu.advancedweb.example.CounterTest)  Time elapsed: 0.005 sec  <<< FAILURE!
+java.lang.AssertionError: 
+
+   9|      @Test
+  10|      public void test_1() {
+  11|          Counter counter = new Counter();  // counter=Counter [state=0]
+  12|          
+  13|          counter.increase();  // counter=Counter [state=1]
+  14|          counter.increase();  // counter=Counter [state=2]
+  15|          
+  16|          int state = counter.get();  // state=2
+  17|          
+  18|*         assertEquals(state, 3);  // AssertionError: expected:<2> but was:<3>
+  19|      }
+
+        at hu.advancedweb.example.CounterTest.test_1(CounterTest.java:18)
+```
+
 
 It automatically tracks the state of the test to provide the important details for a failing scenario,
 favoring simple assertions expressed mostly in plain Java over the extensive use of test libraries,
