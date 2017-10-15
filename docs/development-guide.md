@@ -19,9 +19,9 @@ instruments the bytecode of the test methods at startup, during the class loadin
 
 The test classes are explored and instrumented with with [ASM](http://asm.ow2.org/). The whole process happens really fast, many other tools use this technique in the industry, such as the [JaCoCo Java Code Coverage Library](http://www.eclemma.org/jacoco/).
 
-First, Scott determines if a class or method should be instrumented (hu.advancedweb.scott.instrumentation.transformation.param package](https://github.com/dodie/scott/tree/master/scott/src/main/java/hu/advancedweb/scott/instrumentation/transformation/param)).
+First, Scott determines if a class or method should be instrumented [hu.advancedweb.scott.instrumentation.transformation.param package](https://github.com/dodie/scott/tree/master/scott/src/main/java/hu/advancedweb/scott/instrumentation/transformation/param)).
 
-Then, it augments the test methods with tracking code that collects data when a test is executed. (hu.advancedweb.scott.instrumentation.transformation package](https://github.com/dodie/scott/tree/master/scott/src/main/java/hu/advancedweb/scott/instrumentation/transformation)).
+Then, it augments the test methods with tracking code that collects data when a test is executed. [hu.advancedweb.scott.instrumentation.transformation package](https://github.com/dodie/scott/tree/master/scott/src/main/java/hu/advancedweb/scott/instrumentation/transformation)).
 
 
 ## Runtime
