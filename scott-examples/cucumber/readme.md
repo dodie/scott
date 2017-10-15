@@ -26,4 +26,4 @@ Scott tracks the input parameters and field values, and present them in the test
 **HTML report:**
 ![HTML](https://github.com/dodie/scott-showcase/blob/master/cucumber_html.png "HTML")
 
-Of course the produced JSON can contain the augmented message, so tools like Jenkins can display it as well.
+Of course the produced JSON is augmented with the details, so tools like Jenkins can display it as well.
