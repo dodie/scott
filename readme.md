@@ -29,7 +29,7 @@ java.lang.AssertionError:
 ```
 
 
-It automatically tracks the state of the test to provide the important details for a failing scenario,
+It automatically tracks the internal state of the test to provide the important details for a failing scenario,
 favoring simple assertions expressed mostly in plain Java over the extensive use of test libraries,
 such as Hamcrest or AssertJ.
 (Although it plays nicely with other testing tools and frameworks.)
@@ -39,14 +39,13 @@ Instead, it aims to be a small tool that can be dropped into a project to do its
 so you can worry much less about expressing assertions,
 and still have meaningful failure messages.
 
-Supports [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4),
-[JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5),
-and [Cucumber-JUnit](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
-
 > **Scott**: All systems automated and ready. A chimpanzee and two trainees could run her.
 
 > **Kirk**: Thank you, Mr. Scott. I'll try not to take that personally.
 
+Supports [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4),
+[JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5),
+and [Cucumber-JUnit](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
 
 Features
 --------
