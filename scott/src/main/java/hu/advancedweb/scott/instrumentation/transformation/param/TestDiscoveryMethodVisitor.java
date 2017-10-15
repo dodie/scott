@@ -38,7 +38,7 @@ public class TestDiscoveryMethodVisitor extends MethodVisitor {
 	@Override
 	public void visitEnd() {
 		for (String annotationDesc : annotations) {
-			if (AnnotationMatcher.match(annotationDesc, "scott.track.method_annotation", new String[] {"org.junit.Test", "org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory"})) {
+			if (AnnotationMatcher.match(annotationDesc, "scott.track.method_annotation", new String[] {"org.junit.Test", "org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory", "cucumber.api.java.*"})) {
 				transformationParameters.markMethodForTracking(methodName, methodDesc, methodSignature);
 				transformationParameters.markMethodForClearingTrackedData(methodName, methodDesc, methodSignature);
 			}

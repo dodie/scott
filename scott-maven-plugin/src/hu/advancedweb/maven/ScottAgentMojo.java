@@ -23,8 +23,6 @@ public class ScottAgentMojo extends AbstractMojo {
 
     private static final String SCOTT_ARTIFACT_NAME = "hu.advancedweb:scott";
     private static final String SUREFIRE_ARG_LINE = "argLine";
-    private static final String ADDITIONAL = "-Dlistener=hu.advancedweb.scott.runtime.ScottRunListener " +
-            "-Dscott.track.method_annotation=\"org.junit.Test,cucumber.api.java.*\"";
 
     @Parameter(property = "project", readonly = true)
     private MavenProject project;
@@ -41,7 +39,7 @@ public class ScottAgentMojo extends AbstractMojo {
     }
 
     private String getArgument(final File agentJarFile) {
-        return format("-javaagent:%s %s", agentJarFile, ADDITIONAL);
+        return format("-javaagent:%s", agentJarFile);
     }
 
 }
