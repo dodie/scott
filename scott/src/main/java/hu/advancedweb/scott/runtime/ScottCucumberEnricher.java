@@ -1,4 +1,4 @@
-package cucumber.runtime.formatter;
+package hu.advancedweb.scott.runtime;
 
 import gherkin.formatter.model.Result;
 import hu.advancedweb.scott.runtime.report.FailureRenderer;
@@ -8,9 +8,9 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScottCucumberEnricher {
+class ScottCucumberEnricher {
 
-    private List<String> informationList;
+	private List<String> informationList;
 
     public void scenario() {
         informationList = new ArrayList<>();

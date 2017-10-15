@@ -20,13 +20,13 @@ import cucumber.api.junit.Cucumber;
 @CucumberOptions(
 		plugin = { 
 				// Instead of "json:target/cucumber.json" use:
-				"cucumber.runtime.formatter.ScottCucumberJSONFormatter:target/cucumber.json", 
+				"hu.advancedweb.scott.runtime.ScottCucumberJSONFormatter:target/cucumber.json",
 				
 				// Instead of "pretty" use:
-				"cucumber.runtime.formatter.ScottCucumberPrettyFormatter", 
+				"hu.advancedweb.scott.runtime.ScottCucumberPrettyFormatter",
 
 				// Instead of "html:target/cucumber" use:
-				"cucumber.runtime.formatter.ScottHTMLFormatter:target/cucumber", 
+				"hu.advancedweb.scott.runtime.ScottHTMLFormatter:target/cucumber",
 				},
         features = {"src/test/resources/feature/"})
 public class FeatureTest {}

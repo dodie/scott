@@ -1,5 +1,6 @@
-package cucumber.runtime.formatter;
+package hu.advancedweb.scott.runtime;
 
+import cucumber.runtime.formatter.CucumberJSONFormatter;
 import gherkin.formatter.model.Result;
 import gherkin.formatter.model.Scenario;
 

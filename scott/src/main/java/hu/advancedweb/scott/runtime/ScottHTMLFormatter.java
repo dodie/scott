@@ -1,4 +1,4 @@
-package cucumber.runtime.formatter;
+package hu.advancedweb.scott.runtime;
 
 import gherkin.formatter.model.Result;
 import gherkin.formatter.model.Scenario;
