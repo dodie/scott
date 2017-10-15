@@ -20,10 +20,10 @@ Demo
 ----
 Scott tracks the input parameters and field values, and present them in the test reports.
 
-**Console output:**
-![Console](https://github.com/dodie/scott-showcase/blob/master/cucumber_console.png "Console")
-
 **HTML report:**
 ![HTML](https://github.com/dodie/scott-showcase/blob/master/cucumber_html.png "HTML")
+
+**Console output:**
+![Console](https://github.com/dodie/scott-showcase/blob/master/cucumber_console.png "Console")
 
 Of course the produced JSON is augmented with the details, so tools like Jenkins can display it as well.
