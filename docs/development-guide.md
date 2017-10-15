@@ -1,16 +1,22 @@
-Required software for development
----------------------------------
+# Required software for development
 
 - *Java 1.7* to compile the core package, and *Java 1.8* to run the whole test suite
 - *Maven 3.0.5*
 
 
-How it works
-------------
-Data about variables, parameters and fields have to be collected at runtime. To achieve this Scott
+# How it works
+
+Scott has two parts: **instrumentation** and **runtime**.
+
+![Scott's architecture](https://github.com/dodie/scott/blob/master/docs/architecture.png "Scott's architecture")
+
+
+## Instrumentation
+
+Data about variables, parameters and fields are collected at runtime. To achieve this Scott
 instruments the bytecode of the test methods during class loading with a
 [Java Agent](http://docs.oracle.com/javase/8/docs/api/java/lang/instrument/package-summary.html),
-and manipulates them with with [ASM](http://asm.ow2.org/). (See ```ScottAgent``` and ```TestClassTransformer```.)
+and manipulates them with with [ASM](http://asm.ow2.org/).
 
 The instrumentation happens really fast, many other tools use this technique in the industry, such
 as the [JaCoCo Java Code Coverage Library](http://www.eclemma.org/jacoco/).
@@ -18,7 +24,14 @@ as the [JaCoCo Java Code Coverage Library](http://www.eclemma.org/jacoco/).
 Scott inserts code to the test methods that has no effect other than recording the interesting stuff
 happening at runtime (line number, variable name, new value, etc.).
 
-These events are saved in a store object (```StateRegistry```), and queried in case of test failure, for example by a JUnit Rule (see ```ScottReportingRule```).
+
+## Runtime
+
+When an instrumented test case is executed, it calls Scott's ```StateRegistry``` after every interesting internal state change with the details of the change. For example it keeps track of the changes made to local variables and fields during a test case.
+The ```StateRegistry``` stores this data so it can be queried later, for example in case of test failure.
+
+
+
 Before every test it clears the event store, and after a failing test it constructs the report based
 on the runtime information and the source code of the test.
 
