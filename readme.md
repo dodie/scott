@@ -7,7 +7,8 @@ Scott Test Reporter
 
 Scott provides **detailed failure messages** for tests written in Java,
 **without the use of complex assertion libraries** to aid developers in rapid development,
-troubleshooting and debugging of tests. All information is **presented on the source code of the test method**:
+troubleshooting and debugging of tests. All information is **presented on the source code of the test method**.
+
 ```java
 test_1(hu.advancedweb.example.CounterTest)  Time elapsed: 0.005 sec  <<< FAILURE!
 java.lang.AssertionError: 
