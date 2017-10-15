@@ -31,7 +31,6 @@ public class FailureRendererTest {
     }
 
     private void assertSingleInt(String resultText) {
-        System.out.println(resultText);
         assertThat("variable loop", resultText, containsString("i=42"));
     }
 

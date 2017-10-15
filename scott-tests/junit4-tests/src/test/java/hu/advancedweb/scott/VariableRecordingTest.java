@@ -170,10 +170,10 @@ public class VariableRecordingTest {
 	
 	@SuppressWarnings("unused")
 	@Test
-	public void methodEndingWithADeclarationsInABlockDontCrash() {
+	public void methodEndingWithADeclarationInABlockDontCrash() {
 		{
 			String inner = "inner";
-			System.out.println("");
+			System.out.print(""); // Some other statement.
 			String inner2 = "inner2";
 		}
 	}

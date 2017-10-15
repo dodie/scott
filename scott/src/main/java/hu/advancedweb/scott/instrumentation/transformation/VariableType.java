@@ -59,7 +59,6 @@ enum VariableType {
 				}
 			}
 		}
-		System.out.println("Returning null for " + desc);
 		return null;
 	}
 }
