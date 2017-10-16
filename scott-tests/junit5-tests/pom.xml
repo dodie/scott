@@ -8,6 +8,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	
+	<name>Scott Test Reporter - JUnit 5 Test Suite</name>
 
 	<build>
 		<plugins>

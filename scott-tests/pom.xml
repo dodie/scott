@@ -7,6 +7,8 @@
 	<artifactId>scott-tests</artifactId>
 	<packaging>pom</packaging>
 	<version>3.1.0</version>
+	
+	<name>Scott Test Reporter - Tests</name>
 
 	<modules>
 		<module>junit4-tests</module>
