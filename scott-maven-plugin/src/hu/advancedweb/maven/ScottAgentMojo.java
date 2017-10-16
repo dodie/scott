@@ -22,7 +22,7 @@ import static java.lang.String.format;
 public class ScottAgentMojo extends AbstractMojo {
 
     private static final String SCOTT_ARTIFACT_NAME = "hu.advancedweb:scott";
-    private static final String SUREFIRE_ARG_LINE = "argLine";
+    private static final String ARG_LINE = "argLine";
 
     @Parameter(property = "project", readonly = true)
     private MavenProject project;
@@ -33,9 +33,9 @@ public class ScottAgentMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         final Properties projectProperties = this.project.getProperties();
         final File agentJarFile = pluginArtifactMap.get(SCOTT_ARTIFACT_NAME).getFile();
-        String newValue = getArgument(agentJarFile);
-        getLog().info(SUREFIRE_ARG_LINE + " set to " + newValue);
-        projectProperties.setProperty(SUREFIRE_ARG_LINE, newValue);
+        String arguments = getArgument(agentJarFile);
+        getLog().info(ARG_LINE + " set to " + arguments);
+        projectProperties.setProperty(ARG_LINE, arguments);
     }
 
     private String getArgument(final File agentJarFile) {
