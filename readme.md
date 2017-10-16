@@ -46,6 +46,55 @@ Supports [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/jun
 [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5),
 and [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
 
+
+How to use
+----------
+
+After including Scott to the build flow, it automatically creates the detailed failure messages for failing tests.
+All you have to do is to write tests in Java with simple assertions or using your favorite testing library
+and run them as you would do normally. Scott will do its magic behind the scenes.
+
+The recommended way to use Scott is the **Scott Maven Plugin**. Just add the following to your ```pom.xml``` file.
+
+```xml
+<build>
+	<plugins>
+		<!-- Add the Scott Plugin. -->
+		<plugin>
+			<groupId>hu.advancedweb</groupId>
+			<artifactId>scott-maven-plugin</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<executions>
+				<execution>
+					<goals>
+						<goal>prepare-agent</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+	</plugins>
+</build>
+<dependencies>
+	<!-- Add Scott as a dependency -->
+	<dependency>
+		<groupId>hu.advancedweb</groupId>
+		<artifactId>scott</artifactId>
+		<version>${scott.version}</version>
+		<scope>test</scope>
+	</dependency>
+</dependencies>
+```
+
+For complete examples see the following examples:
+
+- [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4)
+- [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5)
+- [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber)
+
+For a quick demo check out and ```mvn install``` one of these example projects, as they not only
+contain the required setup configuration (see the ```pom.xml``` files), but a bunch of failing tests for the show.
+
+
 Features
 --------
 Consider this failing test case:
@@ -89,96 +138,6 @@ For every failing test Scott reports the
 - **relevant fields** that the test accesses, but does not modify.
 
 All information is nicely **visualized on the source code** of the test method.
-
-For a more demos check out the [JUnit examples](https://github.com/dodie/scott/tree/master/scott-examples/junit4),
-or the [Cucumber showcase](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
-
-
-How to use
-----------
-
-After including Scott to the build flow, it automatically creates the detailed failure messages for failing tests.
-All you have to do is to write tests in Java with simple assertions or using your favorite testing library
-and run them as you would do normally. Scott will do its magic behind the scenes.
-
-A Maven Plugin is on its way to make it even easier,
-but until then add this to your *pom.xml* file:
-
-```xml
-<build>
-	<plugins>
-
-		...
-
-		<!-- Use the Maven Dependency Plugin to copy Scott's JAR
-		     from the dependency to the target directory. -->
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-dependency-plugin</artifactId>
-			<version>2.5.1</version>
-			<executions>
-				<execution>
-					<id>copy-agent</id>
-					<phase>process-test-classes</phase>
-					<goals>
-						<goal>copy</goal>
-					</goals>
-					<configuration>
-						<artifactItems>
-							<artifactItem>
-								<groupId>hu.advancedweb</groupId>
-								<artifactId>scott</artifactId>
-								<outputDirectory>${project.build.directory}/agents</outputDirectory>
-								<destFileName>scott-agent.jar</destFileName>
-							</artifactItem>
-						</artifactItems>
-					</configuration>
-				</execution>
-			</executions>
-		</plugin>
-
-		<!-- Modify the Maven Surefire Plugin's configuration
-		     to load Scott's Java Agent for instrumentation.
-		     (Works with Failsafe Plugin too.) -->
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-surefire-plugin</artifactId>
-			<configuration>
-				<argLine>-javaagent:${project.build.directory}/agents/scott-agent.jar</argLine>
-				<workingDirectory>${basedir}/target</workingDirectory>
-			</configuration>
-		</plugin>
-
-		...
-
-	</plugins>
-</build>
-<dependencies>
-
-	...
-
-	<!-- Add Scott and JUnit as dependencies. -->
-	<dependency>
-		<groupId>hu.advancedweb</groupId>
-		<artifactId>scott</artifactId>
-		<version>3.0.0</version>
-		<scope>test</scope>
-	</dependency>
-	<dependency>
-		<groupId>junit</groupId>
-		<artifactId>junit</artifactId>
-		<version>4.12</version>
-		<scope>test</scope>
-	</dependency>
-
-	...
-
-</dependencies>
-```
-
-For a demo check out and ```mvn install``` the [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4) or the [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5) sample projects
-that contains the required setup configuration to use Scott (see the ```pom.xml``` files)
-and a bunch of failing tests for the show.
 
 
 Changelog
