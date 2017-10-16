@@ -94,6 +94,8 @@ For complete examples see the following examples:
 For a quick demo check out and ```mvn install``` one of these example projects, as they not only
 contain the required setup configuration (see the ```pom.xml``` files), but a bunch of failing tests for the show.
 
+For alternative ways of using Scott, see [this](https://github.com/dodie/scott/blob/master/docs/usage.md) guide.
+
 
 Features
 --------
@@ -131,7 +133,7 @@ myTest(hu.advancedweb.example.ListTest) FAILED!
 
 Notice that even **without sophisticated** assertions the required information is present in the test report.
 
-For every failing test Scott reports the
+For every failing test, Scott reports the
 - assignments to **local variables**,
 - **changes** made to objects referenced by local variables and fields,
 - **input parameters** and
