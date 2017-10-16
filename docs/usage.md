@@ -52,11 +52,6 @@ The reporting for Cucumber JVM is based on the
 
 The automatic tracking behavior can be customized with the following configuration parameters:
 
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
-
 | Parameter name  | Description   | Default value |
 | -------------   | ------------- | ------------- | 
 | scott.track.method_annotation  | Track a method if it's marked with at least one of the specified annotations.  | "org.junit.Test", "org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory", "cucumber.api.java.\*" |
@@ -67,8 +62,6 @@ Every parameter can contain zero, one or more strings, separated by commas. Each
 
 - A Fully Qualified Name of an annotation.
 - Or an expression that starts with the beginning of a Fully Qualified Name of an annotation and ends with ```.*```.
-
-
 
 
 # Manual
