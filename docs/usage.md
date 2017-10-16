@@ -41,8 +41,8 @@ For complete examples see the following examples:
 
 By default the instrumentation happens automatically for JUnit4, JUnit5 test methods and Cucumber Steps to collect the data. 
 
-For every JUnit4 test it also inject the [ScottReportingRule](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottReportingRule.java) to produce the nice, detailed error messages in case of a failure, based on the collected data.
-Similarly, for every JUnit5 test it injects the [ScottJUnit5Extension](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottJUnit5Extension.java) for the same reason.
+For every JUnit4 test, it also injects the [ScottReportingRule](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottReportingRule.java) to produce the nice, detailed error messages in case of a failure, based on the collected data.
+Similarly, for every JUnit5 test, it injects the [ScottJUnit5Extension](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottJUnit5Extension.java) for the same reason.
 The reporting for Cucumber JVM is based on the
 [formatter configuration](https://github.com/dodie/scott/blob/master/scott-examples/cucumber/src/test/java/hu/advancedweb/example/FeatureTest.java#L15) of the Cucumber runner, so it can't be done automatically. For this to work, you must manually specify at least one of the formatters Scott provide:
 
