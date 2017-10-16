@@ -1,5 +1,5 @@
 ## Recommended: Scott Maven Plugin
-The recommended way to use Scott is the **Scott Maven Plugin**:
+The recommended way to use Scott is the **Scott Maven Plugin**. Just add the following to your ```pom.xml``` file.
 
 ```xml
 <build>
