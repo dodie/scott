@@ -18,7 +18,7 @@ import cucumber.api.junit.Cucumber;
 				"hu.advancedweb.scott.runtime.ScottCucumberPrettyFormatter",
 
 				// Instead of "html:target/cucumber" use:
-				"hu.advancedweb.scott.runtime.ScottHTMLFormatter:target/cucumber",
+				"hu.advancedweb.scott.runtime.ScottCucumberHTMLFormatter:target/cucumber",
 				},
         features = {"src/test/resources/feature/"})
 public class FeatureTest {}

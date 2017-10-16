@@ -5,11 +5,11 @@ import gherkin.formatter.model.Scenario;
 
 import java.net.URL;
 
-public class ScottHTMLFormatter extends HTMLFormatter {
+public class ScottCucumberHTMLFormatter extends HTMLFormatter {
 
 	private final ScottCucumberEnricher enricher;
 
-	public ScottHTMLFormatter(URL htmlReportDir) {
+	public ScottCucumberHTMLFormatter(URL htmlReportDir) {
 		super(htmlReportDir);
 		enricher = new ScottCucumberEnricher();
 	}
