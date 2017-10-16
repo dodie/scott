@@ -29,24 +29,22 @@ java.lang.AssertionError:
 ```
 
 
-It automatically tracks the state of the test to provide the important details for a failing scenario,
+It automatically tracks the internal state of the tests to provide important details for a failing scenario,
 favoring simple assertions expressed mostly in plain Java over the extensive use of test libraries,
 such as Hamcrest or AssertJ.
 (Although it plays nicely with other testing tools and frameworks.)
 
 Scott does not intend to be a testing framework, nor does it provide an API to use in the tests.
 Instead, it aims to be a small tool that can be dropped into a project to do its job automatically,
-so you can worry much less about expressing assertions,
-and still have meaningful failure messages.
-
-Supports [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4),
-[JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5),
-and [Cucumber-JUnit](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
+so you can worry much less about expressing assertions, and still have meaningful failure messages.
 
 > **Scott**: All systems automated and ready. A chimpanzee and two trainees could run her.
 
 > **Kirk**: Thank you, Mr. Scott. I'll try not to take that personally.
 
+Supports [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4),
+[JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5),
+and [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
 
 Features
 --------
