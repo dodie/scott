@@ -1,9 +1,41 @@
 ## Recommended: Scott Maven Plugin
 The recommended way to do this is with the **Scott Maven Plugin**:
 
+```xml
+<build>
+	<plugins>
+		<!-- Add the Scott Plugin. -->
+		<plugin>
+			<groupId>hu.advancedweb</groupId>
+			<artifactId>scott-maven-plugin</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<executions>
+				<execution>
+					<goals>
+						<goal>prepare-agent</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+	</plugins>
+</build>
+<dependencies>
+	<!-- Add Scott as a dependency -->
+	<dependency>
+		<groupId>hu.advancedweb</groupId>
+		<artifactId>scott</artifactId>
+		<version>${scott.version}</version>
+		<scope>test</scope>
+	</dependency>
+</dependencies>
 ```
-TODO
-```
+
+For complete examples see the following examples:
+
+- [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4)
+- [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5)
+- [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber)
+
 
 ## Manual
 However, if you can't use the Maven Plugin for some reason, you can do the necessary steps manually.
@@ -71,7 +103,7 @@ To do exactly this with Maven, see the following example.
 	<dependency>
 		<groupId>hu.advancedweb</groupId>
 		<artifactId>scott</artifactId>
-		<version>3.0.0</version>
+		<version>${scott.version}</version>
 		<scope>test</scope>
 	</dependency>
 	<dependency>
