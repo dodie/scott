@@ -63,6 +63,12 @@ Every parameter can contain zero, one or more strings, separated by commas. Each
 - A Fully Qualified Name of an annotation.
 - Or an expression that starts with the beginning of a Fully Qualified Name of an annotation and ends with ```.*```.
 
+Currently these parameters as to be passed as java arguments. For example:
+
+```bash
+mvn clean install -Dscott.track.method_annotation="org.jsunit.Test,cucumber.api.java.*"
+```
+
 
 # Manual
 However, if you can't use the Maven Plugin for some reason, you can do the necessary steps manually.
