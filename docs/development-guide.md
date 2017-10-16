@@ -30,8 +30,15 @@ The ```StateRegistry``` stores this data so it can be queried later, for example
 Scott has integration for JUnit4, JUnit5 and Cucumber-JVM. For details, see the [examples](https://github.com/dodie/scott/tree/master/scott-examples).
 
 
-Project Layout and Building from Source
----------------------------------------
+## Integration
+
+For the above to work, the ```Scott Agent``` has to be passed as a ```-javaagent``` to the application. 
+The [Scott Maven Plugin](https://github.com/dodie/scott/tree/master/scott-maven-plugin) helps to automatize this job.
+For details see the [usage guide](https://github.com/dodie/scott/blob/master/docs/usage.md).
+
+
+# Project Layout and Building from Source
+
 The core module where you can find all the instrumentation and rendering parts is ```scott```,
 while the related tests are in the```scott-tests``` project. These two are submodules of the root pom,
 which is provided for convenience. The tests are in a separate module, because the suite excersizes
@@ -53,8 +60,8 @@ and examining their outputs manually. These projects also serve as an example ab
 in your projects.
 
 
-Debug mode
-----------
+# Debug mode
+
 Scott can be started in debug mode to make it easier to see what instrumentations happen during the
 test execution. To activate it, just set the ```scottDebug``` environment variable to true when running
 your tests (for example on Unix: ```export scottDebug="true"```), then Scott shows the visited and modified classes.
