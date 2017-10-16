@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hu.advancedweb</groupId>
 	<artifactId>scott-example-junit5</artifactId>
-	<version>2.1.0-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -14,7 +14,7 @@
 			<plugin>
 				<groupId>hu.advancedweb</groupId>
 				<artifactId>scott-maven-plugin</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>3.1.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>hu.advancedweb</groupId>
 			<artifactId>scott</artifactId>
-			<version>2.1.0-SNAPSHOT</version>
+			<version>3.1.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

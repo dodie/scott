@@ -1,54 +1,119 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>hu.advancedweb</groupId>
-    <artifactId>scott-maven-plugin</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <url>https://github.com/dodie/scott</url>
-    <packaging>maven-plugin</packaging>
+	<groupId>hu.advancedweb</groupId>
+	<artifactId>scott-maven-plugin</artifactId>
+	<version>3.1.0</version>
+	<url>https://github.com/dodie/scott</url>
+	<packaging>maven-plugin</packaging>
 
-    <name>Scott Maven Plugin</name>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
-    <properties>
-        <scott.agent.version>2.1.0-SNAPSHOT</scott.agent.version>
-    </properties>
+	<name>Scott Maven Plugin</name>
+	<description>
+    	Scott provides detailed failure messages for tests written
+		in Java based on their runtime behaviour and source code.
+		
+		This plugin eases project configuration for Scott.
+    </description>
+    
+    <licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+		</license>
+	</licenses>
+	
+	<developers>
+		<developer>
+			<name>David Csakvari</name>
+			<email>dodiehun@gmail.com</email>
+			<organization>advancedweb.hu</organization>
+			<organizationUrl>https://advancedweb.hu</organizationUrl>
+		</developer>
+	</developers>
+	
+	<scm>
+		<url>https://github.com/dodie/scott/tree/master</url>
+		<connection>scm:git:git://github.com/dodie/scott.git</connection>
+		<developerConnection>scm:git:ssh://github.com:dodie/scott.git</developerConnection>
+	</scm>
 
-    <prerequisites>
-        <maven>2.2.1</maven>
-    </prerequisites>
+	<prerequisites>
+		<maven>2.2.1</maven>
+	</prerequisites>
+		
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>META-INF</directory>
+				<targetPath>META-INF</targetPath>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.4</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>${project.prerequisites.maven}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-project</artifactId>
-            <version>${project.prerequisites.maven}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>scott</artifactId>
-            <version>${scott.agent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugin-tools</groupId>
-            <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.4</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <sourceDirectory>src</sourceDirectory>
-        <resources>
-            <resource>
-                <directory>META-INF</directory>
-                <targetPath>META-INF</targetPath>
-            </resource>
-        </resources>
-    </build>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-plugin-api</artifactId>
+			<version>${project.prerequisites.maven}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-project</artifactId>
+			<version>${project.prerequisites.maven}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>scott</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.plugin-tools</groupId>
+			<artifactId>maven-plugin-annotations</artifactId>
+			<version>3.4</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 </project>
