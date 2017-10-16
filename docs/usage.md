@@ -1,5 +1,5 @@
 ## Recommended: Scott Maven Plugin
-The recommended way to do this is with the **Scott Maven Plugin**:
+The recommended way to use Scott is the **Scott Maven Plugin**:
 
 ```xml
 <build>
