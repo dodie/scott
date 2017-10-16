@@ -54,7 +54,7 @@ The automatic tracking behavior can be customized with the following configurati
 
 | Parameter name  | Description   | Default value |
 | -------------   | ------------- | ------------- | 
-| scott.track.method_annotation  | Track a method if it's marked with at least one of the specified annotations.  | "org.junit.Test", "org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory", "cucumber.api.java.\*" |
+| scott.track.method_annotation  | Collect runtime data from a method if it's marked with at least one of the specified annotations.  | "org.junit.Test", "org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory", "cucumber.api.java.\*" |
 | scott.inject_junit4_rule.method_annotation | Inject ```ScottReportingRule``` to catch failing tests for JUnit4, if the class has at least one method with at least one of the following annotations. | "org.junit.Test" |
 | scott.inject_junit5_extension.method_annotation | Inject ```ScottJUnit5Extension``` to catch failing tests for JUnit5, if the class has at least one method with at least one of the following annotations. | "org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory" |
 
