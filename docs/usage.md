@@ -61,7 +61,7 @@ The automatic tracking behavior can be customized with the following configurati
 Every parameter can contain zero, one or more strings, separated by commas. Each item has to be one of the following:
 
 - A Fully Qualified Name of an annotation.
-- Or an expression that starts with the beginning of a Fully Qualified Name of an annotation and ends with ```.*```.
+- Or an expression that starts with a package name and ends with a ```*```.
 
 Currently these parameters as to be passed as java arguments. For example:
 
