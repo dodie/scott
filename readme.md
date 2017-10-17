@@ -147,6 +147,14 @@ Changelog
 See [Releases](https://github.com/dodie/scott/releases).
 
 
+**New features in the latest release:**
+
+- Maven Plugin #4
+- Scott Cucumber JVM now records whole scenarios #12
+- Improved loop rendering #18
+- Improved string appearance #27
+
+
 Contributing
 ------------
 Contributions are welcome! Please make sure to visit the
