@@ -147,12 +147,10 @@ Changelog
 See [Releases](https://github.com/dodie/scott/releases).
 
 
-**New features in the latest release:**
+**Highlights from the latest release:**
 
 - [Maven Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
 - Scott Cucumber JVM now records [whole scenarios](https://github.com/dodie/scott/tree/master/scott-examples/cucumber)
-- Improved loop rendering
-- Improved string appearance
 
 
 Contributing
