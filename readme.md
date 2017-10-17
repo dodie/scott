@@ -85,7 +85,7 @@ The recommended way to use Scott is the **Scott Maven Plugin**. Just add the fol
 </dependencies>
 ```
 
-For complete examples see the following examples:
+For complete examples see the following:
 
 - [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4)
 - [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5)
