@@ -54,7 +54,7 @@ After including Scott to the build flow, it automatically creates the detailed f
 All you have to do is to write tests in Java with simple assertions or using your favorite testing library
 and run them as you would do normally. Scott will do its magic behind the scenes.
 
-The recommended way to use Scott is the **Scott Maven Plugin**. Just add the following to your ```pom.xml``` file.
+The recommended way to use Scott is the **Scott Maven Plugin**. Just add the following to your ```pom.xml``` file. (See a minimal example pom file [here](https://github.com/dodie/scott/blob/master/scott-examples/junit4/pom.xml).)
 
 ```xml
 <build>
