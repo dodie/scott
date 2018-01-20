@@ -148,10 +148,11 @@ Changelog
 See [Releases](https://github.com/dodie/scott/releases).
 
 
-**Highlights from the latest release:**
+**Highlights from the latest releases:**
 
 - [Maven Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
 - Scott Cucumber JVM now records [whole scenarios](https://github.com/dodie/scott/tree/master/scott-examples/cucumber)
+- [Customizable tracking behavior](https://github.com/dodie/scott/blob/master/docs/usage.md#configuring-the-automatic-tracking-behavior-with-the-maven-plugin)
 
 
 Contributing
