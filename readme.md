@@ -94,7 +94,8 @@ For complete examples see the following:
 For a quick demo check out and ```mvn install``` one of these example projects, as they not only
 contain the required setup configuration (see the ```pom.xml``` files), but a bunch of failing tests for the show.
 
-For alternative ways of using Scott, see [this](https://github.com/dodie/scott/blob/master/docs/usage.md) guide.
+For configuration options and alternative ways of using Scott, see
+[this](https://github.com/dodie/scott/blob/master/docs/usage.md) guide.
 
 
 Features
