@@ -39,21 +39,72 @@ For complete examples see the following examples:
 
 ## Configuration
 
-By default the instrumentation happens automatically for JUnit4, JUnit5 test methods and Cucumber Steps to collect the data. 
+By default the instrumentation happens automatically for JUnit4, JUnit5 test methods and Cucumber Steps to collect the data.
 
 For every JUnit4 test, it also injects the [ScottReportingRule](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottReportingRule.java) to produce the nice, detailed error messages in case of a failure, based on the collected data.
 Similarly, for every JUnit5 test, it injects the [ScottJUnit5Extension](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottJUnit5Extension.java) for the same reason.
-The reporting for Cucumber JVM is based on the
+
+So, by default there is no need for additional configuration to use Scott with JUnit4 or JUnit5 tests.
+
+However, the reporting for Cucumber JVM is based on the
 [formatter configuration](https://github.com/dodie/scott/blob/master/scott-examples/cucumber/src/test/java/hu/advancedweb/example/FeatureTest.java#L15) of the Cucumber runner, so it can't be done automatically. For this to work, you must manually specify at least one of the formatters Scott provide:
 
 - [ScottCucumberJSONFormatter](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottCucumberJSONFormatter.java)
 - [ScottCucumberHTMLFormatter](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottCucumberHTMLFormatter.java)
 - [ScottCucumberPrettyFormatter](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottCucumberPrettyFormatter.java)
 
-The automatic tracking behavior can be customized with the following configuration parameters:
+See the [Cucumber Example Test](https://github.com/dodie/scott/blob/master/scott-examples/cucumber/src/test/java/hu/advancedweb/example/FeatureTest.java) for more info.
+
+
+### Configuring the automatic tracking behavior with the Maven Plugin
+In case you are not satisfied with the default tracking behavior, the Scott Maven Plugin provides configuration
+options:
 
 | Parameter name  | Description   | Default value |
-| -------------   | ------------- | ------------- | 
+| -------------   | ------------- | ------------- |
+| trackMethodAnnotations  | Collect runtime data from a method if it's marked with at least one of the specified annotations.  | org.junit.Test, org.junit.jupiter.api.Test, org.junit.jupiter.api.TestFactory, cucumber.api.java.\* |
+| junit4RuleMethodAnnotations | Inject ```ScottReportingRule``` to catch failing tests for JUnit4, if the class has at least one method with at least one of the following annotations. | org.junit.Test |
+| junit5RuleMethodAnnotations | Inject ```ScottJUnit5Extension``` to catch failing tests for JUnit5, if the class has at least one method with at least one of the following annotations. | org.junit.jupiter.api.Test, org.junit.jupiter.api.TestFactory |
+
+
+See the following example for the Plugin configuration:
+
+```xml
+<plugin>
+	<groupId>hu.advancedweb</groupId>
+	<artifactId>scott-maven-plugin</artifactId>
+	<version>${scott.version}</version>
+	<executions>
+		<execution>
+			<goals>
+				<goal>prepare-agent</goal>
+			</goals>
+		</execution>
+		<configuration>
+			<trackMethodAnnotations>
+				<trackMethodAnnotation>org.junit.Test</trackMethodAnnotation>
+				<trackMethodAnnotation>org.junit.jupiter.api.Test</trackMethodAnnotation>
+				<trackMethodAnnotation>org.junit.jupiter.api.TestFactory</trackMethodAnnotation>
+				<trackMethodAnnotation>cucumber.api</trackMethodAnnotation>
+			</trackMethodAnnotations>
+			<junit4RuleMethodAnnotations>
+				<junit4RuleMethodAnnotation>org.junit.Test</junit4RuleMethodAnnotation>
+			</junit4RuleMethodAnnotations>
+			<junit5RuleMethodAnnotations>
+				<junit5RuleMethodAnnotation>org.junit.jupiter.api.Test</junit5RuleMethodAnnotation>
+				<junit5RuleMethodAnnotation>org.junit.jupiter.api.TestFactory</junit5RuleMethodAnnotation>
+			</junit5RuleMethodAnnotations>
+		</configuration>
+	</executions>
+</plugin>
+```
+
+
+### Configuring the automatic tracking behavior with command line arguments
+The automatic tracking behavior can also be customized by supplying the following configuration parameters:
+
+| Parameter name  | Description   | Default value |
+| -------------   | ------------- | ------------- |
 | scott.track.method_annotation  | Collect runtime data from a method if it's marked with at least one of the specified annotations.  | "org.junit.Test", "org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory", "cucumber.api.java.\*" |
 | scott.inject_junit4_rule.method_annotation | Inject ```ScottReportingRule``` to catch failing tests for JUnit4, if the class has at least one method with at least one of the following annotations. | "org.junit.Test" |
 | scott.inject_junit5_extension.method_annotation | Inject ```ScottJUnit5Extension``` to catch failing tests for JUnit5, if the class has at least one method with at least one of the following annotations. | "org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory" |
@@ -66,7 +117,7 @@ Every parameter can contain zero, one or more strings, separated by commas. Each
 Currently these parameters as to be passed as java arguments. For example:
 
 ```bash
-mvn clean install -Dscott.track.method_annotation="org.jsunit.Test,cucumber.api.java.*"
+mvn clean install -Dscott.track.method_annotation="org.junit.Test,cucumber.api.java.*"
 ```
 
 
