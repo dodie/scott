@@ -63,7 +63,7 @@ The recommended way to use Scott is the **Scott Maven Plugin**. Just add the fol
 		<plugin>
 			<groupId>hu.advancedweb</groupId>
 			<artifactId>scott-maven-plugin</artifactId>
-			<version>3.1.0</version>
+			<version>3.2.0</version>
 			<executions>
 				<execution>
 					<goals>
@@ -79,7 +79,7 @@ The recommended way to use Scott is the **Scott Maven Plugin**. Just add the fol
 	<dependency>
 		<groupId>hu.advancedweb</groupId>
 		<artifactId>scott</artifactId>
-		<version>3.1.0</version>
+		<version>3.2.0</version>
 		<scope>test</scope>
 	</dependency>
 </dependencies>
