@@ -3,7 +3,7 @@ Scott Test Reporter - JUnit 5 Example project
 
 This project contains the necessary setup configuration to use Scott with JUnit 5,
 (see [pom.xml](https://github.com/dodie/scott/blob/master/scott-examples/junit5/pom.xml))
-for details.
+for details. This example works with Java source level 1.8 and 1.9
 
 Check out the [JUnit 4 example project](https://github.com/dodie/scott/blob/master/scott-examples/junit4)
 as well for another bunch of failing tests that demonstrates the detailed failure messages.
