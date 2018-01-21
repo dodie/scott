@@ -44,7 +44,8 @@ so you can worry much less about expressing assertions, and still have meaningfu
 
 Supports [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4),
 [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5),
-and [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
+and [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber),
+on Java 7, Java 8, and Java 9.
 
 
 How to use
@@ -153,6 +154,7 @@ See [Releases](https://github.com/dodie/scott/releases).
 - [Maven Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
 - Scott Cucumber JVM now records [whole scenarios](https://github.com/dodie/scott/tree/master/scott-examples/cucumber)
 - [Customizable tracking behavior](https://github.com/dodie/scott/blob/master/docs/usage.md#configuring-the-automatic-tracking-behavior-with-the-maven-plugin)
+- Java 9 support
 
 
 Contributing
