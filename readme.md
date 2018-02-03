@@ -99,6 +99,14 @@ For configuration options and alternative ways of using Scott, see
 [this](https://github.com/dodie/scott/blob/master/docs/usage.md) guide.
 
 
+### Cucumber
+
+Scott for Cucumber tracks whole scenarios, and in case of a failure it prints the details of every step involved.
+
+This feature provides valuable information if a test fails in a CI environment, as it can make it much easier to reproduce and fix browser-based tests, especially for flaky tests.
+See the [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber) example project for details.
+
+
 Features
 --------
 Consider this failing test case:
