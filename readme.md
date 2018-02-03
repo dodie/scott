@@ -104,6 +104,9 @@ For configuration options and alternative ways of using Scott, see
 Scott for Cucumber tracks whole scenarios, and in case of a failure it prints the details of every step involved.
 
 This feature provides valuable information if a test fails in a CI environment, as it can make it much easier to reproduce and fix browser-based tests, especially for flaky tests.
+
+![HTML](https://github.com/dodie/scott-showcase/blob/master/cucumber_html_main.jpeg "HTML")
+
 See the [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber) example project for details.
 
 
@@ -159,10 +162,10 @@ See [Releases](https://github.com/dodie/scott/releases).
 
 **Highlights from the latest releases:**
 
+- Java 9 support
 - [Maven Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
 - Scott Cucumber JVM now records [whole scenarios](https://github.com/dodie/scott/tree/master/scott-examples/cucumber)
 - [Customizable tracking behavior](https://github.com/dodie/scott/blob/master/docs/usage.md#configuring-the-automatic-tracking-behavior-with-the-maven-plugin)
-- Java 9 support
 
 
 Contributing
