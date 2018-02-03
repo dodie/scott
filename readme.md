@@ -44,7 +44,8 @@ so you can worry much less about expressing assertions, and still have meaningfu
 
 Supports [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4),
 [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5),
-and [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber).
+and [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber),
+on Java 7, Java 8, and Java 9.
 
 
 How to use
@@ -96,6 +97,17 @@ contain the required setup configuration (see the ```pom.xml``` files), but a bu
 
 For configuration options and alternative ways of using Scott, see
 [this](https://github.com/dodie/scott/blob/master/docs/usage.md) guide.
+
+
+### Cucumber
+
+Scott for Cucumber tracks whole scenarios, and in case of a failure it prints the details of every step involved.
+
+This feature provides valuable information if a test fails in a CI environment, as it can make it much easier to reproduce and fix browser-based tests, especially for flaky tests.
+
+![HTML](https://github.com/dodie/scott-showcase/blob/master/cucumber_html_main.jpeg "HTML")
+
+See the [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber) example project for details.
 
 
 Features
@@ -150,6 +162,7 @@ See [Releases](https://github.com/dodie/scott/releases).
 
 **Highlights from the latest releases:**
 
+- Java 9 support
 - [Maven Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
 - Scott Cucumber JVM now records [whole scenarios](https://github.com/dodie/scott/tree/master/scott-examples/cucumber)
 - [Customizable tracking behavior](https://github.com/dodie/scott/blob/master/docs/usage.md#configuring-the-automatic-tracking-behavior-with-the-maven-plugin)
