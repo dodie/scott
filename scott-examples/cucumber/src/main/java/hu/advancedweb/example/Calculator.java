@@ -1,45 +1,43 @@
 package hu.advancedweb.example;
 
+import java.util.Deque;
+import java.util.LinkedList;
+
 public class Calculator {
-	
-	private Mode mode = Mode.INPUT;
-	private int lastInput;
-	private int result;
-	
-	private enum Mode {
-		INPUT, ADD, MULTIPLY
+
+	private final Deque<String> stack = new LinkedList<String>();
+
+	public void push(String arg) {
+		stack.add(arg);
 	}
-	
-	public void enter(int number) {
-		
-		if (mode == Mode.INPUT) {
-			this.result = number;
-			this.lastInput = number;
-		} else if (mode == Mode.ADD) {
-			this.result = number + result;
-			this.lastInput = number;
-		} else if (mode == Mode.MULTIPLY) {
-			this.result = number * result;
-			this.lastInput = number;
+
+	public String evaluate() {
+
+		String op = stack.removeLast();
+		Integer x = Integer.parseInt(stack.removeLast());
+		Integer y = Integer.parseInt(stack.removeLast());
+
+		Integer val;
+		if (op.equals("-")) {
+			val = x - y;
+		} else if (op.equals("+")) {
+			val = x + y;
+		} else if (op.equals("*")) {
+			val = x * y;
+		} else if (op.equals("/")) {
+			val = x / y;
 		} else {
-			throw new UnsupportedOperationException();
+			throw new IllegalArgumentException();
 		}
+
+		stack.push(Integer.toString(val));
+
+		return stack.getLast();
 	}
-	
-	public void pressPlus() {
-		mode = Mode.ADD;
+
+	@Override
+	public String toString() {
+		return "[stack=" + stack + "]";
 	}
-	
-	public void pressMultiply() {
-		mode = Mode.MULTIPLY;
-	}
-	
-	public void pressEnter() {
-		enter(lastInput);
-	}
-	
-	public int getResult() {
-		return result;
-	}
-	
+
 }
