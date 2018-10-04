@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id "hu.advanceweb.scott-plugin" version "0.1.0-RC"
+}
+
+group 'hu.advancedweb'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+project.ext {
+    cucumberVersion = '4.0.0'
+}
+
+dependencies {
+    compile group: 'info.cukes', name: 'cucumber-java', version: '1.2.5'
+    testCompile group: 'info.cukes', name: 'cucumber-junit', version: '1.2.5'
+    testCompile 'org.hamcrest:hamcrest-library:1.3'
+    testCompile 'junit:junit:4.12'
+}
+
