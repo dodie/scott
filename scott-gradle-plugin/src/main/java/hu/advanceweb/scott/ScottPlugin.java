@@ -30,12 +30,6 @@ public class ScottPlugin implements Plugin<Project> {
         });
     }
 
-    /**
-     * Configures the agent dependencies using the 'scott' configuration.
-     * Uses the version declared in 'toolVersion' of the scott extension if no dependencies are explicitly declared.
-     *
-     * @param extension the extension that has the tool version to use
-     */
     private Configuration configureAgentDependencies(Project project, ScottPluginExtension extension) {
         Configuration agentConf = project.getConfigurations().create(AGENT_CONFIGURATION_NAME);
         agentConf.setVisible(false);
