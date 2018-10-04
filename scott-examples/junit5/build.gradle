@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id "hu.advanceweb.scott-plugin" version "0.1.0-RC"
+}
+
+group 'hu.advancedweb'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	testCompile('org.junit.jupiter:junit-jupiter-api:5.3.1')
+	testCompile('org.junit.jupiter:junit-jupiter-params:5.3.1')
+	testRuntime('org.junit.jupiter:junit-jupiter-engine:5.3.1')
+	testRuntime('org.mockito:mockito-core:2.2.28')
+}
+
+
+test {
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+}
+

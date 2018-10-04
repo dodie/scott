@@ -3,7 +3,7 @@ plugins {
     id "hu.advanceweb.scott-plugin" version "0.1.0-RC"
 }
 
-group 'teste'
+group 'hu.advancedweb'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
