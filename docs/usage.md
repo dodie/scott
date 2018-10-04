@@ -30,6 +30,15 @@ The recommended way to use Scott is the **Scott Maven Plugin**. Just add the fol
 </dependencies>
 ```
 
+# Scott Gradle Plugin
+You can use Scott with the **Scott Gradle Plugin**. Just add the following to your ```build.gradle``` file.
+
+```groovy
+plugins {
+  id "hu.advanceweb.scott-plugin" version "${scott.version}"
+}
+```
+
 For complete examples see the following examples:
 
 - [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4)
@@ -56,8 +65,8 @@ However, the reporting for Cucumber JVM is based on the
 See the [Cucumber Example Test](https://github.com/dodie/scott/blob/master/scott-examples/cucumber/src/test/java/hu/advancedweb/example/FeatureTest.java) for more info.
 
 
-### Configuring the automatic tracking behavior with the Maven Plugin
-In case you are not satisfied with the default tracking behavior, the Scott Maven Plugin provides configuration
+### Configuring the automatic tracking behavior
+In case you are not satisfied with the default tracking behavior, the Scott Maven Plugin and Gradle Plugin provides configuration
 options:
 
 | Parameter name  | Description   | Default value |
@@ -67,7 +76,7 @@ options:
 | junit5RuleMethodAnnotations | Inject ```ScottJUnit5Extension``` to catch failing tests for JUnit5, if the class has at least one method with at least one of the following annotations. | org.junit.jupiter.api.Test, org.junit.jupiter.api.TestFactory |
 
 
-See the following example for the Plugin configuration:
+See the following example for the Maven Plugin configuration:
 
 ```xml
 <plugin>
@@ -98,7 +107,16 @@ See the following example for the Plugin configuration:
 	</executions>
 </plugin>
 ```
+With Gradle you can provide these configuration to the plugin by adding an extension object called `scott`:
 
+```groovy
+scott {
+    toolVersion ='3.3.0'
+    trackMethodAnnotations = ['org.junit.Test', 'cucumber.api.java.*']
+}
+```
+
+Here, we override the scoot version using the `toolVersion` property and also set the `trackMethodAnnotations` parameter describe above. 
 
 ### Configuring the automatic tracking behavior with command line arguments
 The automatic tracking behavior can also be customized by supplying the following configuration parameters:
@@ -201,3 +219,4 @@ To do exactly this with Maven, see the following example.
 
 </dependencies>
 ```
+
