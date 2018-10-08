@@ -6,7 +6,7 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 /**
- * To include Scott report in Scott's output you can use the formatters used in this example.
+ * To include Scott report in Cucumber's output you can use the formatters used in this example.
  */
 @RunWith(Cucumber.class)
 @CucumberOptions(
