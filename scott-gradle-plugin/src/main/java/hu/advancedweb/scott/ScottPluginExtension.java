@@ -1,4 +1,4 @@
-package hu.advanceweb.scott;
+package hu.advancedweb.scott;
 
 import java.util.List;
 

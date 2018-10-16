@@ -5,9 +5,9 @@ plugins {
 }
 
 group 'hu.advanceweb'
-version '3.3.3'
+version '3.3.0'
 
-sourceCompatibility = 9
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -22,8 +22,8 @@ pluginBundle {
 gradlePlugin {
     plugins {
         scottPlugin {
-            id = 'hu.advanceweb.scott-plugin'
-            implementationClass = 'hu.advanceweb.scott.ScottPlugin'
+            id = 'hu.advancedweb.scott-plugin'
+            implementationClass = 'hu.advancedweb.scott.ScottPlugin'
             displayName = 'Detailed failure reports and hassle free assertions for Java tests'
             description = 'Scott provides detailed failure messages for tests written in Java, without the use of complex assertion libraries to aid developers in rapid development, troubleshooting and debugging of tests. All information is presented on the source code of the test method as comments.'
         }
@@ -33,5 +33,4 @@ gradlePlugin {
 dependencies {
     compile gradleApi()
     compile 'org.codehaus.groovy:groovy-all:2.3.11'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
 }

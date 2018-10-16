@@ -1,4 +1,4 @@
-package hu.advanceweb.scott;
+package hu.advancedweb.scott;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -8,6 +8,7 @@ import org.gradle.process.CommandLineArgumentProvider;
 import org.gradle.process.JavaForkOptions;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +54,7 @@ public class ScottPlugin implements Plugin<Project> {
 
         @Override
         public Iterable<String> asArguments() {
-            return List.of(getArgument());
+            return Arrays.asList(getArgument());
         }
 
         private String getArgument() {
