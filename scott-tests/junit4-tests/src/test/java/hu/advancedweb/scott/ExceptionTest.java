@@ -6,6 +6,9 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 public class ExceptionTest {
 	
 	@SuppressWarnings("null")
@@ -114,5 +117,46 @@ public class ExceptionTest {
 			}
 		}
 	}
-	
+
+	@Test(expected = NullPointerException.class)
+	public void tryFinallyBlockThatThrowsException() {
+		String o = null;
+		ByteArrayOutputStream out = null;
+		PrintStream printStream = null;
+
+		try {
+			out = new ByteArrayOutputStream();
+			printStream = new PrintStream(out);
+
+			printStream.append("Hello World");
+
+			o.length();
+
+		} finally {
+			assertThat(TestHelper.getLastRecordedStateForVariable("out"), equalTo(out.toString()));
+			printStream.close();
+		}
+	}
+
+	@Test
+	public void tryCatchFinallyBlock() {
+		String o = null;
+		ByteArrayOutputStream out = null;
+		PrintStream printStream = null;
+
+		try {
+			out = new ByteArrayOutputStream();
+			printStream = new PrintStream(out);
+
+			printStream.append("Hello World");
+
+			o.length();
+
+		} catch (Exception ignored) {
+
+		} finally {
+			assertThat(TestHelper.getLastRecordedStateForVariable("out"), equalTo(out.toString()));
+			printStream.close();
+		}
+	}
 }
