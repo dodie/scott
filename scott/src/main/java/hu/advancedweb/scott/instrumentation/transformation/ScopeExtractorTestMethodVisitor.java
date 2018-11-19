@@ -149,7 +149,10 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 			for (TryCatchBlockLabels tryCatchBlock : tryCatchBlocks) {
 				if (label == tryCatchBlock.start) {
 					tryCatchBlockScopes.push(tryCatchBlock);
-				} else if (label == tryCatchBlock.handler) {
+				}
+			}
+			for (TryCatchBlockLabels tryCatchBlock : tryCatchBlocks) {
+				if (label == tryCatchBlock.handler) {
 					tryCatchBlockScopes.pop();
 				}
 			}
