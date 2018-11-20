@@ -1,0 +1,36 @@
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '0.10.0'
+}
+
+group 'hu.advanceweb'
+version '3.3.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+pluginBundle {
+    website = 'https://github.com/dodie/scott'
+    vcsUrl = 'https://github.com/dodie/scott.git'
+    tags = ['testing-tools','java', 'junit', 'assertions', 'scott']
+}
+
+gradlePlugin {
+    plugins {
+        scottPlugin {
+            id = 'hu.advancedweb.scott-plugin'
+            implementationClass = 'hu.advancedweb.scott.ScottPlugin'
+            displayName = 'Detailed failure reports and hassle free assertions for Java tests'
+            description = 'Scott provides detailed failure messages for tests written in Java, without the use of complex assertion libraries to aid developers in rapid development, troubleshooting and debugging of tests. All information is presented on the source code of the test method as comments.'
+        }
+    }
+}
+
+dependencies {
+    compile gradleApi()
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+}
