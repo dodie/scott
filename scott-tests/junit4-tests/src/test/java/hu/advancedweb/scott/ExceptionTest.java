@@ -139,24 +139,31 @@ public class ExceptionTest {
 	}
 
 	@Test
-	public void tryCatchFinallyBlock() {
-		String o = null;
-		ByteArrayOutputStream out = null;
-		PrintStream printStream = null;
-
+	public void equivalentToTryWithResources() {
 		try {
-			out = new ByteArrayOutputStream();
-			printStream = new PrintStream(out);
+			Throwable throwable = null;
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			PrintStream printStream = new PrintStream(out);
 
-			printStream.append("Hello World");
-
-			o.length();
-
-		} catch (Exception ignored) {
-
-		} finally {
-			assertThat(TestHelper.getLastRecordedStateForVariable("out"), equalTo(out.toString()));
-			printStream.close();
+			try {
+				printStream.append("Hello World");
+			} catch (Exception e) {
+				throwable = e;
+				throw e;
+			} finally {
+				assertThat(TestHelper.getLastRecordedStateForVariable("out"), equalTo(out.toString()));
+				if (throwable != null) {
+					try {
+						printStream.close();
+					} catch (Exception e) {
+						throwable.addSuppressed(e);
+					}
+				} else {
+					printStream.close();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
