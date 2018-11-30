@@ -130,4 +130,18 @@ public class WeirdFormattingTest {
 				times(1))
 		.bar();
 	}
+
+	@Test
+	public void earlyDeclarationTest() throws Exception {
+		String early;
+		
+		// some stuff that might be instrumented
+		String other = "other";
+		assertThat(other, equalTo(other));
+		assertThat(TestHelper.getLastRecordedStateForVariable("other"), equalTo(wrapped(other)));
+		
+		early = "early";
+		assertThat(early, equalTo(early));
+		assertThat(TestHelper.getLastRecordedStateForVariable("early"), equalTo(wrapped(early)));
+	}
 }
