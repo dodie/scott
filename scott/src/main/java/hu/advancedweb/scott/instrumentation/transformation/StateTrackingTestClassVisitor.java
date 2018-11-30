@@ -25,7 +25,7 @@ public class StateTrackingTestClassVisitor extends ClassVisitor {
 	private TransformationParameters transformationParameters;
 	
 	public StateTrackingTestClassVisitor(ClassVisitor cv, TransformationParameters transformationParameters) {
-		super(Opcodes.ASM5, cv);
+		super(Opcodes.ASM7, cv);
 		this.transformationParameters = transformationParameters;
 	}
 	

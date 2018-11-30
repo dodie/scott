@@ -38,7 +38,7 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 	private Map<Integer, Integer> lineNumerToFirstOccurrenceOfVariables;
 	
 	public ScopeExtractorTestMethodVisitor(StateEmitterTestMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
-		super(Opcodes.ASM5, access, name, desc, signature, exceptions);
+		super(Opcodes.ASM7, access, name, desc, signature, exceptions);
 		this.next = next;
 		lineNumerToFirstOccurrenceOfVariables = new HashMap<>();
 	}

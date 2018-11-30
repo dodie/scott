@@ -22,7 +22,7 @@ public class TestDiscoveryMethodVisitor extends MethodVisitor {
 	private List<String> annotations = new ArrayList<>();
 
 	public TestDiscoveryMethodVisitor(MethodVisitor mv, TransformationParameters.Builder transformationParameters, String name, String desc, String signature) {
-		super(Opcodes.ASM5, mv);
+		super(Opcodes.ASM7, mv);
 		this.transformationParameters = transformationParameters;
 		this.methodName = name;
 		this.methodDesc = desc;

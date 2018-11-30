@@ -15,7 +15,7 @@ public class DiscoveryClassVisitor extends ClassVisitor {
 	private TransformationParameters.Builder transformationParameters;
 
 	public DiscoveryClassVisitor(TransformationParameters.Builder transformationParameters) {
-		super(Opcodes.ASM5);
+		super(Opcodes.ASM7);
 		this.transformationParameters = transformationParameters;
 	}
 	

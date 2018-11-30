@@ -44,7 +44,7 @@ so you can worry much less about expressing assertions, and still have meaningfu
 Supports [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4),
 [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5),
 and [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber),
-on Java 7, Java 8, and Java 9.
+on Java 7, Java 8, and Java 11.
 
 
 How to use

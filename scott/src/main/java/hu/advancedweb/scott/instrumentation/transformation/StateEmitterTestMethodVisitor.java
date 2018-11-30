@@ -36,7 +36,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	
 
 	public StateEmitterTestMethodVisitor(MethodVisitor mv, String className, String methodName, boolean clearTrackedDataAtStart) {
-		super(Opcodes.ASM5, mv);
+		super(Opcodes.ASM7, mv);
 		
 		Logger.log("Visiting: " + className + "." + methodName);
 		
