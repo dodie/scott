@@ -6,9 +6,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 public class ExceptionTest {
 	
 	@SuppressWarnings("null")
@@ -117,53 +114,5 @@ public class ExceptionTest {
 			}
 		}
 	}
-
-	@Test(expected = NullPointerException.class)
-	public void tryFinallyBlockThatThrowsException() {
-		String o = null;
-		ByteArrayOutputStream out = null;
-		PrintStream printStream = null;
-
-		try {
-			out = new ByteArrayOutputStream();
-			printStream = new PrintStream(out);
-
-			printStream.append("Hello World");
-
-			o.length();
-
-		} finally {
-			assertThat(TestHelper.getLastRecordedStateForVariable("out"), equalTo(out.toString()));
-			printStream.close();
-		}
-	}
-
-	@Test
-	public void equivalentToTryWithResources() {
-		try {
-			Throwable throwable = null;
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			PrintStream printStream = new PrintStream(out);
-
-			try {
-				printStream.append("Hello World");
-			} catch (Exception e) {
-				throwable = e;
-				throw e;
-			} finally {
-				assertThat(TestHelper.getLastRecordedStateForVariable("out"), equalTo(out.toString()));
-				if (throwable != null) {
-					try {
-						printStream.close();
-					} catch (Exception e) {
-						throwable.addSuppressed(e);
-					}
-				} else {
-					printStream.close();
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 }

@@ -8,7 +8,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import hu.advancedweb.scott.MockitoTest.Foo;
@@ -82,9 +81,8 @@ public class WeirdFormattingTest {
 
 	@SuppressWarnings("null")
 	@Test
-	@Ignore // FIXME: See issue 19: multiple variable declarations in different scopes on the same line cause problems.
 	public void inlineFormattingWithTryCatch() {
-		String o = null; try { String inner = "inner";	assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(inner)); o.length(); } catch (Exception e) { o = "fallback"; assertThat(TestHelper.getLastRecordedStateForVariable("e"), equalTo(e.toString())); assertThat(TestHelper.getLastRecordedStateForVariable("o"), equalTo(o)); }	
+		String o = null; try { String inner = "inner";	assertThat(TestHelper.getLastRecordedStateForVariable("inner"), equalTo(wrapped(inner))); o.length(); } catch (Exception e) { o = "fallback"; assertThat(TestHelper.getLastRecordedStateForVariable("e"), equalTo(e.toString())); assertThat(TestHelper.getLastRecordedStateForVariable("o"), equalTo(wrapped(o))); }
 	}
 	
 	@SuppressWarnings("null")

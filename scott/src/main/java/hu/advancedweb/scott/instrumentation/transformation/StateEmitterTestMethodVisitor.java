@@ -1,7 +1,6 @@
 package hu.advancedweb.scott.instrumentation.transformation;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,6 +20,8 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 
 	private int lineNumber;
 	private int lineNumberForMethodCallTrack;
+
+	private Set<Label> visitedLabels = new HashSet<>();
 	
 	private Set<Integer> localVariables = new HashSet<>();
 	
@@ -69,6 +70,12 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	}
 	
 	@Override
+	public void visitLabel(Label label) {
+		super.visitLabel(label);
+		this.visitedLabels.add(label);
+	}
+	
+	@Override
 	public void visitLineNumber(int lineNumber, Label label) {
 		this.lineNumberForMethodCallTrack = this.lineNumber;
 		this.lineNumber = lineNumber;
@@ -78,6 +85,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	@Override
 	public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
 		localVariables.clear();
+		visitedLabels.clear();
 		return super.visitAnnotation(desc, visible);
 	}
 	
@@ -290,15 +298,15 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	}
 	
 	private LocalVariableScope getLocalVariableScope(int var) {
-		// check the scopes in reverse order in case of multiple var declarations on the same line
-		List<LocalVariableScope> localVariableScopesReversed = new ArrayList<>(localVariableScopes);
-		Collections.reverse(localVariableScopesReversed);
-		
 		for (LocalVariableScope localVariableScope : localVariableScopes) {
-			if (localVariableScope.var == var &&
-					localVariableScope.start <= lineNumber &&
-					localVariableScope.end >= lineNumber) {
-				return localVariableScope;
+			if (localVariableScope.var == var) {
+				boolean inScope = ((visitedLabels.size() - 1) >= localVariableScope.startIndex &&
+						(visitedLabels.size() - 1) < localVariableScope.endIndex)
+						||  localVariableScope.additionalIndexes.contains(visitedLabels.size() - 1);
+				
+				if (inScope) {
+					return localVariableScope;
+				}
 			}
 		}
 		return null;
