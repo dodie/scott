@@ -47,7 +47,7 @@ public class AssertionsTest {
 
 	@Test
 	void timeoutExceededWithPreemptiveTermination() {
-		assertTimeoutPreemptively(ofMillis(10), () -> {
+		assertTimeoutPreemptively(ofMillis(1000), () -> {
 			assertEquals(2, 2);
 		});
 	}
