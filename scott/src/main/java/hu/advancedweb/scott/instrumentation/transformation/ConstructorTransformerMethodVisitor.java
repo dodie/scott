@@ -40,7 +40,7 @@ public class ConstructorTransformerMethodVisitor extends MethodNode {
 			super.visitInsn(Opcodes.DUP);
 			super.visitMethodInsn(Opcodes.INVOKESPECIAL, Type.getInternalName(ScottReportingRule.class), "<init>", "()V", false);
 
-			super.visitFieldInsn(Opcodes.PUTFIELD, 
+			super.visitFieldInsn(Opcodes.PUTFIELD,
 					className, "scottReportingRule",
 					Type.getDescriptor(ScottReportingRule.class));
 		}
@@ -50,7 +50,6 @@ public class ConstructorTransformerMethodVisitor extends MethodNode {
 	
 	@Override
 	public void visitEnd() {
-		// TODO: check for no constructor
 		super.visitEnd();
 		accept(next);
 	}
