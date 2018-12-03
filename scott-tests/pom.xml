@@ -6,7 +6,7 @@
 	<groupId>hu.advancedweb</groupId>
 	<artifactId>scott-tests</artifactId>
 	<packaging>pom</packaging>
-	<version>3.3.0</version>
+	<version>3.4.0</version>
 	
 	<name>Scott Test Reporter - Tests</name>
 

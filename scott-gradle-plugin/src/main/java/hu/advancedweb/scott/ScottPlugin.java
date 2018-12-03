@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class ScottPlugin implements Plugin<Project> {
 
-    public static final String DEFAULT_SCOTT_VERSION = "3.3.0";
+    public static final String DEFAULT_SCOTT_VERSION = "3.4.0";
     public static final String AGENT_CONFIGURATION_NAME = "scottAgent";
     public static final String PLUGIN_EXTENSION_NAME = "scott";
 

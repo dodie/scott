@@ -4,7 +4,7 @@
 
 	<groupId>hu.advancedweb</groupId>
 	<artifactId>scott-maven-plugin</artifactId>
-	<version>3.3.0</version>
+	<version>3.4.0</version>
 	<url>https://github.com/dodie/scott</url>
 	<packaging>maven-plugin</packaging>
 
@@ -12,7 +12,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<name>Scott Maven Plugin</name>
+	<name>Scott Test Reporter - Maven Plugin</name>
 	<description>
     	Scott provides detailed failure messages for tests written
 		in Java based on their runtime behaviour and source code.
