@@ -61,7 +61,21 @@ and examining their outputs manually. These projects also serve as an example ab
 in your projects.
 
 
-# Debug mode
+# Recommended Tools
+
+- [ASM Bytecode Outline](https://marketplace.eclipse.org/content/bytecode-outline) plugin for Eclipse
+- [ASM Bytecode Outline](https://plugins.jetbrains.com/plugin/5918-asm-bytecode-outline) plugin for IntelliJ IDEA
+- [javap](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javap.html) Java Class File Disassembler
+
+
+# Tips for Bug Hunting
+
+## Tests
+
+Always create a failing test that reproduces the problematic use-case. Try to create a minimal test case that still exhibits the bug.
+
+
+## Debug logging
 
 Scott can be started in debug mode to make it easier to see what instrumentations happen during the
 test execution. To activate it, just set the ```scottDebug``` environment variable to true when running
@@ -80,9 +94,3 @@ Scott instrumentation:  - instrumentToTrackVariableState of variable at 84: Loca
 Scott instrumentation:  - instrumentToTrackVariableState of variable at 85: LocalVariableScope [var=2, name=j, start=81, end=86]
 ...
 ```
-
-# Recommended Tools
-
-- [ASM Bytecode Outline](https://marketplace.eclipse.org/content/bytecode-outline) plugin for Eclipse
-- [ASM Bytecode Outline](https://plugins.jetbrains.com/plugin/5918-asm-bytecode-outline) plugin for IntelliJ IDEA
-- [javap](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javap.html) Java Class File Disassembler
