@@ -89,7 +89,7 @@ The recommended way to use Scott is the **Scott Maven Plugin** or **Scott Gradle
 If you prefer use Gradle, you can use our plugin (See a minimal example build.gradle file [here](https://github.com/dodie/scott/blob/master/scott-examples/junit4/build.gradle).):
 ```groovy
 plugins {
-  id "hu.advanceweb.scott-plugin" version "3.4.0"
+  id "hu.advanceweb.scott-gradle-plugin" version "3.4.0"
 }
 ```
 
