@@ -6,6 +6,8 @@ to use Scott with Cucumber (```io.cucumber:cucumber-java```). (See [pom.xml](htt
 setup and the [FeatureTest](https://github.com/dodie/scott/blob/master/scott-examples/cucumber/src/test/java/hu/advancedweb/example/FeatureTest.java) for the ```@CucumberOptions```.)
 and a bunch of failing tests to demonstrate the detailed failure messages.
 
+For `info-cukes:cucumber-java` support, check [the other example project](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-info-cukes).
+
 Scott for Cucumber **tracks whole scenarios**, and in case of a failure it prints the details of every step involved.
 
 This feature provides valuable information if a test fails in a CI environment, as it can make it much easier to reproduce and fix browser-based tests, especially for flaky tests.
