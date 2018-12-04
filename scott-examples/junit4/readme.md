@@ -13,6 +13,7 @@ Run ``` mvn install ``` to see the tests failing.
 
 Demo
 ----
+The following snippets are from the console output of the example project:
 
 **Tracking object state:**
 ```java
