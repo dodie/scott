@@ -94,3 +94,29 @@ Scott instrumentation:  - instrumentToTrackVariableState of variable at 84: Loca
 Scott instrumentation:  - instrumentToTrackVariableState of variable at 85: LocalVariableScope [var=2, name=j, start=81, end=86]
 ...
 ```
+
+## Typical issues
+
+- If you see an exception in in the `hu.advancedweb.scott.instrumentation` package, chances are that Scott failed to instrument the test cases, and the tests did not even run.
+- If the test fails with a `java.lang.VerifyError`, it's a sign that the instrumentation phase finished, but the class files were modified in an illegal way. Example:
+```
+[ERROR] java.lang.VerifyError:
+[ERROR] Bad local variable type
+[ERROR] Exception Details:
+[ERROR] Location:
+[ERROR] hu/advancedweb/example/CounterTest.try_with_resources()V @246: aload
+[ERROR] Reason:
+[ERROR] Type top (current frame, locals[4]) is not assignable to reference type
+[ERROR] Current Frame:
+[ERROR] bci: @246
+[ERROR] flags: { }
+[ERROR] locals: { 'hu/advancedweb/example/CounterTest', 'java/lang/Throwable', 'java/lang/Throwable', 'java/io/ByteArrayOutputStream' }
+[ERROR] stack: { 'java/io/ByteArrayOutputStream' }
+[ERROR] Bytecode:
+[ERROR] 0000000: 1255 1270 b800 5c01 4c01 4dbb 002b 59b7
+[ERROR] 0000010: 002d 4e12 7112 7212 7312 70b8 0063 2d12
+[ERROR] 0000020: 7212 7312 70b8 0067 bb00 2e59 2d2d 1272
+[ERROR] 0000030: 1273 1270 b800 67b7 0030 3a04 1274 1275
+```
+- If an exception happens in `hu.advancedweb.scott.runtime`, it's a sign that the instrumentation works, but when it tries to call Scott's runtime methods, something goes wrong.
+- If the tests work as expected, but there is no output, or something seems to be missing from the recording, it can indicate either a rendering issue, or it might be that the instrumentation did not happen correctly.
