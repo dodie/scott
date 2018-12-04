@@ -43,7 +43,7 @@ so you can worry much less about expressing assertions, and still have meaningfu
 
 Supports [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4),
 [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5),
-and [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber),
+and [Cucumber Java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber),
 on Java 7, Java 8, and Java 11.
 
 
@@ -98,7 +98,8 @@ For complete examples see the following:
 
 - [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4)
 - [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5)
-- [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber)
+- [Cucumber Java (io.cucumber:cucumber-java)](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber) and
+  [info-cukes:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-info-cukes)
 
 For a quick demo check out and ```mvn install``` one of these example projects, as they not only
 contain the required setup configuration (see the ```pom.xml``` files), but a bunch of failing tests for the show.
@@ -115,7 +116,7 @@ This feature provides valuable information if a test fails in a CI environment, 
 
 ![HTML](https://github.com/dodie/scott-showcase/blob/master/cucumber_html_main.jpeg "HTML")
 
-See the [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber) example project for details.
+See the [Cucumber Java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber) example project for details.
 
 
 Features
@@ -170,10 +171,10 @@ See [Releases](https://github.com/dodie/scott/releases).
 
 **Highlights from the latest releases:**
 
-- Java 9 support
+- Java 11 support
 - [Gradle Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
 - [Maven Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
-- Scott Cucumber JVM now records [whole scenarios](https://github.com/dodie/scott/tree/master/scott-examples/cucumber)
+- Scott Cucumber Java now records [whole scenarios](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber), supports [io.cucumber:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber) and [info.cukes:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-info-cukes)
 - [Customizable tracking behavior](https://github.com/dodie/scott/blob/master/docs/usage.md#configuring-the-automatic-tracking-behavior-with-the-maven-plugin)
 
 
