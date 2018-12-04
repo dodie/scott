@@ -110,7 +110,7 @@ For configuration options and alternative ways of using Scott, see
 
 ### Cucumber
 
-Scott for Cucumber tracks whole scenarios, and in case of a failure it prints the details of every step involved.
+Scott for Cucumber tracks **whole scenarios**, and in case of a failure it prints the details of every step involved.
 
 This feature provides valuable information if a test fails in a CI environment, as it can make it much easier to reproduce and fix browser-based tests, especially for flaky tests.
 
