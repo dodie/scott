@@ -52,11 +52,11 @@ and build the project with all the tests by issueing the following on the **root
 mvn clean install
 ```
 
-This test suite is responsible for making Scott crash-free, and verify that
+This [test suite](https://github.com/dodie/scott/tree/master/scott-tests) is responsible for making Scott crash-free, and verify that
 the correct values are recorded during test execution. The report rendering part is not examined
 in this test suite.
 
-The correct rendering can be ensured by running the example test suites in the ```scott-examples``` directory,
+The correct rendering can be ensured by running the example test suites in the [scott-examples](https://github.com/dodie/scott/tree/master/scott-examples) directory,
 and examining their outputs manually. These projects also serve as an example about using Scott with various tools
 in your projects.
 
