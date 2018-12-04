@@ -83,6 +83,6 @@ Scott instrumentation:  - instrumentToTrackVariableState of variable at 85: Loca
 
 # Recommended Tools
 
-- [Bytecode Outline](https://marketplace.eclipse.org/content/bytecode-outline) plugin for Eclipse
+- [ASM Bytecode Outline](https://marketplace.eclipse.org/content/bytecode-outline) plugin for Eclipse
 - [ASM Bytecode Outline](https://plugins.jetbrains.com/plugin/5918-asm-bytecode-outline) plugin for IntelliJ IDEA
 - [javap](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javap.html) Java Class File Disassembler
