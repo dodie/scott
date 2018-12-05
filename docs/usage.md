@@ -1,71 +1,5 @@
-# Recommended: Scott Maven Plugin
-The recommended way to use Scott is the **Scott Maven Plugin**. Just add the following to your ```pom.xml``` file.
-
-```xml
-<build>
-	<plugins>
-		<!-- Add the Scott Plugin. -->
-		<plugin>
-			<groupId>hu.advancedweb</groupId>
-			<artifactId>scott-maven-plugin</artifactId>
-			<version>${scott.version}</version>
-			<executions>
-				<execution>
-					<goals>
-						<goal>prepare-agent</goal>
-					</goals>
-				</execution>
-			</executions>
-		</plugin>
-	</plugins>
-</build>
-<dependencies>
-	<!-- Add Scott as a dependency -->
-	<dependency>
-		<groupId>hu.advancedweb</groupId>
-		<artifactId>scott</artifactId>
-		<version>${scott.version}</version>
-		<scope>test</scope>
-	</dependency>
-</dependencies>
-```
-
-# Scott Gradle Plugin
-You can use Scott with the **Scott Gradle Plugin**. Just add the following to your ```build.gradle``` file.
-
-```groovy
-plugins {
-  id "hu.advanceweb.scott-plugin" version "${scott.version}"
-}
-```
-
-For complete examples see the following examples:
-
-- [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4)
-- [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5)
-- [Cucumber JVM](https://github.com/dodie/scott/tree/master/scott-examples/cucumber)
-
-
-## Configuration
-
-By default the instrumentation happens automatically for JUnit4, JUnit5 test methods and Cucumber Steps to collect the data.
-
-For every JUnit4 test, it also injects the [ScottReportingRule](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottReportingRule.java) to produce the nice, detailed error messages in case of a failure, based on the collected data.
-Similarly, for every JUnit5 test, it injects the [ScottJUnit5Extension](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottJUnit5Extension.java) for the same reason.
-
-So, by default there is no need for additional configuration to use Scott with JUnit4 or JUnit5 tests.
-
-However, the reporting for Cucumber JVM is based on the
-[formatter configuration](https://github.com/dodie/scott/blob/master/scott-examples/cucumber/src/test/java/hu/advancedweb/example/FeatureTest.java#L15) of the Cucumber runner, so it can't be done automatically. For this to work, you must manually specify at least one of the formatters Scott provide:
-
-- [ScottCucumberJSONFormatter](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottCucumberJSONFormatter.java)
-- [ScottCucumberHTMLFormatter](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottCucumberHTMLFormatter.java)
-- [ScottCucumberPrettyFormatter](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/runtime/ScottCucumberPrettyFormatter.java)
-
-See the [Cucumber Example Test](https://github.com/dodie/scott/blob/master/scott-examples/cucumber/src/test/java/hu/advancedweb/example/FeatureTest.java) for more info.
-
-
-### Configuring the automatic tracking behavior
+# Configuration
+## Configuring the automatic tracking behavior
 In case you are not satisfied with the default tracking behavior, the Scott Maven Plugin and Gradle Plugin provides configuration
 options:
 
@@ -118,7 +52,7 @@ scott {
 
 Here, we override the scoot version using the `toolVersion` property and also set the `trackMethodAnnotations` parameter describe above. 
 
-### Configuring the automatic tracking behavior with command line arguments
+## Configuring the automatic tracking behavior with command line arguments
 The automatic tracking behavior can also be customized by supplying the following configuration parameters:
 
 | Parameter name  | Description   | Default value |
