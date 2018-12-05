@@ -106,7 +106,7 @@ For a quick demo check out and ```mvn install``` one of these example projects, 
 contain the required setup configuration (see the ```pom.xml``` files), but a bunch of failing tests for the show.
 
 For configuration options and alternative ways of using Scott, see
-[this](https://github.com/dodie/scott/blob/master/docs/usage.md) guide.
+[this](https://github.com/dodie/scott/blob/master/docs/configuration.md) guide.
 
 
 ### Cucumber
@@ -176,7 +176,7 @@ See [Releases](https://github.com/dodie/scott/releases).
 - [Gradle Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
 - [Maven Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
 - Scott Cucumber Java now records [whole scenarios](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber), supports [io.cucumber:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber) and [info.cukes:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-info-cukes)
-- [Customizable tracking behavior](https://github.com/dodie/scott/blob/master/docs/usage.md#configuring-the-automatic-tracking-behavior-with-the-maven-plugin)
+- [Customizable tracking behavior](https://github.com/dodie/scott/blob/master/docs/configuration.md#configuring-the-automatic-tracking-behavior-with-the-maven-plugin)
 
 
 Contributing
