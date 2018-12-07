@@ -1,6 +1,6 @@
 # Specify Scott agent as a command-line argument
 
-If you can't use the Maven Plugin for some reason, you can do the necessary steps manually.
+If you can't use the Gradle or Maven Plugin for some reason, you can do the necessary steps manually.
 
 1. Get Scott as a dependency.
 2. Extract scott-agent.jar.
