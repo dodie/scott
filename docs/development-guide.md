@@ -95,6 +95,14 @@ Scott instrumentation:  - instrumentToTrackVariableState of variable at 85: Loca
 ...
 ```
 
+## Compare results with original bytecode
+
+You can run the [TestClassTransformer](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/instrumentation/transformation/TestClassTransformer.java) as a standalone application to process a class file with Scott.
+It takes two arguments: one for the path of a class file and one for the path where it will write the results.
+
+Then, you can easily compare the original and the instrumented class files with `javap`.
+
+
 ## Typical issues
 
 - If you see an exception in in the `hu.advancedweb.scott.instrumentation` package, chances are that Scott failed to instrument the test cases, and the tests did not even run.
