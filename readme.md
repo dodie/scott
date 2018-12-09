@@ -54,8 +54,25 @@ After including Scott to the build flow, it automatically creates the detailed f
 All you have to do is to write tests in Java with simple assertions or using your favorite testing library
 and run them as you would do normally. Scott will do its magic behind the scenes.
 
-The recommended way to use Scott is the **Scott Maven Plugin** or **Scott Gradle Plugin**. With the former just add the following to your ```pom.xml``` file. (See a minimal example pom file [here](https://github.com/dodie/scott/blob/master/scott-examples/junit4/pom.xml).)
 
+### Gradle
+The recommended way to use Scott is the **Scott Maven Plugin** or **Scott Gradle Plugin**.
+
+Add the following snippet to your [build.gradle](https://github.com/dodie/scott/blob/master/scott-examples/junit4/build.gradle)):
+```groovy
+plugins {
+  id "hu.advanceweb.scott-gradle-plugin" version "3.4.0"
+}
+```
+
+Example projects:
+- [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4)
+- [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5)
+
+
+### Maven
+
+Add the following to your [pom.xml](https://github.com/dodie/scott/blob/master/scott-examples/junit4/pom.xml):
 ```xml
 <build>
 	<plugins>
@@ -85,27 +102,9 @@ The recommended way to use Scott is the **Scott Maven Plugin** or **Scott Gradle
 </dependencies>
 ```
 
-
-If you prefer use Gradle, you can use our plugin (See a minimal example build.gradle file [here](https://github.com/dodie/scott/blob/master/scott-examples/junit4/build.gradle).):
-```groovy
-plugins {
-  id "hu.advanceweb.scott-gradle-plugin" version "3.4.0"
-}
-```
-
-
-For complete examples see the following:
-
+Example projects:
 - [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4)
 - [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5)
-- [Cucumber Java (io.cucumber:cucumber-java)](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber) and
-  [info-cukes:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-info-cukes)
-
-For a quick demo check out and ```mvn install``` one of these example projects, as they not only
-contain the required setup configuration (see the ```pom.xml``` files), but a bunch of failing tests for the show.
-
-For configuration options and alternative ways of using Scott, see
-[this](https://github.com/dodie/scott/blob/master/docs/usage.md) guide.
 
 
 ### Cucumber
@@ -116,7 +115,19 @@ This feature provides valuable information if a test fails in a CI environment, 
 
 ![HTML](https://github.com/dodie/scott-showcase/blob/master/cucumber_html_main.jpeg "HTML")
 
-See the [Cucumber Java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber) example project for details.
+Example projects with Cucumber tests:
+- [io.cucumber:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber)
+- [info-cukes:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-info-cukes)
+
+
+### Wire it up manually
+
+If you can't use the Gradle or Maven Plugin for some reason, you can do the necessary steps [manually](https://github.com/dodie/scott/blob/master/docs/manually_specify_agent.md).
+
+
+Configuration
+-------------
+In case you are not satisfied with the default tracking behavior, the Scott Maven Plugin and Gradle Plugin provides [configuration options](https://github.com/dodie/scott/blob/master/docs/configuration.md) to fine-tune its behaviour.
 
 
 Features
@@ -175,7 +186,7 @@ See [Releases](https://github.com/dodie/scott/releases).
 - [Gradle Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
 - [Maven Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
 - Scott Cucumber Java now records [whole scenarios](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber), supports [io.cucumber:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber) and [info.cukes:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-info-cukes)
-- [Customizable tracking behavior](https://github.com/dodie/scott/blob/master/docs/usage.md#configuring-the-automatic-tracking-behavior-with-the-maven-plugin)
+- [Customizable tracking behavior](https://github.com/dodie/scott/blob/master/docs/configuration.md#configuring-the-automatic-tracking-behavior-with-the-maven-plugin)
 
 
 Contributing

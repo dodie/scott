@@ -3,7 +3,7 @@ Scott Test Reporter - Cucumber Example project
 
 This project contains the necessary configuration
 to use Scott with Cucumber (```io.cucumber:cucumber-java```). (See [pom.xml](https://github.com/dodie/scott/blob/master/scott-examples/cucumber/pom.xml) for the project
-setup and the [FeatureTest](https://github.com/dodie/scott/blob/master/scott-examples/cucumber/src/test/java/hu/advancedweb/example/FeatureTest.java) for the ```@CucumberOptions```.)
+setup and the [FeatureTest](https://github.com/dodie/scott/blob/master/scott-examples/cucumber-cucumber-io/src/test/java/hu/advancedweb/example/FeatureTest.java) for the ```@CucumberOptions```.)
 and a bunch of failing tests to demonstrate the detailed failure messages.
 
 For `info-cukes:cucumber-java` support, check [the other example project](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-info-cukes).
