@@ -63,9 +63,11 @@ in your projects.
 
 # Recommended Tools
 
-- [ASM Bytecode Outline](https://marketplace.eclipse.org/content/bytecode-outline) plugin for Eclipse
-- [ASM Bytecode Outline](https://plugins.jetbrains.com/plugin/5918-asm-bytecode-outline) plugin for IntelliJ IDEA
-- [javap](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javap.html) Java Class File Disassembler
+- [ASM Bytecode Outline plugin for Eclipse](https://marketplace.eclipse.org/content/bytecode-outline) or
+  [ASM Bytecode Outline plugin for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/5918-asm-bytecode-outline):
+  amongst many things, it displays the bytecode of the selected method and class as you navigate around.
+- [javap, the Java Class File Disassembler](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javap.html):
+  the easiest way to check the contents of a class file.
 
 
 # Tips for Bug Hunting
@@ -95,12 +97,36 @@ Scott instrumentation:  - instrumentToTrackVariableState of variable at 85: Loca
 ...
 ```
 
+
 ## Compare results with original bytecode
 
-You can run the [TestClassTransformer](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/instrumentation/transformation/TestClassTransformer.java) as a standalone application to process a class file with Scott.
+You can run the [TestClassTransformer](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/debug/runner/TestClassTransformerRunner.java) as a standalone application to process a class file with Scott.
+
+
+```
+mvn exec:java -Dexec.mainClass="hu.advancedweb.scott.debug.runner.TestClassTransformerRunner" -Dexec.args="<tests_dir>/target/test-classes/hu/ExampleTest.class <tests_dir>/target/test-classes/hu/ExampleTestInstrumented.class"
+```
+
 It takes two arguments: one for the path of a class file and one for the path where it will write the results.
 
-Then, you can easily compare the original and the instrumented class files with `javap`.
+Then, you can easily compare the original and the instrumented class files.
+
+
+## Investigate the contents of a class file
+
+The simplest way is to use `javap`. For example:
+
+```
+javap -c -l hu.advancedweb.scott.ExampleTest
+```
+
+To see a class file exactly as Scott does, you can use the [ClassFileStructurePrinter](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/debug/printer/ClassFileStructurePrinter.java). For example:
+
+```
+mvn exec:java -Dexec.mainClass="hu.advancedweb.scott.debug.printer.ClassFileStructurePrinter" -Dexec.args="<tests_dir>/target/test-classes/hu/ExampleTest.class"
+```
+
+ The tool takes a single argument, and prints its structure by relying on ASM's [Textifier](https://static.javadoc.io/org.ow2.asm/asm/5.2/org/objectweb/asm/util/Textifier.html).
 
 
 ## Typical issues
@@ -128,3 +154,4 @@ Then, you can easily compare the original and the instrumented class files with 
 ```
 - If an exception happens in `hu.advancedweb.scott.runtime`, it's a sign that the instrumentation works, but when it tries to call Scott's runtime methods, something goes wrong.
 - If the tests work as expected, but there is no output, or something seems to be missing from the recording, it can indicate either a rendering issue, or it might be that the instrumentation did not happen correctly.
+
