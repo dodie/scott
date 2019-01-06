@@ -35,7 +35,7 @@ Scott has integration for JUnit4, JUnit5 and Cucumber Java. For details, see the
 
 For the above to work, the ```Scott Agent``` has to be passed as a ```-javaagent``` to the application. 
 The [Scott Maven Plugin](https://github.com/dodie/scott/tree/master/scott-maven-plugin) helps to automatize this job.
-For details see the [usage guide](https://github.com/dodie/scott/blob/master/docs/usage.md).
+For details see the [related usage guide](https://github.com/dodie/scott/blob/master/docs/manually_specify_agent.md).
 
 
 # Project Layout and Building from Source
@@ -98,7 +98,7 @@ Scott instrumentation:  - instrumentToTrackVariableState of variable at 85: Loca
 ```
 
 
-## Compare results with original bytecode
+## Compare instrumented and original bytecode
 
 You can run the [TestClassTransformer](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/debug/runner/TestClassTransformerRunner.java) as a standalone application to process a class file with Scott.
 
@@ -120,7 +120,7 @@ The simplest way is to use `javap`. For example:
 javap -c -l hu.advancedweb.scott.ExampleTest
 ```
 
-To see a class file exactly as Scott does, you can use the [ClassFileStructurePrinter](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/debug/printer/ClassFileStructurePrinter.java). For example:
+Or, to see a class file exactly as Scott does, you can use the [ClassFileStructurePrinter](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/debug/printer/ClassFileStructurePrinter.java). For example:
 
 ```
 mvn exec:java -Dexec.mainClass="hu.advancedweb.scott.debug.printer.ClassFileStructurePrinter" -Dexec.args="<tests_dir>/target/test-classes/hu/ExampleTest.class"
