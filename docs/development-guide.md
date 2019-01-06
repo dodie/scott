@@ -61,6 +61,38 @@ and examining their outputs manually. These projects also serve as an example ab
 in your projects.
 
 
+## Build and test the Gradle Plugin
+
+You can build a customized version of Scott, then try it out fairly easily if you'd like to use it in a Maven Project.
+However, using it with the Gradle Plugin is a bit trickier:
+
+1. Build the Scott core module
+```
+cd <scott_project_directory>/scott
+mvn clean install
+```
+
+2. Build the Gradle Plugin
+```
+cd <scott_project_directory>/scott-gradle-plugin
+./gradlew build
+```
+
+3. Modify your Gradle based test project to use this Plugin:
+```
+buildscript{
+    dependencies{
+        classpath fileTree(dir:'<project_dir>/scott-gradle-plugin/build/libs', include: ['*.jar'])
+    }
+}
+apply plugin: 'hu.advancedweb.scott-gradle-plugin'
+
+repositories {
+    mavenLocal()
+}
+```
+
+
 # Recommended Tools
 
 - [ASM Bytecode Outline plugin for Eclipse](https://marketplace.eclipse.org/content/bytecode-outline) or
