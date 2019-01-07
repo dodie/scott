@@ -45,7 +45,7 @@ With Gradle you can provide these configuration to the plugin by adding an exten
 
 ```groovy
 scott {
-    toolVersion ='3.4.0'
+    toolVersion ='3.4.1'
     trackMethodAnnotations = ['org.junit.Test', 'cucumber.api.java.*']
 }
 ```

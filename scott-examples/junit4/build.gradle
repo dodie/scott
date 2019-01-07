@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id "hu.advancedweb.scott-gradle-plugin" version "3.4.0"
+    id "hu.advancedweb.scott-gradle-plugin" version "3.4.1"
 }
 
 group 'hu.advancedweb'

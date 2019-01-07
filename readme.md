@@ -61,7 +61,7 @@ The recommended way to use Scott is the **Scott Maven Plugin** or **Scott Gradle
 Add the following snippet to your [build.gradle](https://github.com/dodie/scott/blob/master/scott-examples/junit4/build.gradle)):
 ```groovy
 plugins {
-  id "hu.advanceweb.scott-gradle-plugin" version "3.4.0"
+  id "hu.advanceweb.scott-gradle-plugin" version "3.4.1"
 }
 ```
 
@@ -80,7 +80,7 @@ Add the following to your [pom.xml](https://github.com/dodie/scott/blob/master/s
 		<plugin>
 			<groupId>hu.advancedweb</groupId>
 			<artifactId>scott-maven-plugin</artifactId>
-			<version>3.4.0</version>
+			<version>3.4.1</version>
 			<executions>
 				<execution>
 					<goals>
@@ -96,7 +96,7 @@ Add the following to your [pom.xml](https://github.com/dodie/scott/blob/master/s
 	<dependency>
 		<groupId>hu.advancedweb</groupId>
 		<artifactId>scott</artifactId>
-		<version>3.4.0</version>
+		<version>3.4.1</version>
 		<scope>test</scope>
 	</dependency>
 </dependencies>
