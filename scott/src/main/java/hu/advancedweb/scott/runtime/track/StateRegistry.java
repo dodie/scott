@@ -131,9 +131,14 @@ public class StateRegistry {
 	
 	public static void trackFieldState(Object value, String name, int lineNumber, boolean isStatic, String owner) {
 		final String key = getFieldKey(name, isStatic, owner);
-		FIELD_STATES.add(new StateData(lineNumber, objectToString(value), key));
+		
+		String stringValue = objectToStringIgnoreMockitoExceptions(value);
+		
+		if (stringValue != null) {
+			FIELD_STATES.add(new StateData(lineNumber, stringValue, key));
+		}
 	}
-
+	
 	private static String getFieldKey(String name, boolean isStatic, String owner) {
 		final String key;
 		if (isStatic) {

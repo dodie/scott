@@ -162,6 +162,19 @@ public class MockitoTest {
 		verify(holder.t, times(1)).bar();
 		verify(holder.t, times(1)).bar("42");
 	}
+	
+	Foo mockInField;
+	@Test
+	public void simpleMockInField() throws Exception {
+		mockInField = mock(Foo.class);
+		when(mockInField.bar()).thenReturn("42");
+
+		String result = mockInField.bar();
+		assertThat(TestHelper.getLastRecordedStateForVariable("result"), equalTo(wrapped("42")));
+
+		assertEquals("42", result);
+		verify(mockInField, times(1)).bar();
+	}
 
 	public static class MockHolder<T> {
 		final T t;
