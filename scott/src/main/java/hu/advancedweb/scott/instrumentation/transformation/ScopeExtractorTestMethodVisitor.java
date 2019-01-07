@@ -85,7 +85,11 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 		if (VariableType.isStoreOperation(opcode)) {
 			lineNumerToFirstOccurrenceOfVariables.putIfAbsent(var, this.lineNumber);
 			varAccesses.putIfAbsent(var, new ArrayList<Label>());
-			varAccesses.get(var).add(this.labels.get(this.labels.size() - 1));
+			
+			// In some cases a single visitVarInsn happens before the first visitLabel. See Issue #57.
+			if (!this.labels.isEmpty()) {
+				varAccesses.get(var).add(this.labels.get(this.labels.size() - 1));
+			}
 		}
 		super.visitVarInsn(opcode, var);
 	}
