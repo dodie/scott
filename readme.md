@@ -57,15 +57,12 @@ and run them as you would do normally. Scott will do its magic behind the scenes
 
 ### Gradle
 
-Add the following snippet to your [build.gradle](https://github.com/dodie/scott/blob/master/scott-examples/junit4/build.gradle):
+Add [hu.advanceweb.scott-gradle-plugin](https://plugins.gradle.org/plugin/hu.advancedweb.scott-gradle-plugin) to your [build.gradle](https://github.com/dodie/scott/blob/master/scott-examples/junit4/build.gradle):
 ```groovy
 plugins {
   id "hu.advanceweb.scott-gradle-plugin" version "3.4.1"
 }
 ```
-
-More examples:
-- [Gradle Plugin Portal](https://plugins.gradle.org/plugin/hu.advancedweb.scott-gradle-plugin)
 
 Example projects:
 - [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4)
