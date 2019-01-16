@@ -56,7 +56,6 @@ and run them as you would do normally. Scott will do its magic behind the scenes
 
 
 ### Gradle
-The recommended way to use Scott is the **Scott Maven Plugin** or **Scott Gradle Plugin**.
 
 Add the following snippet to your [build.gradle](https://github.com/dodie/scott/blob/master/scott-examples/junit4/build.gradle)):
 ```groovy
