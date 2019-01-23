@@ -7,30 +7,6 @@ Scott Test Reporter
 
 Scott provides failure messages containing **all state changes** for tests written in Java to get meaningful errors even **without assertion libraries**. All information is **presented on the source code of the test method** as comments.
 
-Consider this failing test case:
-
-```java
-@Test
-public void myTest() {
-	Integer[] myArray = new Integer[] { 1, 4, 2, 4 };
-	List<Integer> myList = Arrays.asList(myArray);
-
-	Set<Integer> mySet = new HashSet<>(myList);
-	mySet.remove(4);
-
-	assertTrue(mySet.contains(4));
-}
-```
-
-Normally it just produces an assertion error without a meaningful message.
-```
-myTest(hu.advancedweb.example.ListTest)  Time elapsed: 0.028 sec  <<< FAILURE!
-java.lang.AssertionError
-        at hu.advancedweb.example.ListTest.myTest(ListTest.java:25)
-```
-
-But **with Scott**, it shows the following:
-
 ```java
 myTest(hu.advancedweb.example.ListTest) Time elapsed: 0.028 sec  <<< FAILURE!
 java.lang.AssertionError: 
