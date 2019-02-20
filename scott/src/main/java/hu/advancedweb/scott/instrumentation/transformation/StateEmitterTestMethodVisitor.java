@@ -18,6 +18,7 @@ import org.objectweb.asm.Opcodes;
  */
 public class StateEmitterTestMethodVisitor extends MethodVisitor {
 
+	private static final String TRACKER_CLASS = "hu/advancedweb/scott/runtime/track/StateRegistry";
 	private int lineNumber;
 	private int lineNumberForMethodCallTrack;
 
@@ -175,7 +176,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		Logger.log(" - instrumentToClearTrackedDataAndSignalStartOfRecording");
 		super.visitLdcInsn(className);
 		super.visitLdcInsn(methodName);
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "startTracking", "(Ljava/lang/String;Ljava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "startTracking", "(Ljava/lang/String;Ljava/lang/String;)V", false);
 	}
 	
 	@Override
@@ -195,7 +196,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		Logger.log(" - instrumentToTrackMethodStart of " + methodName + " at " + lineNumber);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(methodName);
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackMethodStart", "(ILjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackMethodStart", "(ILjava/lang/String;)V", false);
 	}
 	
 	private void instrumentToTrackVariableState(LocalVariableScope localVariableScope, int lineNumber) {
@@ -204,7 +205,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitLdcInsn(getLineNumberBoundedByScope(lineNumber, localVariableScope));
 		super.visitLdcInsn(localVariableScope.var);
 		super.visitLdcInsn(methodName);
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackLocalVariableState", "(" + localVariableScope.variableType.desc + "IILjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackLocalVariableState", "(" + localVariableScope.variableType.desc + "IILjava/lang/String;)V", false);
 	}
 	
 	private int getLineNumberBoundedByScope(int lineNumber, LocalVariableScope localVariableScope) {
@@ -253,7 +254,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitLdcInsn(accessedField.owner);
 		
 		// Call tracking code
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;IZLjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;IZLjava/lang/String;)V", false);
 	}
 	
 	private boolean isCurrentClassIsFieldOwnerOrInnerClassOfFieldOwner(String owner) {
@@ -273,7 +274,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitLdcInsn(accessedField.owner);
 		
 		// Call tracking code
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;IZLjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;IZLjava/lang/String;)V", false);
 	}
 
 	private String getFieldDescriptor(AccessedField accessedField) {
@@ -290,7 +291,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitLdcInsn(getLineNumberBoundedByScope(lineNumber, localVariableScope));
 		super.visitLdcInsn(localVariableScope.var);
 		super.visitLdcInsn(methodName);
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, "hu/advancedweb/scott/runtime/track/StateRegistry", "trackVariableName", "(Ljava/lang/String;IILjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackVariableName", "(Ljava/lang/String;IILjava/lang/String;)V", false);
 	}
 	
 	private boolean isVariableInScope(int var) {
