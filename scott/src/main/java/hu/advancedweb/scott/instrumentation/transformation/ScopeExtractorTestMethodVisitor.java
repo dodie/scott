@@ -83,8 +83,8 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 	@Override
 	public void visitVarInsn(int opcode, int var) {
 		if (VariableType.isStoreOperation(opcode)) {
-			lineNumerToFirstOccurrenceOfVariables.putIfAbsent(var, this.lineNumber);
-			varAccesses.putIfAbsent(var, new ArrayList<Label>());
+			putIfAbsent(lineNumerToFirstOccurrenceOfVariables, var, this.lineNumber);
+			putIfAbsent(varAccesses, var, new ArrayList<Label>());
 			
 			// In some cases a single visitVarInsn happens before the first visitLabel. See Issue #57.
 			if (!this.labels.isEmpty()) {
@@ -93,6 +93,12 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 		}
 		super.visitVarInsn(opcode, var);
 	}
+	
+	private static <K, V> void putIfAbsent(Map<K, V> map, K key, V value) {
+        if (!map.containsKey(key)) {
+            map.put(key, value);
+        }
+    }
 
 	@Override
 	public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
