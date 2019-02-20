@@ -29,7 +29,7 @@ public class TestClassTransformer implements ClassFileTransformer {
 		} else {
 			try {
 				TransformationParameters transformationParameters = calculateTransformationParameters(classfileBuffer);
-			    return transform(classfileBuffer, transformationParameters);
+				return transform(classfileBuffer, transformationParameters);
 			} catch (Exception e) {
 				System.err.println("Scott: test instrumentation failed for " + className + "!");
 				e.printStackTrace();
@@ -40,8 +40,8 @@ public class TestClassTransformer implements ClassFileTransformer {
 
 	private TransformationParameters calculateTransformationParameters(byte[] classfileBuffer) {
 		TransformationParameters.Builder transformationParameters = new TransformationParameters.Builder();
-	    ClassVisitor discoveryClassVisitor = new DiscoveryClassVisitor(transformationParameters);
-	    new ClassReader(classfileBuffer).accept(discoveryClassVisitor, 0);
+		ClassVisitor discoveryClassVisitor = new DiscoveryClassVisitor(transformationParameters);
+		new ClassReader(classfileBuffer).accept(discoveryClassVisitor, 0);
 		return transformationParameters.build();
 	}
 	
