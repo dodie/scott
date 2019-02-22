@@ -145,3 +145,4 @@ Contributions are welcome! Please make sure to visit the
 [contribution](https://github.com/dodie/scott/tree/master/CONTRIBUTING.md) and 
 [development guide](https://github.com/dodie/scott/tree/master/docs/development-guide.md) for some important notes on how to build and debug Scott.
 If you are looking for issues that can get you started with the development, see [Issues marked with the help-wanted tag](https://github.com/dodie/scott/issues?q=is%3Aissue+label%3A%22help+wanted%22+is%3Aopen).
+
