@@ -6,3 +6,9 @@ target
 .settings
 pom.xml.asc
 dependency-reduced-pom.xml
+out
+.shelf
+.idea
+*.iml
+*.ipr
+*.iws
