@@ -64,7 +64,6 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		// track method arguments
 		for (LocalVariableScope localVariableScope : localVariableScopes) {
 			if (localVariableScope.start == 0) {
-				instrumentToTrackVariableName(localVariableScope, lineNumber);
 				instrumentToTrackVariableState(localVariableScope, lineNumber);
 			}
 		}
@@ -157,7 +156,6 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 				 * then the variable name is not present in the compiled bytecode.
 				 * With this workaround Scott can still track the assigned value to such variables.
 				 */
-				instrumentToTrackVariableName(lvs, lineNumber);
 				instrumentToTrackVariableState(lvs, lineNumber);
 			}
 		}
@@ -202,10 +200,10 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 	private void instrumentToTrackVariableState(LocalVariableScope localVariableScope, int lineNumber) {
 		Logger.log(" - instrumentToTrackVariableState of variable at " + getLineNumberBoundedByScope(lineNumber, localVariableScope) + ": " + localVariableScope);
 		super.visitVarInsn(localVariableScope.variableType.loadOpcode, localVariableScope.var);
+		super.visitLdcInsn(localVariableScope.name);
 		super.visitLdcInsn(getLineNumberBoundedByScope(lineNumber, localVariableScope));
-		super.visitLdcInsn(localVariableScope.var);
 		super.visitLdcInsn(methodName);
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackLocalVariableState", "(" + localVariableScope.variableType.desc + "IILjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackLocalVariableState", "(" + localVariableScope.variableType.desc + "Ljava/lang/String;ILjava/lang/String;)V", false);
 	}
 	
 	private int getLineNumberBoundedByScope(int lineNumber, LocalVariableScope localVariableScope) {
@@ -250,11 +248,12 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		// Put other params to the stack
 		super.visitLdcInsn(accessedField.name);
 		super.visitLdcInsn(lineNumber);
+		super.visitLdcInsn(methodName);
 		super.visitLdcInsn(accessedField.isStatic);
 		super.visitLdcInsn(accessedField.owner);
 		
 		// Call tracking code
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;IZLjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;ILjava/lang/String;ZLjava/lang/String;)V", false);
 	}
 	
 	private boolean isCurrentClassIsFieldOwnerOrInnerClassOfFieldOwner(String owner) {
@@ -270,11 +269,12 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		// Put other params to the stack
 		super.visitLdcInsn(accessedField.name);
 		super.visitLdcInsn(lineNumber);
+		super.visitLdcInsn(methodName);
 		super.visitLdcInsn(accessedField.isStatic);
 		super.visitLdcInsn(accessedField.owner);
 		
 		// Call tracking code
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;IZLjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;ILjava/lang/String;ZLjava/lang/String;)V", false);
 	}
 
 	private String getFieldDescriptor(AccessedField accessedField) {
@@ -283,15 +283,6 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		} else {
 			return accessedField.desc;
 		}
-	}
-	
-	private void instrumentToTrackVariableName(LocalVariableScope localVariableScope, int lineNumber) {
-		Logger.log(" - instrumentToTrackVariableName at " + getLineNumberBoundedByScope(lineNumber, localVariableScope) + ": " + localVariableScope);
-		super.visitLdcInsn(localVariableScope.name);
-		super.visitLdcInsn(getLineNumberBoundedByScope(lineNumber, localVariableScope));
-		super.visitLdcInsn(localVariableScope.var);
-		super.visitLdcInsn(methodName);
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackVariableName", "(Ljava/lang/String;IILjava/lang/String;)V", false);
 	}
 	
 	private boolean isVariableInScope(int var) {
