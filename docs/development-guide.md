@@ -35,7 +35,7 @@ Scott has integration for JUnit4, JUnit5 and Cucumber Java. For details, see the
 
 For the above to work, the ```Scott Agent``` has to be passed as a ```-javaagent``` to the application. 
 The [Scott Maven Plugin](https://github.com/dodie/scott/tree/master/scott-maven-plugin) helps to automatize this job.
-For details see the [related usage guide](https://github.com/dodie/scott/blob/master/docs/manually_specify_agent.md).
+For details see the [related usage guide](https://github.com/dodie/scott/blob/master/docs/manual_setup.md).
 
 
 # Project Layout and Building from Source
