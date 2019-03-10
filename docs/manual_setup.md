@@ -1,4 +1,4 @@
-# Wire it up manually
+# Manual setup
 
 Although Scott has Gradle and Maven plugins to ease integration (check this guide for more information [here](https://github.com/dodie/scott)), it is possible to integrate it manually, to have full control over the instrumentation.
 
