@@ -65,37 +65,35 @@ public class FailureRenderer {
 		Map<String, String> trackedValue = new HashMap<>();
 		
 		for (StateData event : StateRegistry.getLocalVariableStates()) {
-			String lastValue = trackedValue.get(event.key);
+			String lastValue = trackedValue.get(event.name);
 			if (!event.value.equals(lastValue)) {
 				if (event.lineNumber == 0) {
-					scottReport.addInitialSnapshot(getInitLine(event), StateRegistry.getLocalVariableName(event.key, event.lineNumber), event.value);
+					scottReport.addInitialSnapshot(getInitLine(event), event.name, event.value);
 				} else {
-					scottReport.addSnapshot(event.lineNumber, StateRegistry.getLocalVariableName(event.key, event.lineNumber), event.value);
+					scottReport.addSnapshot(event.lineNumber, event.name, event.value);
 				}
-				trackedValue.put(event.key, event.value);
+				trackedValue.put(event.name, event.value);
 			}
 		}
 		
 		trackedValue = new HashMap<>();
 		
 		for (StateData event : StateRegistry.getFieldStates()) {
-			String lastValue = trackedValue.get(event.key);
+			String lastValue = trackedValue.get(event.name);
 			if (!event.value.equals(lastValue)) {
 				if (event.lineNumber == 0) {
-					scottReport.addInitialSnapshot(0, event.key, event.value);
+					scottReport.addInitialSnapshot(0, event.name, event.value);
 				} else {
-					scottReport.addSnapshot(event.lineNumber, event.key, event.value);
+					scottReport.addSnapshot(event.lineNumber, event.name, event.value);
 				}
 			}
-			trackedValue.put(event.key, event.value);
+			trackedValue.put(event.name, event.value);
 		}
 	}
 	
 	private static int getInitLine(StateData event) {
-		final String methodScope = event.key.substring(0, event.key.indexOf("\\"));
-		
-		if (methodScope.startsWith("lambda$")) {
-			return StateRegistry.getMethodStartLine().get(methodScope);
+		if (event.methodName.startsWith("lambda$")) {
+			return StateRegistry.getMethodStartLine().get(event.methodName);
 		} else {
 			return 0;
 		}

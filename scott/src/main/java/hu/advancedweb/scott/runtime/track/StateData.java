@@ -9,22 +9,26 @@ public class StateData {
 
 	/** Line number where the data is collected. */
 	public final int lineNumber;
+	
+	/** Method where the data is collected. */
+	public final String methodName;
 
-	/** Unique identifier for the variable or field. */
-	public final String key;
+	/** Name of the variable or field. */
+	public final String name;
 	
 	/** Recorded value. */
 	public final String value;
 	
-	public StateData(int lineNumber, String value, String key) {
+	public StateData(int lineNumber, String methodName, String name, String value) {
 		this.lineNumber = lineNumber;
+		this.methodName = methodName;
+		this.name = name;
 		this.value = value;
-		this.key = key;
 	}
 
 	@Override
 	public String toString() {
-		return "StateData [lineNumber=" + lineNumber + ", key=" + key + ", value=" + value + "]";
+		return "StateData [lineNumber=" + lineNumber + ", methodName=" + methodName + ", name=" + name + ", value=" + value + "]";
 	}
-	
+
 }
