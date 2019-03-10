@@ -117,7 +117,7 @@ Example projects with Cucumber tests:
 
 ### Wire it up manually
 
-If you can't use the Gradle or Maven Plugin for some reason, you can do the necessary steps [manually](https://github.com/dodie/scott/blob/master/docs/manually_specify_agent.md).
+If you can't use the Gradle or Maven Plugin for some reason, you can do the necessary steps [manually](https://github.com/dodie/scott/blob/master/docs/manual_setup.md).
 
 
 Configuration
