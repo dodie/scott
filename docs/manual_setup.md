@@ -1,4 +1,14 @@
-# Specify Scott agent as a command-line argument
+# Manual setup
+
+Although Scott has Gradle and Maven plugins to ease integration (check this guide for more information [here](https://github.com/dodie/scott)), it is possible to integrate it manually, to have full control over the instrumentation.
+
+There are two options:
+
+1. Specify the agent manually
+2. Transform the classes after compilation
+
+
+## 1. Specify the agent manually
 
 If you can't use the Gradle or Maven Plugin for some reason, you can do the necessary steps manually.
 
@@ -6,7 +16,7 @@ If you can't use the Gradle or Maven Plugin for some reason, you can do the nece
 2. Extract scott-agent.jar.
 3. Specify the ```-javaagent:<path-to>/scott-agent.jar``` to your application.
 
-To do exactly this with Maven, see the following example.
+It can be done in multiple ways. For an example to do exactly this with Maven, see the following example.
 
 ```xml
 <build>
@@ -80,3 +90,11 @@ To do exactly this with Maven, see the following example.
 </dependencies>
 ```
 
+## 2. Transform the classes after compilation
+
+It's possible modify existing class files (or create new class files based on existing class files) to include the
+instrumentation.
+
+1. Get Scott as a dependency.
+2. Use the [ScottClassFileTransformer](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/instrumentation/ScottClassFileTransformer.java) to transform class files as part of the build process.
+3. Make sure to include Scott as a run-time dependency to your application for the instrumentation to work.

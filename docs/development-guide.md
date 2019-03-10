@@ -35,7 +35,7 @@ Scott has integration for JUnit4, JUnit5 and Cucumber Java. For details, see the
 
 For the above to work, the ```Scott Agent``` has to be passed as a ```-javaagent``` to the application. 
 The [Scott Maven Plugin](https://github.com/dodie/scott/tree/master/scott-maven-plugin) helps to automatize this job.
-For details see the [related usage guide](https://github.com/dodie/scott/blob/master/docs/manually_specify_agent.md).
+For details see the [related usage guide](https://github.com/dodie/scott/blob/master/docs/manual_setup.md).
 
 
 # Project Layout and Building from Source
@@ -132,16 +132,17 @@ Scott instrumentation:  - instrumentToTrackVariableState of variable at 85: Loca
 
 ## Compare instrumented and original bytecode
 
-You can run the [TestClassTransformer](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/debug/runner/TestClassTransformerRunner.java) as a standalone application to process a class file with Scott.
+You can run the [ScottClassFileTransformer](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/instrumentation/ScottClassFileTransformer.java) as a standalone application to process a class file with Scott.
 
 
 ```
-mvn exec:java -Dexec.mainClass="hu.advancedweb.scott.debug.runner.TestClassTransformerRunner" -Dexec.args="<tests_dir>/target/test-classes/hu/ExampleTest.class <tests_dir>/target/test-classes/hu/ExampleTestInstrumented.class"
+mvn exec:java -Dexec.mainClass="hu.advancedweb.scott.instrumentation.ScottClassFileTransformer" -Dexec.args="<tests_dir>/target/test-classes/hu/ExampleTest.class <tests_dir>/target/test-classes/hu/ExampleTestInstrumented.class"
 ```
 
-It takes two arguments: one for the path of a class file and one for the path where it will write the results.
-
-Then, you can easily compare the original and the instrumented class files.
+Its first parameter is the path of the source class file. If no other parameters are given, it will overwrite the
+source file with its instrumented version. If one additional parameter is supplied, it will leave the source
+file in tact, and will write the instrumented version to the definied target path, making it easy to compare
+the original and the instumented versions.
 
 
 ## Investigate the contents of a class file
