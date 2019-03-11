@@ -10,6 +10,7 @@ import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 
 /**
  * Instruments test methods to call Scott Runtime to track variable states.
@@ -53,7 +54,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		
 		// clear previously tracked data
 		if (clearTrackedDataAtStart) {
-			instrumentToClearTrackedDataAndSignalStartOfRecording();
+			instrumentToTrackMethodStart();
 		}
 		
 		// track initial field states
@@ -99,7 +100,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 				Handle handle = (Handle)bsmArgs[1];
 				String methodName = handle.getName();
 				if (methodName.startsWith("lambda$")) {
-					instrumentToTrackMethodStart(handle.getName(), lineNumber);
+					instrumentToTrackLambdaStart(handle.getName(), lineNumber);
 				}
 			}
 		}
@@ -170,13 +171,6 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		instrumentToTrackVariableState(lvs, lineNumber);
 	}
 	
-	private void instrumentToClearTrackedDataAndSignalStartOfRecording() {
-		Logger.log(" - instrumentToClearTrackedDataAndSignalStartOfRecording");
-		super.visitLdcInsn(className);
-		super.visitLdcInsn(methodName);
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "startTracking", "(Ljava/lang/String;Ljava/lang/String;)V", false);
-	}
-	
 	@Override
 	public void visitFieldInsn(int opcode, String owner, String name, String desc) {
 		super.visitFieldInsn(opcode, owner, name, desc);
@@ -190,11 +184,19 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		}
 	}
 	
-	private void instrumentToTrackMethodStart(String methodName, int lineNumber) {
-		Logger.log(" - instrumentToTrackMethodStart of " + methodName + " at " + lineNumber);
+	private void instrumentToTrackMethodStart() {
+		Logger.log(" - instrumentToTrackMethodStart");
+		super.visitLdcInsn(methodName);
+		super.visitLdcInsn(Type.getType("L" + className + ";"));
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackMethodStart", "(Ljava/lang/String;Ljava/lang/Class;)V", false);
+	}
+	
+	private void instrumentToTrackLambdaStart(String methodName, int lineNumber) {
+		Logger.log(" - instrumentToTrackLambdaStart of " + methodName + " at " + lineNumber);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(methodName);
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackMethodStart", "(ILjava/lang/String;)V", false);
+		super.visitLdcInsn(Type.getType("L" + className + ";"));
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackLambdaStart", "(ILjava/lang/String;Ljava/lang/Class;)V", false);
 	}
 	
 	private void instrumentToTrackVariableState(LocalVariableScope localVariableScope, int lineNumber) {
@@ -203,7 +205,8 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitLdcInsn(localVariableScope.name);
 		super.visitLdcInsn(getLineNumberBoundedByScope(lineNumber, localVariableScope));
 		super.visitLdcInsn(methodName);
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackLocalVariableState", "(" + localVariableScope.variableType.desc + "Ljava/lang/String;ILjava/lang/String;)V", false);
+		super.visitLdcInsn(Type.getType("L" + className + ";"));
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackLocalVariableState", "(" + localVariableScope.variableType.desc + "Ljava/lang/String;ILjava/lang/String;Ljava/lang/Class;)V", false);
 	}
 	
 	private int getLineNumberBoundedByScope(int lineNumber, LocalVariableScope localVariableScope) {
@@ -249,11 +252,12 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitLdcInsn(accessedField.name);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(methodName);
+		super.visitLdcInsn(Type.getType("L" + className + ";"));
 		super.visitLdcInsn(accessedField.isStatic);
 		super.visitLdcInsn(accessedField.owner);
 		
 		// Call tracking code
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;ILjava/lang/String;ZLjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;ILjava/lang/String;Ljava/lang/Class;ZLjava/lang/String;)V", false);
 	}
 	
 	private boolean isCurrentClassIsFieldOwnerOrInnerClassOfFieldOwner(String owner) {
@@ -270,11 +274,12 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitLdcInsn(accessedField.name);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(methodName);
+		super.visitLdcInsn(Type.getType("L" + className + ";"));
 		super.visitLdcInsn(accessedField.isStatic);
 		super.visitLdcInsn(accessedField.owner);
 		
 		// Call tracking code
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;ILjava/lang/String;ZLjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;ILjava/lang/String;Ljava/lang/Class;ZLjava/lang/String;)V", false);
 	}
 
 	private String getFieldDescriptor(AccessedField accessedField) {
