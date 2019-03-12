@@ -12,7 +12,7 @@ import org.objectweb.asm.Opcodes;
  * 
  * @author David Csakvari
  */
-public class TestDiscoveryMethodVisitor extends MethodVisitor {
+public class DiscoveryMethodVisitor extends MethodVisitor {
 
 	private TransformationParameters.Builder transformationParameters;
 	private String methodName;
@@ -21,7 +21,7 @@ public class TestDiscoveryMethodVisitor extends MethodVisitor {
 
 	private List<String> annotations = new ArrayList<>();
 
-	public TestDiscoveryMethodVisitor(MethodVisitor mv, TransformationParameters.Builder transformationParameters, String name, String desc, String signature) {
+	public DiscoveryMethodVisitor(MethodVisitor mv, TransformationParameters.Builder transformationParameters, String name, String desc, String signature) {
 		super(Opcodes.ASM7, mv);
 		this.transformationParameters = transformationParameters;
 		this.methodName = name;
@@ -37,10 +37,13 @@ public class TestDiscoveryMethodVisitor extends MethodVisitor {
 	
 	@Override
 	public void visitEnd() {
+		if (methodName.startsWith("lambda$")) {
+			transformationParameters.markLambdaForTracking(methodName, methodDesc, methodSignature);
+		}
+		
 		for (String annotationDesc : annotations) {
 			if (AnnotationMatcher.match(annotationDesc, "scott.track.method_annotation", new String[] {"org.junit.Test", "org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory", "cucumber.api.java.*"})) {
 				transformationParameters.markMethodForTracking(methodName, methodDesc, methodSignature);
-				transformationParameters.markMethodForClearingTrackedData(methodName, methodDesc, methodSignature);
 			}
 			
 			if (AnnotationMatcher.match(annotationDesc, "scott.inject_junit4_rule.method_annotation", new String[] {"org.junit.Test"})) {

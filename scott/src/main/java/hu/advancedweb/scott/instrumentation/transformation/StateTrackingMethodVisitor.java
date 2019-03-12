@@ -17,7 +17,7 @@ import org.objectweb.asm.Type;
  * 
  * @author David Csakvari
  */
-public class StateEmitterTestMethodVisitor extends MethodVisitor {
+public class StateTrackingMethodVisitor extends MethodVisitor {
 
 	private static final String TRACKER_CLASS = "hu/advancedweb/scott/runtime/track/StateRegistry";
 	private int lineNumber;
@@ -35,27 +35,22 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 
 	private String className;
 
-	private boolean clearTrackedDataAtStart;
-	
 
-	public StateEmitterTestMethodVisitor(MethodVisitor mv, String className, String methodName, boolean clearTrackedDataAtStart) {
+	public StateTrackingMethodVisitor(MethodVisitor mv, String className, String methodName) {
 		super(Opcodes.ASM7, mv);
 		
 		Logger.log("Visiting: " + className + "." + methodName);
 		
 		this.className = className;
 		this.methodName = methodName;
-		this.clearTrackedDataAtStart = clearTrackedDataAtStart;
 	}
 	
 	@Override
 	public void visitCode() {
 		super.visitCode();
 		
-		// clear previously tracked data
-		if (clearTrackedDataAtStart) {
-			instrumentToTrackMethodStart();
-		}
+		// track method start
+		instrumentToTrackMethodStart();
 		
 		// track initial field states
 		for (AccessedField accessedField : accessedFields) {
@@ -100,7 +95,7 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 				Handle handle = (Handle)bsmArgs[1];
 				String methodName = handle.getName();
 				if (methodName.startsWith("lambda$")) {
-					instrumentToTrackLambdaStart(handle.getName(), lineNumber);
+					instrumentToTrackLambdaDefinition(handle.getName(), lineNumber);
 				}
 			}
 		}
@@ -191,12 +186,12 @@ public class StateEmitterTestMethodVisitor extends MethodVisitor {
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackMethodStart", "(Ljava/lang/String;Ljava/lang/Class;)V", false);
 	}
 	
-	private void instrumentToTrackLambdaStart(String methodName, int lineNumber) {
-		Logger.log(" - instrumentToTrackLambdaStart of " + methodName + " at " + lineNumber);
+	private void instrumentToTrackLambdaDefinition(String methodName, int lineNumber) {
+		Logger.log(" - instrumentToTrackLambdaDefinition of " + methodName + " at " + lineNumber);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(methodName);
 		super.visitLdcInsn(Type.getType("L" + className + ";"));
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackLambdaStart", "(ILjava/lang/String;Ljava/lang/Class;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackLambdaDefinition", "(ILjava/lang/String;Ljava/lang/Class;)V", false);
 	}
 	
 	private void instrumentToTrackVariableState(LocalVariableScope localVariableScope, int lineNumber) {

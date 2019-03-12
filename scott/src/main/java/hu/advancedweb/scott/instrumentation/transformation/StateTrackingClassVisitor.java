@@ -16,15 +16,15 @@ import hu.advancedweb.scott.runtime.ScottReportingRule;
  * 
  * @see ConstructorTransformerMethodVisitor
  * @see ScopeExtractorTestMethodVisitor
- * @see StateEmitterTestMethodVisitor
+ * @see StateTrackingMethodVisitor
  * @author David Csakvari
  */
-public class StateTrackingTestClassVisitor extends ClassVisitor {
+public class StateTrackingClassVisitor extends ClassVisitor {
 	
 	private String className;
 	private TransformationParameters transformationParameters;
 	
-	public StateTrackingTestClassVisitor(ClassVisitor cv, TransformationParameters transformationParameters) {
+	public StateTrackingClassVisitor(ClassVisitor cv, TransformationParameters transformationParameters) {
 		super(Opcodes.ASM7, cv);
 		this.transformationParameters = transformationParameters;
 	}
@@ -47,7 +47,7 @@ public class StateTrackingTestClassVisitor extends ClassVisitor {
 				return methodVisitor;
 			}
 		} else if (transformationParameters.isMethodTrackingRequired(name, desc, signature)) {
-		    StateEmitterTestMethodVisitor variableMutationEventEmitter = new StateEmitterTestMethodVisitor(methodVisitor, className, name, transformationParameters.isClearingTrackedDataInTheBeginningOfThisMethodRequired(name, desc, signature));
+		    StateTrackingMethodVisitor variableMutationEventEmitter = new StateTrackingMethodVisitor(methodVisitor, className, name);
 		    MethodVisitor variableExtractor = new ScopeExtractorTestMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions);
 		    return variableExtractor;
 		} else {

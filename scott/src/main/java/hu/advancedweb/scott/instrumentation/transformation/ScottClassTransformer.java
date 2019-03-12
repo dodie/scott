@@ -22,7 +22,7 @@ public class ScottClassTransformer {
 	private byte[] transform(byte[] classfileBuffer, TransformationParameters transformationParameters) {
 		ClassReader classReader = new ClassReader(classfileBuffer);
 		ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_FRAMES);
-		ClassVisitor localVariableStateEmitterTestClassVisitor = new StateTrackingTestClassVisitor(classWriter, transformationParameters);
+		ClassVisitor localVariableStateEmitterTestClassVisitor = new StateTrackingClassVisitor(classWriter, transformationParameters);
 		classReader.accept(localVariableStateEmitterTestClassVisitor, 0);
 		return classWriter.toByteArray();
 	}
