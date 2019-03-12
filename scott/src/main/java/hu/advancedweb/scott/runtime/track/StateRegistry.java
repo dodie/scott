@@ -60,13 +60,15 @@ public class StateRegistry {
 	public static void trackMethodStart(String methodName, Class<?> clazz) {
 		CLASS_NAME = classToTypeName(clazz);
 		METHOD_NAME = methodName;
-		
-		LOCAL_VARIABLE_STATES.clear();
-		LOCAL_VARIABLE_NAMES.clear();
-		FIELD_STATES.clear();
+
+		if (!methodName.startsWith("lambda$")) {
+			LOCAL_VARIABLE_STATES.clear();
+			LOCAL_VARIABLE_NAMES.clear();
+			FIELD_STATES.clear();
+		}
 	}
 	
-	public static void trackLambdaStart(int lineNumber, String methodName, Class<?> clazz) {
+	public static void trackLambdaDefinition(int lineNumber, String methodName, Class<?> clazz) {
 		METHOD_START_LINES.put(methodName, lineNumber);
 	}
 	

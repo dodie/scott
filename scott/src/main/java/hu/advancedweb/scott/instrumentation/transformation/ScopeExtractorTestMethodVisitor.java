@@ -33,14 +33,14 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 
 	private Set<TryCatchBlockLabels> tryCatchBlocks = new HashSet<>();
 
-	private StateEmitterTestMethodVisitor next;
+	private StateTrackingMethodVisitor next;
 
 	private int lineNumber;
 
 	private Map<Integer, Integer> lineNumerToFirstOccurrenceOfVariables;
 	private Map<Integer, List<Label>> varAccesses;
 
-	public ScopeExtractorTestMethodVisitor(StateEmitterTestMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
+	public ScopeExtractorTestMethodVisitor(StateTrackingMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
 		super(Opcodes.ASM7, access, name, desc, signature, exceptions);
 		this.next = next;
 		lineNumerToFirstOccurrenceOfVariables = new HashMap<>();

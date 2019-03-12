@@ -22,23 +22,17 @@ public class TransformationParameters {
 	
 	private final List<String> trackTheseLambdas;
 	
-	private final List<String> clearTrackedDataInTheBeginningOfTheseMethods;
-	
+
 	public boolean isMethodTrackingRequired(String methodName, String methodDesc, String methodSignature) {
 		return trackTheseMethods.contains(encode(methodName, methodDesc, methodSignature)) ||
 				(trackTheseLambdas.contains(encode(methodName, methodDesc, methodSignature)) && !trackTheseMethods.isEmpty());
 	}
 
-	public boolean isClearingTrackedDataInTheBeginningOfThisMethodRequired(String methodName, String methodDesc, String methodSignature) {
-		return clearTrackedDataInTheBeginningOfTheseMethods.contains(encode(methodName, methodDesc, methodSignature));
-	}
-	
-	private TransformationParameters(boolean isJUnit4RuleInjectionRequired, boolean isJUnit5ExtensionInjectionRequired, List<String> trackTheseMethods, List<String> trackTheseLambdas, List<String> clearTrackedDataInTheBeginningOfTheseMethods) {
+	private TransformationParameters(boolean isJUnit4RuleInjectionRequired, boolean isJUnit5ExtensionInjectionRequired, List<String> trackTheseMethods, List<String> trackTheseLambdas) {
 		this.isJUnit4RuleInjectionRequired = isJUnit4RuleInjectionRequired;
 		this.isJUnit5ExtensionInjectionRequired = isJUnit5ExtensionInjectionRequired;
 		this.trackTheseMethods = trackTheseMethods;
 		this.trackTheseLambdas = trackTheseLambdas;
-		this.clearTrackedDataInTheBeginningOfTheseMethods = clearTrackedDataInTheBeginningOfTheseMethods;
 	}
 	
 	public static final class Builder {
@@ -46,10 +40,9 @@ public class TransformationParameters {
 		private boolean isJUnit5ExtensionInjectionRequired;
 		private List<String> trackTheseMethods = new ArrayList<>();
 		private List<String> trackTheseLambdas = new ArrayList<>();
-		private List<String> clearTrackedDataInTheBeginningOfTheseMethods = new ArrayList<>();
 		
 		public TransformationParameters build() {
-			return new TransformationParameters(isJUnit4RuleInjectionRequired, isJUnit5ExtensionInjectionRequired, Collections.unmodifiableList(trackTheseMethods), Collections.unmodifiableList(trackTheseLambdas), Collections.unmodifiableList(clearTrackedDataInTheBeginningOfTheseMethods));
+			return new TransformationParameters(isJUnit4RuleInjectionRequired, isJUnit5ExtensionInjectionRequired, Collections.unmodifiableList(trackTheseMethods), Collections.unmodifiableList(trackTheseLambdas));
 		}
 		
 		void markClassForJUnit4RuleInjection() {
@@ -68,10 +61,6 @@ public class TransformationParameters {
 			trackTheseLambdas.add(encode(methodName, methodDesc, methodSignature));
 		}
 		
-		void markMethodForClearingTrackedData(String methodName, String methodDesc, String methodSignature) {
-			clearTrackedDataInTheBeginningOfTheseMethods.add(encode(methodName, methodDesc, methodSignature));
-		}
-
 	}
 	
 	private static String encode(String methodName, String methodDesc, String methodSignature) {
