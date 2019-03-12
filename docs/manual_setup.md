@@ -98,3 +98,24 @@ instrumentation.
 1. Get Scott as a dependency.
 2. Use the [ScottClassFileTransformer](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/instrumentation/ScottClassFileTransformer.java) to transform class files as part of the build process.
 3. Make sure to include Scott as a run-time dependency to your application for the instrumentation to work.
+
+The following Gradle setup achieves something similar:
+
+```groovy
+buildscript {
+	dependencies {
+		classpath "hu.advancedweb:scott:3.4.1"
+	}
+}
+
+compileJava {
+	doLast {
+		def files = fileTree("${buildDir}/classes").filter {f -> f.path.endsWith(".class")}.files
+		files.forEach { f ->
+			println "Transforming " + f
+			TestClassTransformerRunner.transformClass(f.path)
+			println " - done"
+		}
+	}
+}
+```
