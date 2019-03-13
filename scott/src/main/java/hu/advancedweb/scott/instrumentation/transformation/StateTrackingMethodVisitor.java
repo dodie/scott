@@ -63,6 +63,10 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 				instrumentToTrackVariableState(localVariableScope, lineNumber);
 			}
 		}
+		
+		// signal that there are no more argument and initial field state tracks,
+		// so the runtime can transform them into a single event if required, see Issue #70.
+		instrumentToTrackEndOfArgumentsAtMethodStart();
 	}
 	
 	@Override
@@ -184,6 +188,13 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		super.visitLdcInsn(methodName);
 		super.visitLdcInsn(Type.getType("L" + className + ";"));
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackMethodStart", "(Ljava/lang/String;Ljava/lang/Class;)V", false);
+	}
+	
+	private void instrumentToTrackEndOfArgumentsAtMethodStart() {
+		Logger.log(" - instrumentToTrackEndOfArgumentsAtMethodStart");
+		super.visitLdcInsn(methodName);
+		super.visitLdcInsn(Type.getType("L" + className + ";"));
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackEndOfArgumentsAtMethodStart", "(Ljava/lang/String;Ljava/lang/Class;)V", false);
 	}
 	
 	private void instrumentToTrackLambdaDefinition(String methodName, int lineNumber) {

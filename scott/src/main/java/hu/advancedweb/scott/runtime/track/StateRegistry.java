@@ -68,6 +68,10 @@ public class StateRegistry {
 		}
 	}
 	
+	public static void trackEndOfArgumentsAtMethodStart(String methodName, Class<?> clazz) {
+		// No-op.
+	}
+	
 	public static void trackLambdaDefinition(int lineNumber, String methodName, Class<?> clazz) {
 		METHOD_START_LINES.put(methodName, lineNumber);
 	}
