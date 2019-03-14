@@ -47,7 +47,7 @@ public class StateTrackingClassVisitor extends ClassVisitor {
 				return methodVisitor;
 			}
 		} else if (transformationParameters.isMethodTrackingRequired(name, desc, signature)) {
-		    StateTrackingMethodVisitor variableMutationEventEmitter = new StateTrackingMethodVisitor(methodVisitor, className, name);
+		    StateTrackingMethodVisitor variableMutationEventEmitter = new StateTrackingMethodVisitor(methodVisitor, className, name, desc);
 		    MethodVisitor variableExtractor = new ScopeExtractorTestMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions);
 		    return variableExtractor;
 		} else {

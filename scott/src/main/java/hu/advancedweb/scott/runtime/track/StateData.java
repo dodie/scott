@@ -1,17 +1,6 @@
 package hu.advancedweb.scott.runtime.track;
 
-/**
- * Represents a data point collected at a given line number.
- * 
- * @author David Csakvari
- */
-public class StateData {
-
-	/** Line number where the data is collected. */
-	public final int lineNumber;
-	
-	/** Method where the data is collected. */
-	public final String methodName;
+public class StateData extends ContextualData {
 
 	/** Name of the variable or field. */
 	public final String name;
@@ -20,8 +9,7 @@ public class StateData {
 	public final String value;
 	
 	public StateData(int lineNumber, String methodName, String name, String value) {
-		this.lineNumber = lineNumber;
-		this.methodName = methodName;
+		super(lineNumber, methodName);
 		this.name = name;
 		this.value = value;
 	}

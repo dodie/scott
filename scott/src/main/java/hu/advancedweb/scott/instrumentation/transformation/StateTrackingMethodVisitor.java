@@ -24,9 +24,11 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	private int lineNumberForMethodCallTrack;
 
 	private Set<Label> visitedLabels = new HashSet<>();
-	
+
+	private Label startFinally = new Label();
+
 	private Set<Integer> localVariables = new HashSet<>();
-	
+
 	private List<LocalVariableScope> localVariableScopes = new ArrayList<>();
 
 	private Set<AccessedField> accessedFields;
@@ -34,20 +36,25 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	private String methodName;
 
 	private String className;
+	
+	private String desc;
 
 
-	public StateTrackingMethodVisitor(MethodVisitor mv, String className, String methodName) {
+	public StateTrackingMethodVisitor(MethodVisitor mv, String className, String methodName, String desc) {
 		super(Opcodes.ASM7, mv);
 		
 		Logger.log("Visiting: " + className + "." + methodName);
 		
 		this.className = className;
 		this.methodName = methodName;
+		this.desc = desc;
 	}
 	
 	@Override
 	public void visitCode() {
 		super.visitCode();
+		
+		instrumentToAddOpeningLabelForEnclosingTry();
 		
 		// track method start
 		instrumentToTrackMethodStart();
@@ -183,6 +190,18 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		}
 	}
 	
+	@Override
+	public void visitMaxs(int maxStack, int maxLocals) {
+		instrumentToTrackUnhandledExceptions();
+		super.visitMaxs(maxStack, maxLocals);
+	}
+	
+	@Override
+	public void visitInsn(int opcode) {
+		instrumentToTrackReturns(opcode);
+		super.visitInsn(opcode);
+	}
+
 	private void instrumentToTrackMethodStart() {
 		Logger.log(" - instrumentToTrackMethodStart");
 		super.visitLdcInsn(methodName);
@@ -287,7 +306,62 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		// Call tracking code
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;ILjava/lang/String;Ljava/lang/Class;ZLjava/lang/String;)V", false);
 	}
+	
+	private void instrumentToAddOpeningLabelForEnclosingTry() {
+		Logger.log(" - instrumentToAddOpeningLabelForEnclosingTry");
+		super.visitLabel(startFinally);
+	}
+	
+	private void instrumentToTrackUnhandledExceptions() {
+		// Based on: http://modularity.info/conference/2007/program/industry/I5-UsingASMFramework.pdf
+		Logger.log(" - instrumentToTrackUnhandledExceptions");
 
+		Label endFinally = new Label();
+		super.visitTryCatchBlock(startFinally, endFinally, endFinally, "java/lang/Throwable");
+		super.visitLabel(endFinally);
+
+		// Record exception
+		super.visitInsn(Opcodes.DUP);
+		super.visitLdcInsn(lineNumber);
+		super.visitLdcInsn(methodName);
+		super.visitLdcInsn(Type.getType("L" + className + ";"));
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackUnhandledException", "(Ljava/lang/Throwable;ILjava/lang/String;Ljava/lang/Class;)V", false);
+
+		// Rethrow
+		super.visitInsn(Opcodes.ATHROW);
+	}
+	
+	private void instrumentToTrackReturns(int opcode) {
+		if (!VariableType.isReturnOperation(opcode)) {
+			return;
+		}
+		
+		if (Opcodes.RETURN == opcode) {
+			super.visitLdcInsn(lineNumber);
+			super.visitLdcInsn(methodName);
+			super.visitLdcInsn(Type.getType("L" + className + ";"));
+			super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackReturn", "(ILjava/lang/String;Ljava/lang/Class;)V", false);
+		} else {
+			if (opcode == Opcodes.DRETURN || opcode == Opcodes.LRETURN) {
+				super.visitInsn(Opcodes.DUP2);
+			} else {
+				super.visitInsn(Opcodes.DUP);
+			}
+			
+			final VariableType variableType;
+			if (opcode == Opcodes.IRETURN) {
+				variableType = VariableType.getReturnTypeFromMethodDesc(desc);
+			} else {
+				variableType = VariableType.getByReturnOpCode(opcode);
+			}
+			
+			super.visitLdcInsn(lineNumber);
+			super.visitLdcInsn(methodName);
+			super.visitLdcInsn(Type.getType("L" + className + ";"));
+			super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackReturn", "(" + variableType.desc + "ILjava/lang/String;Ljava/lang/Class;)V", false);
+		}
+	}
+	
 	private String getFieldDescriptor(AccessedField accessedField) {
 		if (accessedField.desc.startsWith("L") || accessedField.desc.startsWith("[")) {
 			return VariableType.REFERENCE.desc;
