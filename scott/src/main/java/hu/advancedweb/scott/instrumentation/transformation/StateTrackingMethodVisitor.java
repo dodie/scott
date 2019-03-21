@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import hu.advancedweb.scott.instrumentation.transformation.param.InstrumentationActions;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
@@ -33,6 +34,8 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 
 	private Set<AccessedField> accessedFields;
 
+	private InstrumentationActions instrumentationActions;
+
 	private String methodName;
 
 	private String className;
@@ -40,11 +43,12 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	private String desc;
 
 
-	public StateTrackingMethodVisitor(MethodVisitor mv, String className, String methodName, String desc) {
+	StateTrackingMethodVisitor(MethodVisitor mv, InstrumentationActions instrumentationActions, String className, String methodName, String desc) {
 		super(Opcodes.ASM7, mv);
 		
 		Logger.log("Visiting: " + className + "." + methodName);
-		
+
+		this.instrumentationActions = instrumentationActions;
 		this.className = className;
 		this.methodName = methodName;
 		this.desc = desc;
@@ -53,27 +57,33 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	@Override
 	public void visitCode() {
 		super.visitCode();
-		
-		instrumentToAddOpeningLabelForEnclosingTry();
-		
-		// track method start
-		instrumentToTrackMethodStart();
-		
-		// track initial field states
-		for (AccessedField accessedField : accessedFields) {
-			instrumentToTrackFieldState(accessedField, lineNumber);
+
+		if (instrumentationActions.trackUnhandledException) {
+			instrumentToAddOpeningLabelForEnclosingTry();
 		}
-		
-		// track method arguments
-		for (LocalVariableScope localVariableScope : localVariableScopes) {
-			if (localVariableScope.start == 0) {
-				instrumentToTrackVariableState(localVariableScope, lineNumber);
+
+		if (instrumentationActions.trackMethodStart) {
+			// track method start
+			instrumentToTrackMethodStart();
+
+			if (instrumentationActions.trackFieldStateChanges) {
+				// track initial field states
+				for (AccessedField accessedField : accessedFields) {
+					instrumentToTrackFieldState(accessedField, lineNumber);
+				}
 			}
+
+			// track method arguments
+			for (LocalVariableScope localVariableScope : localVariableScopes) {
+				if (localVariableScope.start == 0) {
+					instrumentToTrackVariableState(localVariableScope, lineNumber);
+				}
+			}
+
+			// signal that there are no more argument and initial field state tracks,
+			// so the runtime can transform them into a single event if required, see Issue #70.
+			instrumentToTrackEndOfArgumentsAtMethodStart();
 		}
-		
-		// signal that there are no more argument and initial field state tracks,
-		// so the runtime can transform them into a single event if required, see Issue #70.
-		instrumentToTrackEndOfArgumentsAtMethodStart();
 	}
 	
 	@Override
@@ -101,11 +111,10 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		/*
 		 * Track where lambda expressions are defined.
 		 */
-		if ("java/lang/invoke/LambdaMetafactory".equals(bsm.getOwner())) {
-			if (bsmArgs[1] instanceof Handle) {
+		if (instrumentationActions.anyLambdaMarkedForTracking()) {
+			if ("java/lang/invoke/LambdaMetafactory".equals(bsm.getOwner()) && bsmArgs[1] instanceof Handle) {
 				Handle handle = (Handle)bsmArgs[1];
-				String methodName = handle.getName();
-				if (methodName.startsWith("lambda$")) {
+				if (handle.getName().startsWith("lambda$")) {
 					instrumentToTrackLambdaDefinition(handle.getName(), lineNumber);
 				}
 			}
@@ -121,18 +130,23 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		}
 		
 		if (!owner.startsWith("org/mockito")) {
-			// track every variable state after method calls
-			for (LocalVariableScope localVariableScope : localVariableScopes) {
-				if (!localVariables.contains(localVariableScope.var)) continue;
-				
-				if (isVariableInScope(localVariableScope.var)) {
-					instrumentToTrackVariableState(localVariableScope, lineNumberForMethodCallTrack);
+			if (instrumentationActions.trackLocalVariableStateChanges) {
+				// track every variable state after method calls
+				for (LocalVariableScope localVariableScope : localVariableScopes) {
+					if (!localVariables.contains(localVariableScope.var))
+						continue;
+
+					if (isVariableInScope(localVariableScope.var)) {
+						instrumentToTrackVariableState(localVariableScope, lineNumberForMethodCallTrack);
+					}
 				}
 			}
-			
-			// track every field state after method calls
-			for (AccessedField accessedField : accessedFields) {
-				instrumentToTrackFieldState(accessedField, lineNumberForMethodCallTrack);
+
+			if (instrumentationActions.trackFieldStateChanges) {
+				// track every field state after method calls
+				for (AccessedField accessedField : accessedFields) {
+					instrumentToTrackFieldState(accessedField, lineNumberForMethodCallTrack);
+				}
 			}
 		}
 		
@@ -150,55 +164,75 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	@Override
 	public void visitVarInsn(int opcode, int var) {
 		super.visitVarInsn(opcode, var);
-		
-		// Track variable state and name at variable stores. (Typical variable assignments.)
-		if (VariableType.isStoreOperation(opcode)) {
-			localVariables.add(var);
-			
-			LocalVariableScope lvs = getLocalVariableScope(var);
-			if (lvs != null) {
-				/* 
-				 * This null-check is the workaround for issue #15:
-				 * If a variable declaration is the last statement in a code block,
-				 * then the variable name is not present in the compiled bytecode.
-				 * With this workaround Scott can still track the assigned value to such variables.
-				 */
-				instrumentToTrackVariableState(lvs, lineNumber);
-			}
+
+		if (!instrumentationActions.trackLocalVariableStateChanges) {
+			return;
+		}
+
+		if (!VariableType.isStoreOperation(opcode)) {
+			// Only track variable state and name at variable stores. (Typical variable assignments.)
+			return;
+		}
+
+		localVariables.add(var);
+
+		LocalVariableScope lvs = getLocalVariableScope(var);
+		if (lvs != null) {
+			/*
+			 * This null-check is the workaround for issue #15:
+			 * If a variable declaration is the last statement in a code block,
+			 * then the variable name is not present in the compiled bytecode.
+			 * With this workaround Scott can still track the assigned value to such variables.
+			 */
+			instrumentToTrackVariableState(lvs, lineNumber);
 		}
 	}
 	
 	@Override
 	public void visitIincInsn(int var, int increment) {
 		super.visitIincInsn(var, increment);
-		
-		// Track variable state at variable increases (e.g. i++).
-		LocalVariableScope lvs = getLocalVariableScope(var);
-		instrumentToTrackVariableState(lvs, lineNumber);
+
+		if (instrumentationActions.trackLocalVariableStateChanges) {
+			// Track variable state at variable increases (e.g. i++).
+			LocalVariableScope lvs = getLocalVariableScope(var);
+			instrumentToTrackVariableState(lvs, lineNumber);
+		}
 	}
 	
 	@Override
 	public void visitFieldInsn(int opcode, String owner, String name, String desc) {
 		super.visitFieldInsn(opcode, owner, name, desc);
-		if (Opcodes.PUTFIELD == opcode|| Opcodes.PUTSTATIC == opcode) {
-			for (AccessedField accessedField : accessedFields) {
-				if (accessedField.name.equals(name)) {
-					instrumentToTrackFieldState(accessedField, lineNumber);
-					break;
-				}
+
+		if (!instrumentationActions.trackFieldStateChanges) {
+			return;
+		}
+
+		if (Opcodes.PUTFIELD != opcode && Opcodes.PUTSTATIC != opcode) {
+			// Only track field state and name at stores (assignments).
+			return;
+		}
+
+		for (AccessedField accessedField : accessedFields) {
+			if (accessedField.name.equals(name)) {
+				instrumentToTrackFieldState(accessedField, lineNumber);
+				break;
 			}
 		}
 	}
 	
 	@Override
 	public void visitMaxs(int maxStack, int maxLocals) {
-		instrumentToTrackUnhandledExceptions();
+		if (instrumentationActions.trackUnhandledException) {
+			instrumentToTrackUnhandledExceptions();
+		}
 		super.visitMaxs(maxStack, maxLocals);
 	}
 	
 	@Override
 	public void visitInsn(int opcode) {
-		instrumentToTrackReturns(opcode);
+		if (instrumentationActions.trackReturn) {
+			instrumentToTrackReturn(opcode);
+		}
 		super.visitInsn(opcode);
 	}
 
@@ -216,10 +250,10 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackEndOfArgumentsAtMethodStart", "(Ljava/lang/String;Ljava/lang/Class;)V", false);
 	}
 	
-	private void instrumentToTrackLambdaDefinition(String methodName, int lineNumber) {
-		Logger.log(" - instrumentToTrackLambdaDefinition of " + methodName + " at " + lineNumber);
+	private void instrumentToTrackLambdaDefinition(String handleName, int lineNumber) {
+		Logger.log(" - instrumentToTrackLambdaDefinition of " + handleName + " at " + lineNumber);
 		super.visitLdcInsn(lineNumber);
-		super.visitLdcInsn(methodName);
+		super.visitLdcInsn(handleName);
 		super.visitLdcInsn(Type.getType("L" + className + ";"));
 		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackLambdaDefinition", "(ILjava/lang/String;Ljava/lang/Class;)V", false);
 	}
@@ -331,7 +365,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		super.visitInsn(Opcodes.ATHROW);
 	}
 	
-	private void instrumentToTrackReturns(int opcode) {
+	private void instrumentToTrackReturn(int opcode) {
 		if (!VariableType.isReturnOperation(opcode)) {
 			return;
 		}
@@ -389,11 +423,11 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		return null;
 	}
 	
-	public void setLocalVariableScopes(List<LocalVariableScope> localVariableScopes) {
+	void setLocalVariableScopes(List<LocalVariableScope> localVariableScopes) {
 		this.localVariableScopes = localVariableScopes;
 	}
 	
-	public void setAccessedFields(Set<AccessedField> accessedFields) {
+	void setAccessedFields(Set<AccessedField> accessedFields) {
 		this.accessedFields = accessedFields;
 	}
 	

@@ -31,19 +31,19 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 
 	private Set<AccessedField> accessedFields = new LinkedHashSet<>();
 
-	private Set<TryCatchBlockLabels> tryCatchBlocks = new HashSet<>();
+	private Set<TryCatchBlockLabels> tryCatchFinallyBlocks = new HashSet<>();
 
 	private StateTrackingMethodVisitor next;
 
 	private int lineNumber;
 
-	private Map<Integer, Integer> lineNumerToFirstOccurrenceOfVariables;
+	private Map<Integer, Integer> lineNumberToFirstOccurrenceOfVariables;
 	private Map<Integer, List<Label>> varAccesses;
 
-	public ScopeExtractorTestMethodVisitor(StateTrackingMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
+	ScopeExtractorTestMethodVisitor(StateTrackingMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
 		super(Opcodes.ASM7, access, name, desc, signature, exceptions);
 		this.next = next;
-		lineNumerToFirstOccurrenceOfVariables = new HashMap<>();
+		lineNumberToFirstOccurrenceOfVariables = new HashMap<>();
 		varAccesses = new HashMap<>();
 	}
 
@@ -58,7 +58,7 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 		scopes.clear();
 		accessedFields.clear();
 		lines.clear();
-		tryCatchBlocks.clear();
+		tryCatchFinallyBlocks.clear();
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 	@Override
 	public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
 		super.visitTryCatchBlock(start, end, handler, type);
-		tryCatchBlocks.add(new TryCatchBlockLabels(start, handler));
+		tryCatchFinallyBlocks.add(new TryCatchBlockLabels(start, handler));
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 	@Override
 	public void visitVarInsn(int opcode, int var) {
 		if (VariableType.isStoreOperation(opcode)) {
-			putIfAbsent(lineNumerToFirstOccurrenceOfVariables, var, this.lineNumber);
+			putIfAbsent(lineNumberToFirstOccurrenceOfVariables, var, this.lineNumber);
 			putIfAbsent(varAccesses, var, new ArrayList<Label>());
 			
 			// In some cases a single visitVarInsn happens before the first visitLabel. See Issue #57.
@@ -110,12 +110,7 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 	public void visitFieldInsn(int opcode, String owner, String name, String desc) {
 		super.visitFieldInsn(opcode, owner, name, desc);
 
-		final boolean isStatic;
-		if (Opcodes.GETSTATIC == opcode || Opcodes.PUTSTATIC == opcode) {
-			isStatic = true;
-		} else {
-			isStatic = false;
-		}
+		final boolean isStatic = Opcodes.GETSTATIC == opcode || Opcodes.PUTSTATIC == opcode;
 
 		if (name.startsWith("this$")) {
 			return;
@@ -184,16 +179,14 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 			endLine = tmp;
 		}
 
-		if (lineNumerToFirstOccurrenceOfVariables.containsKey(scope.var)) {
-			if (startLine < lineNumerToFirstOccurrenceOfVariables.get(scope.var)) {
-				/*
-				 * For variables in nested scopes the start Label sometimes
-				 * points to an earlier line, e.g. to the start of the method.
-				 * In these cases the start line of the scope has to be
-				 * corrected.
-				 */
-				startLine = lineNumerToFirstOccurrenceOfVariables.get(scope.var);
-			}
+		if (lineNumberToFirstOccurrenceOfVariables.containsKey(scope.var) && startLine < lineNumberToFirstOccurrenceOfVariables.get(scope.var)) {
+			/*
+			 * For variables in nested scopes the start Label sometimes
+			 * points to an earlier line, e.g. to the start of the method.
+			 * In these cases the start line of the scope has to be
+			 * corrected.
+			 */
+			startLine = lineNumberToFirstOccurrenceOfVariables.get(scope.var);
 		}
 		
 		return new LocalVariableScopeData.LineNumbers(startLine, endLine);
@@ -258,13 +251,13 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 				}
 			}
 
-			for (TryCatchBlockLabels tryCatchBlock : tryCatchBlocks) {
+			for (TryCatchBlockLabels tryCatchBlock : tryCatchFinallyBlocks) {
 				if (label == tryCatchBlock.start) {
 					tryCatchBlockScopes.push(tryCatchBlock);
 				}
 			}
 
-			for (TryCatchBlockLabels tryCatchBlock : tryCatchBlocks) {
+			for (TryCatchBlockLabels tryCatchBlock : tryCatchFinallyBlocks) {
 				if (label == tryCatchBlock.handler) {
 					tryCatchBlockScopes.pop();
 				}
@@ -280,7 +273,7 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 		final String desc;
 		final Labels labels;
 
-		public LocalVariableScopeData(int var, String name, String desc, Labels labels) {
+		LocalVariableScopeData(int var, String name, String desc, Labels labels) {
 			this.var = var;
 			this.name = name;
 			this.desc = desc;
@@ -291,7 +284,7 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 			final Label start;
 			final Label end;
 			
-			public Labels(Label start, Label end) {
+			Labels(Label start, Label end) {
 				this.start = start;
 				this.end = end;
 			}
@@ -301,7 +294,7 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 			final int startLine;
 			final int endLine;
 			
-			public LineNumbers(int startLine, int endLine) {
+			LineNumbers(int startLine, int endLine) {
 				this.startLine = startLine;
 				this.endLine = endLine;
 			}
@@ -312,7 +305,7 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 		final Label start;
 		final Label handler;
 
-		public TryCatchBlockLabels(Label start, Label handler) {
+		TryCatchBlockLabels(Label start, Label handler) {
 			this.start = start;
 			this.handler = handler;
 		}

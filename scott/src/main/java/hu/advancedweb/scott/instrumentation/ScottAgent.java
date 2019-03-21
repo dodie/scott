@@ -26,7 +26,7 @@ public class ScottAgent {
 					return classfileBuffer;
 				} else {
 					try {
-						return new ScottClassTransformer().transform(classfileBuffer);
+						return new ScottClassTransformer().transform(classfileBuffer, ScottConfigurer.getConfiguration());
 					} catch (Exception e) {
 						System.err.println("Scott: test instrumentation failed for " + className + "!");
 						e.printStackTrace();
@@ -36,5 +36,5 @@ public class ScottAgent {
 			}
 		});
 	}
-	
+
 }

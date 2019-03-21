@@ -14,7 +14,7 @@ import hu.advancedweb.scott.instrumentation.transformation.ScottClassTransformer
  */
 public class ScottClassFileTransformer {
 	
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		if (args.length == 1) {
 			transformClass(args[0]);
 		} else if (args.length == 2) {
@@ -33,7 +33,7 @@ public class ScottClassFileTransformer {
 			Path sourceClass = Paths.get(sourcePath);
 
 			byte[] originalClass = Files.readAllBytes(sourceClass);
-			byte[] instrumentedClass = new ScottClassTransformer().transform(originalClass);
+			byte[] instrumentedClass = new ScottClassTransformer().transform(originalClass, ScottConfigurer.getConfiguration());
 
 			Path output = Paths.get(targetPath);
 			Files.write(output, instrumentedClass);

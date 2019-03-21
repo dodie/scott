@@ -3,12 +3,11 @@ package hu.advancedweb.scott.instrumentation.transformation;
 
 import java.lang.instrument.UnmodifiableClassException;
 
+import hu.advancedweb.scott.runtime.ScottReportingRule;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.MethodNode;
-
-import hu.advancedweb.scott.runtime.ScottReportingRule;
 
 /**
  * Transformes the constructor to instantiate the `scottReportingRule` field.
@@ -16,7 +15,7 @@ import hu.advancedweb.scott.runtime.ScottReportingRule;
  * @author David Csakvari
  */
 public class ConstructorTransformerMethodVisitor extends MethodNode {
-	
+
 	private String className;
 	private MethodVisitor next;
 
