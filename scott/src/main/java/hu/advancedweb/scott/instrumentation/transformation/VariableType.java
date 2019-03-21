@@ -1,6 +1,7 @@
 package hu.advancedweb.scott.instrumentation.transformation;
 
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 
 /**
  * Opcodes and descriptions for each variable type.
@@ -62,10 +63,8 @@ enum VariableType {
 	}
 	
 	static VariableType getReturnTypeFromMethodDesc(final String methodDesc) {
-		return getByDesc(methodDesc.replaceAll("\\(.*\\)", ""));
+		return getByDesc(Type.getReturnType(methodDesc).getDescriptor());
 	}
-	
-	
 	
 	static VariableType getByDesc(final String desc) {
 		if (desc.startsWith("L") || desc.startsWith("[")) {

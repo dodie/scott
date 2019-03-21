@@ -8,7 +8,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
-import hu.advancedweb.scott.instrumentation.transformation.param.TransformationParameters;
+import hu.advancedweb.scott.instrumentation.transformation.param.InstrumentationActions;
 import hu.advancedweb.scott.runtime.ScottReportingRule;
 
 /**
@@ -22,11 +22,11 @@ import hu.advancedweb.scott.runtime.ScottReportingRule;
 public class StateTrackingClassVisitor extends ClassVisitor {
 	
 	private String className;
-	private TransformationParameters transformationParameters;
+	private InstrumentationActions instrumentationActions;
 	
-	public StateTrackingClassVisitor(ClassVisitor cv, TransformationParameters transformationParameters) {
+	public StateTrackingClassVisitor(ClassVisitor cv, InstrumentationActions instrumentationActions) {
 		super(Opcodes.ASM7, cv);
-		this.transformationParameters = transformationParameters;
+		this.instrumentationActions = instrumentationActions;
 	}
 	
 	@Override
@@ -40,14 +40,15 @@ public class StateTrackingClassVisitor extends ClassVisitor {
 		MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
 
 		if (name.equals("<init>")) {
-			if (transformationParameters.isJUnit4RuleInjectionRequired) {
+			if (instrumentationActions.isJUnit4RuleInjectionRequired) {
 				MethodVisitor constructorTransformerMethodVisitor = new ConstructorTransformerMethodVisitor(methodVisitor, access, name, desc, signature, exceptions, className);
 				return constructorTransformerMethodVisitor;
 			} else {
 				return methodVisitor;
 			}
-		} else if (transformationParameters.isMethodTrackingRequired(name, desc, signature)) {
-		    StateTrackingMethodVisitor variableMutationEventEmitter = new StateTrackingMethodVisitor(methodVisitor, className, name, desc);
+		} else if (instrumentationActions.isMethodTrackingRequired(name, desc, signature)) {
+		    StateTrackingMethodVisitor variableMutationEventEmitter = new StateTrackingMethodVisitor(methodVisitor,
+					instrumentationActions, className, name, desc);
 		    MethodVisitor variableExtractor = new ScopeExtractorTestMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions);
 		    return variableExtractor;
 		} else {
@@ -57,12 +58,12 @@ public class StateTrackingClassVisitor extends ClassVisitor {
 	
 	@Override
 	public void visitEnd() {
-		if (transformationParameters.isJUnit4RuleInjectionRequired) {
+		if (instrumentationActions.isJUnit4RuleInjectionRequired) {
 			FieldVisitor fv = super.visitField(Opcodes.ACC_PUBLIC, "scottReportingRule", Type.getDescriptor(ScottReportingRule.class), null, null);
 			fv.visitAnnotation(Type.getDescriptor(Rule.class), true).visitEnd();
 		}
 
-		if (transformationParameters.isJUnit5ExtensionInjectionRequired) {
+		if (instrumentationActions.isJUnit5ExtensionInjectionRequired) {
 			AnnotationVisitor av0 = super.visitAnnotation("Lorg/junit/jupiter/api/extension/ExtendWith;", true);
 			AnnotationVisitor av1 = av0.visitArray("value");
 			av1.visit(null, Type.getType("Lhu/advancedweb/scott/runtime/ScottJUnit5Extension;"));

@@ -83,10 +83,6 @@ public class StateRegistry {
 		METHOD_START_LINES.put(methodName, lineNumber);
 	}
 	
-	public static void trackFieldState(String value, String name, int lineNumber, String methodName, Class<?> clazz, boolean isStatic, String owner) {
-		FIELD_STATES.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), value));
-	}
-	
 	public static void trackFieldState(byte value, String name, int lineNumber, String methodName, Class<?> clazz, boolean isStatic, String owner) {
 		FIELD_STATES.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Byte.toString(value)));
 	}
