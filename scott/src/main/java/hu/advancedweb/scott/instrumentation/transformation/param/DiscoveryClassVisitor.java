@@ -57,6 +57,7 @@ public class DiscoveryClassVisitor extends ClassVisitor {
 	@Override
 	public void visitEnd() {
 		super.visitEnd();
+		transformationParameters.setTrackerClass(configuration.getTrackerClass().replace('.', '/'));
 		transformationParameters.includeClass(configuration.isClassInstrumentationAllowed(classFqn, annotationFqns));
 		transformationParameters.trackMethodStart(configuration.isTrackMethodStart());
 		transformationParameters.trackReturn(configuration.isTrackReturn());

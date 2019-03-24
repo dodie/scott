@@ -61,11 +61,15 @@ public class Configuration {
 	 */
 	private int minimumMethodLoc = 0;
 
+	/**
+	 * Specifies the class which will receive the tracked events. 
+	 */
+	private String trackerClass;
 
 	/*
 	 * Feature flags.
 	 */
-
+	
 	/**
 	 * Track events for entering a method.
 	 */
@@ -105,10 +109,10 @@ public class Configuration {
 
 	Configuration(List<String> include, List<String> exclude, List<String> includeByAnnotation,
 			List<String> excludeByAnnotation, List<String> excludeMethodsByName, boolean includeLambdas,
-			boolean includeLambdasOnlyWhenOtherInstrumentationIsInPlace, int minimumMethodLoc,boolean trackMethodStart,
-			boolean trackReturn, boolean trackUnhandledException, boolean trackLocalVariableStateChange,
-			boolean trackFieldStateChanges, List<String> injectJUnit4RuleWhenAnnotationFound,
-			List<String> injectJUnit5ExtensionWhenAnnotationFound) {
+			boolean includeLambdasOnlyWhenOtherInstrumentationIsInPlace, int minimumMethodLoc,
+			String trackerClass, boolean trackMethodStart, boolean trackReturn, boolean trackUnhandledException,
+			boolean trackLocalVariableStateChange, boolean trackFieldStateChanges,
+			List<String> injectJUnit4RuleWhenAnnotationFound, List<String> injectJUnit5ExtensionWhenAnnotationFound) {
 		this.include = include;
 		this.exclude = exclude;
 		this.includeByAnnotation = includeByAnnotation;
@@ -116,6 +120,7 @@ public class Configuration {
 		this.excludeMethodsByName = excludeMethodsByName;
 		this.includeLambdas = includeLambdas;
 		this.includeLambdasOnlyWhenOtherInstrumentationIsInPlace = includeLambdasOnlyWhenOtherInstrumentationIsInPlace;
+		this.trackerClass = trackerClass;
 		this.minimumMethodLoc = minimumMethodLoc;
 		this.trackMethodStart = trackMethodStart;
 		this.trackReturn = trackReturn;
@@ -191,6 +196,10 @@ public class Configuration {
 	public boolean isJUnit5ExtensionInjectionRequired(List<String> methodAnnotations) {
 		return ClassMatcher.anyMatchesAsClassOrPackage(methodAnnotations, injectJUnit5ExtensionWhenAnnotationFound);
 	}
+	
+	public String getTrackerClass() {
+		return trackerClass;
+	}
 
 	public boolean isTrackMethodStart() {
 		return trackMethodStart;
@@ -223,6 +232,7 @@ public class Configuration {
 		boolean includeLambdas = true;
 		boolean includeLambdasOnlyWhenOtherInstrumentationIsInPlace = false;
 		int minimumMethodLoc = 0;
+		String trackerClass;
 		boolean trackMethodStart = true;
 		boolean trackReturn = true;
 		boolean trackUnhandledException = true;
@@ -232,6 +242,10 @@ public class Configuration {
 		List<String> injectJUnit5ExtensionWhenAnnotationFound = new ArrayList<String>();
 
 		public Configuration build() {
+			if (trackerClass == null) {
+				throw new IllegalArgumentException("Missing required parameter: trackerClass");
+			}
+			
 			return new Configuration(
 					include,
 					exclude,
@@ -241,6 +255,7 @@ public class Configuration {
 					includeLambdas,
 					includeLambdasOnlyWhenOtherInstrumentationIsInPlace,
 					minimumMethodLoc,
+					trackerClass,
 					trackMethodStart,
 					trackReturn,
 					trackUnhandledException,
@@ -288,6 +303,11 @@ public class Configuration {
 
 		public Builder setTrackMethodStart(boolean trackMethodStart) {
 			this.trackMethodStart = trackMethodStart;
+			return this;
+		}
+		
+		public Builder setTrackerClass(String trackerClass) {
+			this.trackerClass = trackerClass;
 			return this;
 		}
 

@@ -11,10 +11,12 @@ import org.junit.Test;
 public class ConfigTest {
 
 	private int anyMethodLoc = 10;
+	
+	private String anyTrackerClass = "";
 
 	@Test
 	public void instrumentation_should_be_allowed_by_default() {
-		Configuration config = new Configuration.Builder().build();
+		Configuration config = new Configuration.Builder().setTrackerClass(anyTrackerClass).build();
 		assertTrue(config.isClassInstrumentationAllowed("hu.awm.Example", new ArrayList<String>()));
 		assertTrue(config.isMethodInstrumentationAllowed("test", anyMethodLoc, new ArrayList<String>(), new ArrayList<String>()));
 	}
@@ -22,6 +24,7 @@ public class ConfigTest {
 	@Test
 	public void only_included_classes_should_be_instrumented() {
 		Configuration configWithInclusion = new Configuration.Builder()
+				.setTrackerClass(anyTrackerClass)
 				.setInclude(Arrays.asList("hu.awm"))
 				.build();
 		assertFalse(configWithInclusion.isClassInstrumentationAllowed("hu.Example", new ArrayList<String>()));
@@ -29,12 +32,14 @@ public class ConfigTest {
 		assertTrue(configWithInclusion.isClassInstrumentationAllowed("hu.awm.module.Example", new ArrayList<String>()));
 
 		Configuration configWithExclusion = new Configuration.Builder()
+				.setTrackerClass(anyTrackerClass)
 				.setExclude(Arrays.asList("hu.awm.module"))
 				.build();
 		assertTrue(configWithExclusion.isClassInstrumentationAllowed("hu.awm.Example", new ArrayList<String>()));
 		assertFalse(configWithExclusion.isClassInstrumentationAllowed("hu.awm.module.Example", new ArrayList<String>()));
 
 		Configuration configWithInclusionAndExclusion = new Configuration.Builder()
+				.setTrackerClass(anyTrackerClass)
 				.setInclude(Arrays.asList("hu.awm"))
 				.setExclude(Arrays.asList("hu.awm.module"))
 				.build();
@@ -42,6 +47,7 @@ public class ConfigTest {
 		assertFalse(configWithInclusionAndExclusion.isClassInstrumentationAllowed("hu.awm.module.Example", new ArrayList<String>()));
 
 		Configuration configWithInclusionAndExcludeAnnotation = new Configuration.Builder()
+				.setTrackerClass(anyTrackerClass)
 				.setInclude(Arrays.asList("hu.awm"))
 				.setExcludeByAnnotation(Arrays.asList("hu.awm.Exclude"))
 				.build();
@@ -52,16 +58,18 @@ public class ConfigTest {
 
 	@Test
 	public void only_included_methods_should_be_instrumented() {
-		Configuration config = new Configuration.Builder().build();
+		Configuration config = new Configuration.Builder().setTrackerClass(anyTrackerClass).build();
 		assertTrue(config.isMethodInstrumentationAllowed("test", anyMethodLoc, new ArrayList<String>(), new ArrayList<String>()));
 
 		Configuration configWithNameExclusion = new Configuration.Builder()
+				.setTrackerClass(anyTrackerClass)
 				.setExcludeMethodsByName(Arrays.asList("toString"))
 				.build();
 		assertTrue(configWithNameExclusion.isMethodInstrumentationAllowed("test", anyMethodLoc, new ArrayList<String>(), new ArrayList<String>()));
 		assertFalse(configWithNameExclusion.isMethodInstrumentationAllowed("toString", anyMethodLoc, new ArrayList<String>(), new ArrayList<String>()));
 
 		Configuration configWithIncludeAnnotation = new Configuration.Builder()
+				.setTrackerClass(anyTrackerClass)
 				.setIncludeByAnnotation(Arrays.asList("hu.awm.Include", "hu.awm.Include2"))
 				.build();
 		assertFalse(configWithIncludeAnnotation.isMethodInstrumentationAllowed("test", anyMethodLoc, new ArrayList<String>(), new ArrayList<String>()));
@@ -69,6 +77,7 @@ public class ConfigTest {
 		assertTrue(configWithIncludeAnnotation.isMethodInstrumentationAllowed("test", anyMethodLoc, new ArrayList<String>(), Arrays.asList("hu.awm.Include")));
 
 		Configuration configWithIncludeAndExcludeAnnotation = new Configuration.Builder()
+				.setTrackerClass(anyTrackerClass)
 				.setIncludeByAnnotation(Arrays.asList("hu.awm.Include"))
 				.setExcludeByAnnotation(Arrays.asList("hu.awm.Exclude"))
 				.build();
