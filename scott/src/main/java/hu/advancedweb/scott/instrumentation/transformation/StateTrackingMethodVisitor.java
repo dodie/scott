@@ -20,8 +20,8 @@ import org.objectweb.asm.Type;
  */
 public class StateTrackingMethodVisitor extends MethodVisitor {
 
-	private static final String TRACKER_CLASS = "hu/advancedweb/scott/runtime/track/StateRegistry";
 	private int lineNumber;
+	
 	private int lineNumberForMethodCallTrack;
 
 	private Set<Label> visitedLabels = new HashSet<>();
@@ -240,14 +240,14 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		Logger.log(" - instrumentToTrackMethodStart");
 		super.visitLdcInsn(methodName);
 		super.visitLdcInsn(Type.getType("L" + className + ";"));
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackMethodStart", "(Ljava/lang/String;Ljava/lang/Class;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, instrumentationActions.trackerClass, "trackMethodStart", "(Ljava/lang/String;Ljava/lang/Class;)V", false);
 	}
 	
 	private void instrumentToTrackEndOfArgumentsAtMethodStart() {
 		Logger.log(" - instrumentToTrackEndOfArgumentsAtMethodStart");
 		super.visitLdcInsn(methodName);
 		super.visitLdcInsn(Type.getType("L" + className + ";"));
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackEndOfArgumentsAtMethodStart", "(Ljava/lang/String;Ljava/lang/Class;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, instrumentationActions.trackerClass, "trackEndOfArgumentsAtMethodStart", "(Ljava/lang/String;Ljava/lang/Class;)V", false);
 	}
 	
 	private void instrumentToTrackLambdaDefinition(String handleName, int lineNumber) {
@@ -255,7 +255,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(handleName);
 		super.visitLdcInsn(Type.getType("L" + className + ";"));
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackLambdaDefinition", "(ILjava/lang/String;Ljava/lang/Class;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, instrumentationActions.trackerClass, "trackLambdaDefinition", "(ILjava/lang/String;Ljava/lang/Class;)V", false);
 	}
 	
 	private void instrumentToTrackVariableState(LocalVariableScope localVariableScope, int lineNumber) {
@@ -265,7 +265,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		super.visitLdcInsn(getLineNumberBoundedByScope(lineNumber, localVariableScope));
 		super.visitLdcInsn(methodName);
 		super.visitLdcInsn(Type.getType("L" + className + ";"));
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackLocalVariableState", "(" + localVariableScope.variableType.desc + "Ljava/lang/String;ILjava/lang/String;Ljava/lang/Class;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, instrumentationActions.trackerClass, "trackLocalVariableState", "(" + localVariableScope.variableType.desc + "Ljava/lang/String;ILjava/lang/String;Ljava/lang/Class;)V", false);
 	}
 	
 	private int getLineNumberBoundedByScope(int lineNumber, LocalVariableScope localVariableScope) {
@@ -316,7 +316,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		super.visitLdcInsn(accessedField.owner);
 		
 		// Call tracking code
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;ILjava/lang/String;Ljava/lang/Class;ZLjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, instrumentationActions.trackerClass, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;ILjava/lang/String;Ljava/lang/Class;ZLjava/lang/String;)V", false);
 	}
 	
 	private boolean isCurrentClassIsFieldOwnerOrInnerClassOfFieldOwner(String owner) {
@@ -338,7 +338,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		super.visitLdcInsn(accessedField.owner);
 		
 		// Call tracking code
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;ILjava/lang/String;Ljava/lang/Class;ZLjava/lang/String;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, instrumentationActions.trackerClass, "trackFieldState", "(" + getFieldDescriptor(accessedField) + "Ljava/lang/String;ILjava/lang/String;Ljava/lang/Class;ZLjava/lang/String;)V", false);
 	}
 	
 	private void instrumentToAddOpeningLabelForEnclosingTry() {
@@ -359,7 +359,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(methodName);
 		super.visitLdcInsn(Type.getType("L" + className + ";"));
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackUnhandledException", "(Ljava/lang/Throwable;ILjava/lang/String;Ljava/lang/Class;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, instrumentationActions.trackerClass, "trackUnhandledException", "(Ljava/lang/Throwable;ILjava/lang/String;Ljava/lang/Class;)V", false);
 
 		// Rethrow
 		super.visitInsn(Opcodes.ATHROW);
@@ -374,7 +374,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 			super.visitLdcInsn(lineNumber);
 			super.visitLdcInsn(methodName);
 			super.visitLdcInsn(Type.getType("L" + className + ";"));
-			super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackReturn", "(ILjava/lang/String;Ljava/lang/Class;)V", false);
+			super.visitMethodInsn(Opcodes.INVOKESTATIC, instrumentationActions.trackerClass, "trackReturn", "(ILjava/lang/String;Ljava/lang/Class;)V", false);
 		} else {
 			if (opcode == Opcodes.DRETURN || opcode == Opcodes.LRETURN) {
 				super.visitInsn(Opcodes.DUP2);
@@ -392,7 +392,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 			super.visitLdcInsn(lineNumber);
 			super.visitLdcInsn(methodName);
 			super.visitLdcInsn(Type.getType("L" + className + ";"));
-			super.visitMethodInsn(Opcodes.INVOKESTATIC, TRACKER_CLASS, "trackReturn", "(" + variableType.desc + "ILjava/lang/String;Ljava/lang/Class;)V", false);
+			super.visitMethodInsn(Opcodes.INVOKESTATIC, instrumentationActions.trackerClass, "trackReturn", "(" + variableType.desc + "ILjava/lang/String;Ljava/lang/Class;)V", false);
 		}
 	}
 	

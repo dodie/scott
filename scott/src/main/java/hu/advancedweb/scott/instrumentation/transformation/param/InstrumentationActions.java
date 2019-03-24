@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class InstrumentationActions {
 
+	public final String trackerClass;
 	public final boolean includeClass;
 	private final List<String> trackTheseMethods;
 	private final List<String> trackTheseLambdas;
@@ -35,6 +36,7 @@ public class InstrumentationActions {
 	}
 
 	private InstrumentationActions(
+			String trackerClass,
 			boolean includeClass,
 			List<String> trackTheseMethods,
 			List<String> trackTheseLambdas,
@@ -46,6 +48,7 @@ public class InstrumentationActions {
 			boolean trackLocalVariableStateChanges,
 			boolean trackFieldStateChanges
 	) {
+		this.trackerClass = trackerClass;
 		this.includeClass = includeClass;
 		this.isJUnit4RuleInjectionRequired = isJUnit4RuleInjectionRequired;
 		this.isJUnit5ExtensionInjectionRequired = isJUnit5ExtensionInjectionRequired;
@@ -59,6 +62,7 @@ public class InstrumentationActions {
 	}
 	
 	public static final class Builder {
+		private String trackerClass;
 		private boolean includeClass;
 		private List<String> trackTheseMethods = new ArrayList<>();
 		private List<String> trackTheseLambdas = new ArrayList<>();
@@ -72,6 +76,7 @@ public class InstrumentationActions {
 		
 		public InstrumentationActions build() {
 			return new InstrumentationActions(
+					trackerClass,
 					includeClass,
 					Collections.unmodifiableList(trackTheseMethods),
 					Collections.unmodifiableList(trackTheseLambdas),
@@ -82,6 +87,10 @@ public class InstrumentationActions {
 					trackUnhandledException,
 					trackLocalVariableStateChange,
 					trackFieldStateChanges);
+		}
+		
+		void setTrackerClass(String trackerClass) {
+			this.trackerClass = trackerClass;
 		}
 		
 		void markClassForJUnit4RuleInjection() {

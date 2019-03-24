@@ -9,6 +9,7 @@ public class ScottConfigurer {
 	
 	public static Configuration getConfiguration() {
 		return new Configuration.Builder()
+				.setTrackerClass("hu.advancedweb.scott.runtime.track.StateRegistry")
 				.setIncludeLambdasOnlyWhenOtherInstrumentationIsInPlace(true)
 				.setIncludeByAnnotation(getPropertyConfig("scott.track.method_annotation",
 						new String[] { "org.junit.Test", "org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory",
