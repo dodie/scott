@@ -21,7 +21,7 @@ import org.objectweb.asm.tree.MethodNode;
  * 
  * @author David Csakvari
  */
-public class ScopeExtractorTestMethodVisitor extends MethodNode {
+public class ScopeExtractorMethodVisitor extends MethodNode {
 
 	private List<Label> labels = new ArrayList<>();
 
@@ -40,7 +40,7 @@ public class ScopeExtractorTestMethodVisitor extends MethodNode {
 	private Map<Integer, Integer> lineNumberToFirstOccurrenceOfVariables;
 	private Map<Integer, List<Label>> varAccesses;
 
-	ScopeExtractorTestMethodVisitor(StateTrackingMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
+	ScopeExtractorMethodVisitor(StateTrackingMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
 		super(Opcodes.ASM7, access, name, desc, signature, exceptions);
 		this.next = next;
 		lineNumberToFirstOccurrenceOfVariables = new HashMap<>();

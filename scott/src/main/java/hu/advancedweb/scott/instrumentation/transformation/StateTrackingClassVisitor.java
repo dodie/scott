@@ -15,7 +15,7 @@ import hu.advancedweb.scott.runtime.ScottReportingRule;
  * Manitpulates the class through the appropriate MethodVisitors.
  * 
  * @see ConstructorTransformerMethodVisitor
- * @see ScopeExtractorTestMethodVisitor
+ * @see ScopeExtractorMethodVisitor
  * @see StateTrackingMethodVisitor
  * @author David Csakvari
  */
@@ -49,7 +49,7 @@ public class StateTrackingClassVisitor extends ClassVisitor {
 		} else if (instrumentationActions.isMethodTrackingRequired(name, desc, signature)) {
 		    StateTrackingMethodVisitor variableMutationEventEmitter = new StateTrackingMethodVisitor(methodVisitor,
 					instrumentationActions, className, name, desc);
-		    MethodVisitor variableExtractor = new ScopeExtractorTestMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions);
+		    MethodVisitor variableExtractor = new ScopeExtractorMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions);
 		    return variableExtractor;
 		} else {
 			return methodVisitor;
