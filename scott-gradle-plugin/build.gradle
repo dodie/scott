@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'hu.advanceweb'
-version '3.4.1'
+version '3.5.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 

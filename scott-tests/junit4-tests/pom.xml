@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hu.advancedweb</groupId>
 	<artifactId>junit4-tests</artifactId>
-	<version>3.4.1</version>
+	<version>3.5.0-SNAPSHOT</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
