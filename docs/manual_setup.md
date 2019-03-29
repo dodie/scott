@@ -96,26 +96,28 @@ It's possible modify existing class files (or create new class files based on ex
 instrumentation.
 
 1. Get Scott as a dependency.
-2. Use the [ScottClassFileTransformer](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/instrumentation/ScottClassFileTransformer.java) to transform class files as part of the build process.
+2. Use the [ScottClassFileTransformer](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/instrumentation/ScottClassFileTransformer.java) to transform class files as part of the build process. When using it, make sure to have all runtime dependencies of the code available on the classpath. For more information, see Issue #79.
 3. Make sure to include Scott as a run-time dependency to your application for the instrumentation to work.
 
 The following Gradle setup achieves something similar:
 
 ```groovy
+import hu.advancedweb.scott.instrumentation.ScottClassFileTransformer
+
 buildscript {
 	dependencies {
 		classpath "hu.advancedweb:scott:3.4.1"
 	}
 }
 
-compileJava {
-	doLast {
-		def files = fileTree("${buildDir}/classes").filter {f -> f.path.endsWith(".class")}.files
-		files.forEach { f ->
-			println "Transforming " + f
-			TestClassTransformerRunner.transformClass(f.path)
-			println " - done"
-		}
-	}
+task instrument(type: JavaExec) {
+	main = 'hu.advancedweb.scott.instrumentation.ScottClassFileTransformer'
+	args = [sourceSets.main.java.outputDir.absolutePath]
+	classpath = buildscript.configurations.classpath
+	classpath += sourceSets.main.runtimeClasspath
+}
+
+compileJava.doLast {
+	tasks.instrument.execute()
 }
 ```
