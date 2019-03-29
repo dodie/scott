@@ -132,17 +132,14 @@ Scott instrumentation:  - instrumentToTrackVariableState of variable at 85: Loca
 
 ## Compare instrumented and original bytecode
 
-You can run the [ScottClassFileTransformer](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/instrumentation/ScottClassFileTransformer.java) as a standalone application to process a class file with Scott.
+You can run the [ScottClassFileTransformer](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/instrumentation/ScottClassFileTransformer.java) as a standalone application to process a class files with Scott.
 
 
 ```
 mvn exec:java -Dexec.mainClass="hu.advancedweb.scott.instrumentation.ScottClassFileTransformer" -Dexec.args="<tests_dir>/target/test-classes/hu/ExampleTest.class <tests_dir>/target/test-classes/hu/ExampleTestInstrumented.class"
 ```
 
-Its first parameter is the path of the source class file. If no other parameters are given, it will overwrite the
-source file with its instrumented version. If one additional parameter is supplied, it will leave the source
-file in tact, and will write the instrumented version to the definied target path, making it easy to compare
-the original and the instumented versions.
+Supply the folder of the class files as an argument to instrument them.
 
 
 ## Investigate the contents of a class file
