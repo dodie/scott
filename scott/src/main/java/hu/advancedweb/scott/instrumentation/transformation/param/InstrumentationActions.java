@@ -23,14 +23,16 @@ public class InstrumentationActions {
 	public final boolean trackMethodStart;
 	public final boolean trackReturn;
 	public final boolean trackUnhandledException;
-	public final boolean trackLocalVariableStateChanges;
+	public final boolean trackLocalVariableAssignments;
+	public final boolean trackLocalVariableIncrements;
+	public final boolean trackLocalVariablesAfterEveryMethodCall;
 	public final boolean trackFieldStateChanges;
 
 	public boolean isMethodTrackingRequired(String methodName, String methodDesc, String methodSignature) {
 		return trackTheseMethods.contains(encode(methodName, methodDesc, methodSignature)) ||
 				trackTheseLambdas.contains(encode(methodName, methodDesc, methodSignature));
 	}
-	
+
 	public boolean anyLambdaMarkedForTracking() {
 		return !trackTheseLambdas.isEmpty();
 	}
@@ -45,9 +47,10 @@ public class InstrumentationActions {
 			boolean trackMethodStart,
 			boolean trackReturn,
 			boolean trackUnhandledException,
-			boolean trackLocalVariableStateChanges,
-			boolean trackFieldStateChanges
-	) {
+			boolean trackLocalVariableAssignments,
+			boolean trackLocalVariableIncrements,
+			boolean trackLocalVariablesAfterEveryMethodCall,
+			boolean trackFieldStateChanges) {
 		this.trackerClass = trackerClass;
 		this.includeClass = includeClass;
 		this.isJUnit4RuleInjectionRequired = isJUnit4RuleInjectionRequired;
@@ -57,10 +60,12 @@ public class InstrumentationActions {
 		this.trackMethodStart = trackMethodStart;
 		this.trackReturn = trackReturn;
 		this.trackUnhandledException = trackUnhandledException;
-		this.trackLocalVariableStateChanges = trackLocalVariableStateChanges;
+		this.trackLocalVariableAssignments = trackLocalVariableAssignments;
+		this.trackLocalVariableIncrements = trackLocalVariableIncrements;
+		this.trackLocalVariablesAfterEveryMethodCall = trackLocalVariablesAfterEveryMethodCall;
 		this.trackFieldStateChanges = trackFieldStateChanges;
 	}
-	
+
 	public static final class Builder {
 		private String trackerClass;
 		private boolean includeClass;
@@ -71,9 +76,11 @@ public class InstrumentationActions {
 		private boolean trackMethodStart;
 		private boolean trackReturn;
 		private boolean trackUnhandledException;
-		private boolean trackLocalVariableStateChange;
+		private boolean trackLocalVariableAssignments;
+		private boolean trackLocalVariableIncrements;
+		private boolean trackLocalVariablesAfterEveryMethodCall;
 		private boolean trackFieldStateChanges;
-		
+
 		public InstrumentationActions build() {
 			return new InstrumentationActions(
 					trackerClass,
@@ -85,18 +92,20 @@ public class InstrumentationActions {
 					trackMethodStart,
 					trackReturn,
 					trackUnhandledException,
-					trackLocalVariableStateChange,
+					trackLocalVariableAssignments,
+					trackLocalVariableIncrements,
+					trackLocalVariablesAfterEveryMethodCall,
 					trackFieldStateChanges);
 		}
-		
+
 		void setTrackerClass(String trackerClass) {
 			this.trackerClass = trackerClass;
 		}
-		
+
 		void markClassForJUnit4RuleInjection() {
 			this.isJUnit4RuleInjectionRequired = true;
 		}
-		
+
 		void markClassForJUnit5ExtensionInjection() {
 			this.isJUnit5ExtensionInjectionRequired = true;
 		}
@@ -108,7 +117,7 @@ public class InstrumentationActions {
 		boolean anyMethodMarkedForTracking() {
 			return !trackTheseMethods.isEmpty();
 		}
-		
+
 		void markLambdaForTracking(String methodName, String methodDesc, String methodSignature) {
 			trackTheseLambdas.add(encode(methodName, methodDesc, methodSignature));
 		}
@@ -133,16 +142,24 @@ public class InstrumentationActions {
 			this.trackUnhandledException = trackUnhandledException;
 		}
 
-		void trackLocalVariableStateChange(boolean trackLocalVariableStateChange) {
-			this.trackLocalVariableStateChange = trackLocalVariableStateChange;
+		void trackLocalVariableAssignments(boolean trackLocalVariableAssignments) {
+			this.trackLocalVariableAssignments = trackLocalVariableAssignments;
 		}
-
+		
+		void trackLocalVariableIncrements(boolean trackLocalVariableIncrements) {
+			this.trackLocalVariableIncrements = trackLocalVariableIncrements;
+		}
+		
+		void trackLocalVariablesAfterEveryMethodCall(boolean trackLocalVariablesAfterEveryMethodCall) {
+			this.trackLocalVariablesAfterEveryMethodCall = trackLocalVariablesAfterEveryMethodCall;
+		}
+		
 		void trackFieldStateChanges(boolean trackFieldStateChanges) {
 			this.trackFieldStateChanges = trackFieldStateChanges;
 		}
 
 	}
-	
+
 	private static String encode(String methodName, String methodDesc, String methodSignature) {
 		return methodName + "|" + methodDesc + "|" + methodSignature;
 	}

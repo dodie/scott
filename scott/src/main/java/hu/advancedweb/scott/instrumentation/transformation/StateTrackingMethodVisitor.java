@@ -130,7 +130,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		}
 		
 		if (!owner.startsWith("org/mockito")) {
-			if (instrumentationActions.trackLocalVariableStateChanges) {
+			if (instrumentationActions.trackLocalVariablesAfterEveryMethodCall) {
 				// track every variable state after method calls
 				for (LocalVariableScope localVariableScope : localVariableScopes) {
 					if (!localVariables.contains(localVariableScope.var))
@@ -165,7 +165,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	public void visitVarInsn(int opcode, int var) {
 		super.visitVarInsn(opcode, var);
 
-		if (!instrumentationActions.trackLocalVariableStateChanges) {
+		if (!instrumentationActions.trackLocalVariableAssignments) {
 			return;
 		}
 
@@ -192,7 +192,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	public void visitIincInsn(int var, int increment) {
 		super.visitIincInsn(var, increment);
 
-		if (instrumentationActions.trackLocalVariableStateChanges) {
+		if (instrumentationActions.trackLocalVariableIncrements) {
 			// Track variable state at variable increases (e.g. i++).
 			LocalVariableScope lvs = getLocalVariableScope(var);
 			instrumentToTrackVariableState(lvs, lineNumber);
