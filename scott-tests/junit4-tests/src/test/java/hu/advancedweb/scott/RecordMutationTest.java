@@ -21,10 +21,25 @@ public class RecordMutationTest {
 	}
 	
 	@Test
-	public void simpleMutationInc() throws Exception {
-		int i = 0;
-		i++;
+	public void plusEqualsMutation() throws Exception {
+		long l = 1L;
+		int i = 1;
+		Long lL = Long.valueOf("1");
+		Integer iI = Integer.valueOf("1");
+		
+		i = (int)(i + l);
+		i += l;
 		assertThat(TestHelper.getLastRecordedStateForVariable("i"), equalTo(Integer.toString(i)));
+		
+		iI = (int)(iI + lL);
+		assertThat(TestHelper.getLastRecordedStateForVariable("iI"), equalTo(Integer.toString(iI)));
+		
+		i = (int)(i + lL);
+		i += lL;
+		assertThat(TestHelper.getLastRecordedStateForVariable("i"), equalTo(Integer.toString(i)));
+		
+		iI = (int)(iI + l);
+		assertThat(TestHelper.getLastRecordedStateForVariable("iI"), equalTo(Integer.toString(iI)));
 	}
 	
 	@Test
