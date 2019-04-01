@@ -147,7 +147,7 @@ Supply the folder of the class files as an argument to instrument them.
 The simplest way is to use `javap`. For example:
 
 ```
-javap -c -l hu.advancedweb.scott.ExampleTest
+javap -c -l -private hu.advancedweb.scott.ExampleTest
 ```
 
 Or, to see a class file exactly as Scott does, you can use the [ClassFileStructurePrinter](https://github.com/dodie/scott/blob/master/scott/src/main/java/hu/advancedweb/scott/debug/printer/ClassFileStructurePrinter.java). For example:
