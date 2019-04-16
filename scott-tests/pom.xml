@@ -13,5 +13,7 @@
 	<modules>
 		<module>junit4-tests</module>
 		<module>junit5-tests</module>
+		<module>configuration-example-classes</module>
+		<module>configuration-based-tests</module>
 	</modules>
 </project>
