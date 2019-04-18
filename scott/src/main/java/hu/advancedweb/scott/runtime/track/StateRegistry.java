@@ -25,10 +25,6 @@ public class StateRegistry {
 	
 	private static List<StateData> FIELD_STATES = new ArrayList<StateData>();
 	
-	private static List<ReturnData> RETURN_VALUES = new ArrayList<ReturnData>();
-
-	private static List<ExceptionData> UNHANDLED_EXCEPTIONS = new ArrayList<ExceptionData>();
-
 	private static String METHOD_NAME;
 
 	private static String CLASS_NAME;
@@ -39,16 +35,8 @@ public class StateRegistry {
 		return Collections.unmodifiableList(LOCAL_VARIABLE_STATES);
 	}
 	
-	public static List<ExceptionData> getUnhandledExceptions() {
-		return Collections.unmodifiableList(UNHANDLED_EXCEPTIONS);
-	}
-	
 	public static List<StateData> getFieldStates() {
 		return Collections.unmodifiableList(FIELD_STATES);
-	}
-	
-	public static List<ReturnData> getRetrunValues() {
-		return Collections.unmodifiableList(RETURN_VALUES);
 	}
 	
 	public static String getTestClassType() {
@@ -70,8 +58,6 @@ public class StateRegistry {
 		if (!methodName.startsWith("lambda$")) {
 			LOCAL_VARIABLE_STATES.clear();
 			FIELD_STATES.clear();
-			RETURN_VALUES.clear();
-			UNHANDLED_EXCEPTIONS.clear();
 		}
 	}
 	
@@ -185,48 +171,47 @@ public class StateRegistry {
 	}
 	
 	public static void trackUnhandledException(Throwable throwable, int lineNumber, String methodName, Class<?> clazz) {
-		UNHANDLED_EXCEPTIONS.add(new ExceptionData(lineNumber, methodName, throwable));
+		// Do nothing.
 	}
 	
 	public static void trackReturn(int lineNumber, String methodName, Class<?> clazz) {
-		RETURN_VALUES.add(new ReturnData(lineNumber, methodName));
+		// Do nothing.
 	}
 
 	public static void trackReturn(byte value, int lineNumber, String methodName, Class<?> clazz) {
-		RETURN_VALUES.add(new ReturnValueData(lineNumber, methodName, Byte.toString(value)));
+		// Do nothing.
 	}
 
 	public static void trackReturn(short value, int lineNumber, String methodName, Class<?> clazz) {
-		RETURN_VALUES.add(new ReturnValueData(lineNumber, methodName, Short.toString(value)));
+		// Do nothing.
 	}
 
 	public static void trackReturn(int value, int lineNumber, String methodName, Class<?> clazz) {
-		RETURN_VALUES.add(new ReturnValueData(lineNumber, methodName, Integer.toString(value)));
+		// Do nothing.
 	}
 
 	public static void trackReturn(long value, int lineNumber, String methodName, Class<?> clazz) {
-		RETURN_VALUES.add(new ReturnValueData(lineNumber, methodName, Long.toString(value)));
+		// Do nothing.
 	}
 
 	public static void trackReturn(float value, int lineNumber, String methodName, Class<?> clazz) {
-		RETURN_VALUES.add(new ReturnValueData(lineNumber, methodName, Float.toString(value)));
+		// Do nothing.
 	}
 
 	public static void trackReturn(double value, int lineNumber, String methodName, Class<?> clazz) {
-		RETURN_VALUES.add(new ReturnValueData(lineNumber, methodName, Double.toString(value)));
+		// Do nothing.
 	}
 
 	public static void trackReturn(boolean value, int lineNumber, String methodName, Class<?> clazz) {
-		RETURN_VALUES.add(new ReturnValueData(lineNumber, methodName, Boolean.toString(value)));
+		// Do nothing.
 	}
 
 	public static void trackReturn(char value, int lineNumber, String methodName, Class<?> clazz) {
-		RETURN_VALUES.add(new ReturnValueData(lineNumber, methodName, Character.toString(value)));
+		// Do nothing.
 	}
 
 	public static void trackReturn(Object value, int lineNumber, String methodName, Class<?> clazz) {
-		String stringValue = objectToStringIgnoreMockitoExceptions(value);
-		RETURN_VALUES.add(new ReturnValueData(lineNumber, methodName, stringValue));
+		// Do nothing.
 	}
 	
 	private static String objectToStringIgnoreMockitoExceptions(Object value) {

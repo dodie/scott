@@ -19,6 +19,8 @@ public class ScottConfigurer {
 				.setInjectJUnit5ExtensionWhenAnnotationFound(getPropertyConfig(
 						"scott.inject_junit5_extension.method_annotation",
 						new String[] { "org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory" }))
+				.setTrackReturn(false)
+				.setTrackUnhandledException(false)
 				.build();
 	}
 
