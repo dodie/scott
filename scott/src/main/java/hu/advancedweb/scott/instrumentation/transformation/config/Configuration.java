@@ -17,54 +17,54 @@ public class Configuration {
 	 * List of packages and classes to be instrumented.
 	 * When empty, all classes are instrumented.
 	 */
-	private List<String> include = new ArrayList<String>();
+	private final List<String> include;
 
 	/**
 	 * List of packages and classes to be excluded from the instrumentation.
 	 * When empty, no classes are excluded from the instrumentation.
 	 */
-	private List<String> exclude = new ArrayList<String>();
+	private final List<String> exclude;
 
 	/**
 	 * Instrument methods if they are marked with at least one of the specified annotations.
 	 * When a specified annotation found on a class, all of its methods will be instrumented.
 	 * When empty, all methods are instrumented.
 	 */
-	private List<String> includeByAnnotation = new ArrayList<String>();
+	private final List<String> includeByAnnotation;
 
 	/**
 	 * Exclude methods from instrumentation if they are marked with at least one of the specified annotations.
 	 * When a specified annotation found on a class, all of its methods will be excluded.
 	 * When empty, no methods are excluded from the instrumentation.
 	 */
-	private List<String> excludeByAnnotation = new ArrayList<String>();
+	private final List<String> excludeByAnnotation;
 
 	/**
 	 * When a method name matches for any of the supplied parameters, it will not be instrumented.
 	 * When empty, no methods are excluded from the instrumentation.
 	 */
-	private List<String> excludeMethodsByName = new ArrayList<String>();
+	private final List<String> excludeMethodsByName;
 
 	/**
 	 * Allow lambdas to be instrumented.
 	 */
-	private boolean includeLambdas = true;
+	private final boolean includeLambdas;
 
 	/**
 	 * Instrument lambdas only when at least one method is instrumented in the class.
 	 */
-	private boolean includeLambdasOnlyWhenOtherInstrumentationIsInPlace = false;
+	private final boolean includeLambdasOnlyWhenOtherInstrumentationIsInPlace;
 
 	/**
 	 * Exclude methods from instrumentation with the amount of LOC is under or equal to the limit.
 	 * When 0, no methods are excluded from the instrumentation.
 	 */
-	private int minimumMethodLoc = 0;
+	private final int minimumMethodLoc;
 
 	/**
 	 * Specifies the class which will receive the tracked events. 
 	 */
-	private String trackerClass;
+	private final String trackerClass;
 
 	/*
 	 * Feature flags.
@@ -73,49 +73,49 @@ public class Configuration {
 	/**
 	 * Track events for entering a method.
 	 */
-	private boolean trackMethodStart = true;
+	private final boolean trackMethodStart;
 
 	/**
 	 * Track events for returning from a method.
 	 */
-	private boolean trackReturn = true;
+	private final boolean trackReturn;
 
 	/**
 	 * Track unhandled exceptions.
 	 */
-	private boolean trackUnhandledException = true;
+	private final boolean trackUnhandledException;
 
 	/**
 	 * Track local variable assignments.
 	 */
-	private boolean trackLocalVariableAssignments = true;
+	private final boolean trackLocalVariableAssignments;
 	
 	/**
 	 * Track local variable assignments.
 	 */
-	private boolean trackLocalVariableIncrements = true;
+	private final boolean trackLocalVariableIncrements;
 	
 	/**
 	 * Track local variable assignments.
 	 */
-	private boolean trackLocalVariablesAfterEveryMethodCall = true;
+	private final boolean trackLocalVariablesAfterEveryMethodCall;
 	
 	/**
 	 * Track field changes.
 	 */
-	private boolean trackFieldStateChanges = true;
+	private final boolean trackFieldStateChanges;
 
 	/*
 	 * Inject ScottReportingRule to catch failing tests for JUnit4, if the class has at least one method with at least one of the following annotations.
 	 * When empty, the rule is not injected to the class.
 	 */
-	private List<String> injectJUnit4RuleWhenAnnotationFound = new ArrayList<String>();
+	private final List<String> injectJUnit4RuleWhenAnnotationFound;
 
 	/*
 	 * Inject ScottJUnit5Extension to catch failing tests for JUnit5, if the class has at least one method with at least one of the following annotations.
 	 * When empty, the extension is not injected to the class.
 	 */
-	private List<String> injectJUnit5ExtensionWhenAnnotationFound = new ArrayList<String>();
+	private final List<String> injectJUnit5ExtensionWhenAnnotationFound;
 
 	Configuration(
 			List<String> include,
