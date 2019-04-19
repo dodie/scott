@@ -1,5 +1,5 @@
 Scott Test Reporter - JUnit 5 Test Suite
 ========================================
 
-Ensures that the features of JUnit 5 work well with Scott. This suite also tests Java 11 integration.
+Contains narrow-scoped tests to test Scott Test Reporter in integration with JUnit 5, Maven and Java 11.
 
