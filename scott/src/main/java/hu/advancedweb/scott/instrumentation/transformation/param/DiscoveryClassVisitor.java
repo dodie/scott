@@ -65,7 +65,8 @@ public class DiscoveryClassVisitor extends ClassVisitor {
 		transformationParameters.trackLocalVariableAssignments(configuration.isTrackLocalVariableAssignments());
 		transformationParameters.trackLocalVariableIncrements(configuration.isTrackLocalVariableIncrements());
 		transformationParameters.trackLocalVariablesAfterEveryMethodCall(configuration.isTrackLocalVariablesAfterEveryMethodCall());
-		transformationParameters.trackFieldStateChanges(configuration.isTrackFieldStateChanges());
+		transformationParameters.trackFieldAssignments(configuration.isTrackFieldAssignments());
+		transformationParameters.trackFieldsAfterEveryMethodCall(configuration.isTrackFieldsAfterEveryMethodCall());
 
 		if (!transformationParameters.anyMethodMarkedForTracking() &&
 				configuration.isLambdaInstrumentationAllowedWhenOtherInstrumentationIsInPlace()) {

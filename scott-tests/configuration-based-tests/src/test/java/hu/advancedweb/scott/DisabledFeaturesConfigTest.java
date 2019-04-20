@@ -15,12 +15,12 @@ public class DisabledFeaturesConfigTest {
 	@Test
 	public void withDisabledConfigNoInstrumentationHappens() throws Exception {
 		Configuration disabledConfig = new Configuration.Builder()
-				.setTrackFieldStateChanges(false)
 				.setTrackLocalVariableAssignments(false)
 				.setIncludeLambdas(false)
 				.setTrackLocalVariableIncrements(false)
 				.setTrackLocalVariablesAfterEveryMethodCall(false)
-				.setTrackFieldStateChanges(false)
+				.setTrackFieldAssignments(false)
+				.setTrackFieldsAfterEveryMethodCall(false)
 				.setTrackMethodStart(false)
 				.setTrackReturn(false)
 				.setTrackUnhandledException(false)

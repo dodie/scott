@@ -26,7 +26,8 @@ public class InstrumentationActions {
 	public final boolean trackLocalVariableAssignments;
 	public final boolean trackLocalVariableIncrements;
 	public final boolean trackLocalVariablesAfterEveryMethodCall;
-	public final boolean trackFieldStateChanges;
+	public final boolean trackFieldAssignments;
+	public final boolean trackFieldsAfterEveryMethodCall;
 
 	public boolean isMethodTrackingRequired(String methodName, String methodDesc, String methodSignature) {
 		return trackTheseMethods.contains(encode(methodName, methodDesc, methodSignature)) ||
@@ -50,7 +51,8 @@ public class InstrumentationActions {
 			boolean trackLocalVariableAssignments,
 			boolean trackLocalVariableIncrements,
 			boolean trackLocalVariablesAfterEveryMethodCall,
-			boolean trackFieldStateChanges) {
+			boolean trackFieldAssignments,
+			boolean trackFieldsAfterEveryMethodCall) {
 		this.trackerClass = trackerClass;
 		this.includeClass = includeClass;
 		this.isJUnit4RuleInjectionRequired = isJUnit4RuleInjectionRequired;
@@ -63,7 +65,8 @@ public class InstrumentationActions {
 		this.trackLocalVariableAssignments = trackLocalVariableAssignments;
 		this.trackLocalVariableIncrements = trackLocalVariableIncrements;
 		this.trackLocalVariablesAfterEveryMethodCall = trackLocalVariablesAfterEveryMethodCall;
-		this.trackFieldStateChanges = trackFieldStateChanges;
+		this.trackFieldAssignments = trackFieldAssignments;
+		this.trackFieldsAfterEveryMethodCall = trackFieldsAfterEveryMethodCall;
 	}
 
 	public static final class Builder {
@@ -79,7 +82,8 @@ public class InstrumentationActions {
 		private boolean trackLocalVariableAssignments;
 		private boolean trackLocalVariableIncrements;
 		private boolean trackLocalVariablesAfterEveryMethodCall;
-		private boolean trackFieldStateChanges;
+		private boolean trackFieldAssignments;
+		private boolean trackFieldsAfterEveryMethodCall;
 
 		public InstrumentationActions build() {
 			return new InstrumentationActions(
@@ -95,7 +99,8 @@ public class InstrumentationActions {
 					trackLocalVariableAssignments,
 					trackLocalVariableIncrements,
 					trackLocalVariablesAfterEveryMethodCall,
-					trackFieldStateChanges);
+					trackFieldAssignments,
+					trackFieldsAfterEveryMethodCall);
 		}
 
 		void setTrackerClass(String trackerClass) {
@@ -154,8 +159,12 @@ public class InstrumentationActions {
 			this.trackLocalVariablesAfterEveryMethodCall = trackLocalVariablesAfterEveryMethodCall;
 		}
 		
-		void trackFieldStateChanges(boolean trackFieldStateChanges) {
-			this.trackFieldStateChanges = trackFieldStateChanges;
+		void trackFieldAssignments(boolean trackFieldAssignments) {
+			this.trackFieldAssignments = trackFieldAssignments;
+		}
+		
+		void trackFieldsAfterEveryMethodCall(boolean trackFieldsAfterEveryMethodCall) {
+			this.trackFieldsAfterEveryMethodCall = trackFieldsAfterEveryMethodCall;
 		}
 
 	}

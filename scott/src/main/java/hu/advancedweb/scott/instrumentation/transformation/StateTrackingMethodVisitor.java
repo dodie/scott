@@ -66,7 +66,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 			// track method start
 			instrumentToTrackMethodStart();
 
-			if (instrumentationActions.trackFieldStateChanges) {
+			if (instrumentationActions.trackFieldsAfterEveryMethodCall || instrumentationActions.trackFieldAssignments) {
 				// track initial field states
 				for (AccessedField accessedField : accessedFields) {
 					instrumentToTrackFieldState(accessedField, lineNumber);
@@ -142,7 +142,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 				}
 			}
 
-			if (instrumentationActions.trackFieldStateChanges) {
+			if (instrumentationActions.trackFieldsAfterEveryMethodCall) {
 				// track every field state after method calls
 				for (AccessedField accessedField : accessedFields) {
 					instrumentToTrackFieldState(accessedField, lineNumberForMethodCallTrack);
@@ -203,7 +203,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	public void visitFieldInsn(int opcode, String owner, String name, String desc) {
 		super.visitFieldInsn(opcode, owner, name, desc);
 
-		if (!instrumentationActions.trackFieldStateChanges) {
+		if (!instrumentationActions.trackFieldAssignments) {
 			return;
 		}
 

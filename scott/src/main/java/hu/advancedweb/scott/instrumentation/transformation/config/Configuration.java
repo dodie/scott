@@ -91,19 +91,24 @@ public class Configuration {
 	private final boolean trackLocalVariableAssignments;
 	
 	/**
-	 * Track local variable assignments.
+	 * Track local variable increments (i++).
 	 */
 	private final boolean trackLocalVariableIncrements;
 	
 	/**
-	 * Track local variable assignments.
+	 * Track local variables after every method call.
 	 */
 	private final boolean trackLocalVariablesAfterEveryMethodCall;
 	
 	/**
-	 * Track field changes.
+	 * Track assignments to fields.
 	 */
-	private final boolean trackFieldStateChanges;
+	private final boolean trackFieldAssignments;
+	
+	/**
+	 * Track fields after every method call.
+	 */
+	private final boolean trackFieldsAfterEveryMethodCall;
 
 	/*
 	 * Inject ScottReportingRule to catch failing tests for JUnit4, if the class has at least one method with at least one of the following annotations.
@@ -133,7 +138,8 @@ public class Configuration {
 			boolean trackLocalVariableAssignments,
 			boolean trackLocalVariableIncrements,
 			boolean trackLocalVariablesAfterEveryMethodCall,
-			boolean trackFieldStateChanges,
+			boolean trackFieldAssignments,
+			boolean trackFieldsAfterEveryMethodCall,
 			List<String> injectJUnit4RuleWhenAnnotationFound,
 			List<String> injectJUnit5ExtensionWhenAnnotationFound) {
 		this.include = include;
@@ -151,7 +157,8 @@ public class Configuration {
 		this.trackLocalVariableAssignments = trackLocalVariableAssignments;
 		this.trackLocalVariableIncrements = trackLocalVariableIncrements;
 		this.trackLocalVariablesAfterEveryMethodCall = trackLocalVariablesAfterEveryMethodCall;
-		this.trackFieldStateChanges = trackFieldStateChanges;
+		this.trackFieldAssignments = trackFieldAssignments;
+		this.trackFieldsAfterEveryMethodCall = trackFieldsAfterEveryMethodCall;
 		this.injectJUnit4RuleWhenAnnotationFound = injectJUnit4RuleWhenAnnotationFound;
 		this.injectJUnit5ExtensionWhenAnnotationFound = injectJUnit5ExtensionWhenAnnotationFound;
 	}
@@ -249,9 +256,13 @@ public class Configuration {
 	public boolean isTrackLocalVariablesAfterEveryMethodCall() {
 		return trackLocalVariablesAfterEveryMethodCall;
 	}
-
-	public boolean isTrackFieldStateChanges() {
-		return trackFieldStateChanges;
+	
+	public boolean isTrackFieldAssignments() {
+		return trackFieldAssignments;
+	}
+	
+	public boolean isTrackFieldsAfterEveryMethodCall() {
+		return trackFieldsAfterEveryMethodCall;
 	}
 
 
@@ -272,7 +283,8 @@ public class Configuration {
 		boolean trackLocalVariableAssignments = true;
 		boolean trackLocalVariableIncrements = true;
 		boolean trackLocalVariablesAfterEveryMethodCall = true;
-		boolean trackFieldStateChanges = true;
+		boolean trackFieldAssignments = true;
+		boolean trackFieldsAfterEveryMethodCall = true;
 		List<String> injectJUnit4RuleWhenAnnotationFound = new ArrayList<String>();
 		List<String> injectJUnit5ExtensionWhenAnnotationFound = new ArrayList<String>();
 
@@ -297,7 +309,8 @@ public class Configuration {
 					trackLocalVariableAssignments,
 					trackLocalVariableIncrements,
 					trackLocalVariablesAfterEveryMethodCall,
-					trackFieldStateChanges,
+					trackFieldAssignments,
+					trackFieldsAfterEveryMethodCall,
 					injectJUnit4RuleWhenAnnotationFound,
 					injectJUnit5ExtensionWhenAnnotationFound);
 		}
@@ -378,8 +391,13 @@ public class Configuration {
 			return this;
 		}
 
-		public Builder setTrackFieldStateChanges(boolean trackFieldStateChanges) {
-			this.trackFieldStateChanges = trackFieldStateChanges;
+		public Builder setTrackFieldAssignments(boolean trackFieldAssignments) {
+			this.trackFieldAssignments = trackFieldAssignments;
+			return this;
+		}
+		
+		public Builder setTrackFieldsAfterEveryMethodCall(boolean trackFieldsAfterEveryMethodCall) {
+			this.trackFieldsAfterEveryMethodCall = trackFieldsAfterEveryMethodCall;
 			return this;
 		}
 
