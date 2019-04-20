@@ -2,9 +2,9 @@ package hu.advancedweb.scott.helper;
 
 public interface TestScottRuntimeVerifier {
 	
-	public void trackMethodStart(String methodName, Class<?> clazz);
+	public void trackMethodStart(int lineNumber, String methodName, Class<?> clazz);
 	
-	public void trackEndOfArgumentsAtMethodStart(String methodName, Class<?> clazz);
+	public void trackEndOfArgumentsAtMethodStart(int lineNumber, String methodName, Class<?> clazz);
 	
 	public void trackLocalVariableState(Object value, String name, int lineNumber, String methodName, Class<?> clazz);
 	

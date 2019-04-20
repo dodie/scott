@@ -8,6 +8,7 @@ import hu.advancedweb.scott.helper.TestScottRuntimeVerifier;
 import hu.advancedweb.scott.instrumentation.transformation.config.Configuration;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -27,16 +28,16 @@ public class MinimumMethodLocTest {
 			Object obj = clazz.getDeclaredConstructor().newInstance();
 
 			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith1LineBodyInlineDeclaration"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
 			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith1LineBody"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith3LineBody"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith9LineBody"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}
 
@@ -52,16 +53,16 @@ public class MinimumMethodLocTest {
 			Object obj = clazz.getDeclaredConstructor().newInstance();
 
 			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith1LineBodyInlineDeclaration"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
 			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith1LineBody"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith3LineBody"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith9LineBody"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}
 
@@ -77,16 +78,16 @@ public class MinimumMethodLocTest {
 			Object obj = clazz.getDeclaredConstructor().newInstance();
 
 			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith1LineBodyInlineDeclaration"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
 			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith1LineBody"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith3LineBody"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith9LineBody"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}
 
@@ -102,16 +103,16 @@ public class MinimumMethodLocTest {
 			Object obj = clazz.getDeclaredConstructor().newInstance();
 
 			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith1LineBodyInlineDeclaration"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
 			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith1LineBody"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith3LineBody"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith9LineBody"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}
 
@@ -127,16 +128,16 @@ public class MinimumMethodLocTest {
 			Object obj = clazz.getDeclaredConstructor().newInstance();
 
 			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith1LineBodyInlineDeclaration"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
 			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith1LineBody"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith3LineBody"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith9LineBody"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}
 
@@ -152,16 +153,16 @@ public class MinimumMethodLocTest {
 			Object obj = clazz.getDeclaredConstructor().newInstance();
 
 			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith1LineBodyInlineDeclaration"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
 			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith1LineBody"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith3LineBody"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
-			verify(testRuntime, times(1)).trackMethodStart(eq("methodWith9LineBody"), any());
+			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}
 
@@ -177,16 +178,16 @@ public class MinimumMethodLocTest {
 			Object obj = clazz.getDeclaredConstructor().newInstance();
 
 			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith1LineBodyInlineDeclaration"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
 			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith1LineBody"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith3LineBody"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
 			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
-			verify(testRuntime, times(0)).trackMethodStart(eq("methodWith9LineBody"), any());
+			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}
 

@@ -18,12 +18,12 @@ public class TestScottRuntime {
 		}
 	}
 	
-	public static void trackMethodStart(String methodName, Class<?> clazz) {
-		INSTANCE.get().trackMethodStart(methodName, clazz);
+	public static void trackMethodStart(int lineNumber, String methodName, Class<?> clazz) {
+		INSTANCE.get().trackMethodStart(lineNumber, methodName, clazz);
 	}
 	
-	public static void trackEndOfArgumentsAtMethodStart(String methodName, Class<?> clazz) {
-		INSTANCE.get().trackEndOfArgumentsAtMethodStart(methodName, clazz);
+	public static void trackEndOfArgumentsAtMethodStart(int lineNumber, String methodName, Class<?> clazz) {
+		INSTANCE.get().trackEndOfArgumentsAtMethodStart(lineNumber, methodName, clazz);
 	}
 	
 	public static void trackLocalVariableState(Object value, String name, int lineNumber, String methodName, Class<?> clazz) {

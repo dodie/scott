@@ -36,6 +36,8 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 	private StateTrackingMethodVisitor next;
 
 	private int lineNumber;
+	
+	private Integer methodStartLineNumber;
 
 	private Map<Integer, Integer> lineNumberToFirstOccurrenceOfVariables;
 	private Map<Integer, List<Label>> varAccesses;
@@ -76,6 +78,9 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 	@Override
 	public void visitLineNumber(int lineNumber, Label start) {
 		this.lineNumber = lineNumber;
+		if (this.methodStartLineNumber == null) {
+			methodStartLineNumber = lineNumber;
+		}
 		super.visitLineNumber(lineNumber, start);
 		lines.put(lineNumber, start);
 	}
@@ -128,6 +133,7 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 			}
 			localVariableScopes.add(calculateScope(scope));
 		}
+		next.setMethodStartLineNumber(methodStartLineNumber);
 		next.setLocalVariableScopes(localVariableScopes);
 		next.setAccessedFields(accessedFields);
 

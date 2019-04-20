@@ -8,6 +8,7 @@ import hu.advancedweb.scott.helper.TestScottRuntimeVerifier;
 import hu.advancedweb.scott.instrumentation.transformation.config.Configuration;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -153,7 +154,7 @@ public class PackageInclusionExclusionTest {
 			Object obj = clazz.getDeclaredConstructor().newInstance();
 
 			clazz.getDeclaredMethod("hello").invoke(obj);
-			verify(testRuntime).trackMethodStart(eq("hello"), any());
+			verify(testRuntime).trackMethodStart(anyInt(), eq("hello"), any());
 		});
 	}
 

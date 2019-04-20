@@ -33,7 +33,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	private List<LocalVariableScope> localVariableScopes = new ArrayList<>();
 
 	private Set<AccessedField> accessedFields;
-
+	
 	private InstrumentationActions instrumentationActions;
 
 	private String methodName;
@@ -61,7 +61,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		if (instrumentationActions.trackUnhandledException) {
 			instrumentToAddOpeningLabelForEnclosingTry();
 		}
-
+		
 		if (instrumentationActions.trackMethodStart) {
 			// track method start
 			instrumentToTrackMethodStart();
@@ -238,16 +238,18 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 
 	private void instrumentToTrackMethodStart() {
 		Logger.log(" - instrumentToTrackMethodStart");
+		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(methodName);
 		super.visitLdcInsn(Type.getType("L" + className + ";"));
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, instrumentationActions.trackerClass, "trackMethodStart", "(Ljava/lang/String;Ljava/lang/Class;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, instrumentationActions.trackerClass, "trackMethodStart", "(ILjava/lang/String;Ljava/lang/Class;)V", false);
 	}
 	
 	private void instrumentToTrackEndOfArgumentsAtMethodStart() {
 		Logger.log(" - instrumentToTrackEndOfArgumentsAtMethodStart");
+		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(methodName);
 		super.visitLdcInsn(Type.getType("L" + className + ";"));
-		super.visitMethodInsn(Opcodes.INVOKESTATIC, instrumentationActions.trackerClass, "trackEndOfArgumentsAtMethodStart", "(Ljava/lang/String;Ljava/lang/Class;)V", false);
+		super.visitMethodInsn(Opcodes.INVOKESTATIC, instrumentationActions.trackerClass, "trackEndOfArgumentsAtMethodStart", "(ILjava/lang/String;Ljava/lang/Class;)V", false);
 	}
 	
 	private void instrumentToTrackLambdaDefinition(String handleName, int lineNumber) {
@@ -421,6 +423,10 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 			}
 		}
 		return null;
+	}
+	
+	void setMethodStartLineNumber(Integer methodStartLineNumber) {
+		this.lineNumber = methodStartLineNumber != null ? methodStartLineNumber : 0;
 	}
 	
 	void setLocalVariableScopes(List<LocalVariableScope> localVariableScopes) {
