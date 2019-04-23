@@ -28,7 +28,7 @@ class ScottCucumberEnricher {
 			builder.append(getErrorMessage(result.getError()));
 			errorMessage = builder.toString();
 		} else {
-			String errorString = FailureRenderer.render(null, null);
+			String errorString = FailureRenderer.render(null, null, null);
 			informationList.add(errorString);
 		}
 		return new Result(result.getStatus(), result.getDuration(), errorMessage);

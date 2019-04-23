@@ -9,15 +9,12 @@ import hu.advancedweb.scott.runtime.track.StateData;
 import hu.advancedweb.scott.runtime.track.StateRegistry;
 
 /**
- * Renders the pretty-printed report optimized for terminals.
+ * Renders the pretty-printed plain text report containing the source of the
+ * failing test case annotated with the state-changes in the test.
  * 
  * @author David Csakvari
  */
 public class FailureRenderer {
-
-	public static String render(String testClassName, String testMethodName) {
-		return render(testClassName, testMethodName, null);
-	}
 
 	public static String render(String testClassName, String testMethodName, Throwable throwable) {
 		MethodSource methodSource = getTestMethodSource(testClassName, testMethodName);
