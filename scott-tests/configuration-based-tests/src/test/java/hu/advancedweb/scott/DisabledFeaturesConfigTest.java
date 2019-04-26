@@ -5,7 +5,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 
 import org.junit.Test;
 
-import hu.advancedweb.scott.helper.CustomClassLoader;
+import hu.advancedweb.scott.helper.InstrumentedObject;
 import hu.advancedweb.scott.helper.TestScottRuntime;
 import hu.advancedweb.scott.helper.TestScottRuntimeVerifier;
 import hu.advancedweb.scott.instrumentation.transformation.config.Configuration;
@@ -33,13 +33,8 @@ public class DisabledFeaturesConfigTest {
 	}
 	
 	private void assertNoTrackingMethodInvoked(String name, Configuration configuration) {
-		Class<?> clazz = CustomClassLoader
-				.loadAndTransform(name, configuration);
-
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Object obj = clazz.getDeclaredConstructor().newInstance();
-
-			clazz.getDeclaredMethod("ii").invoke(obj);
+			InstrumentedObject.create(name, configuration).invokeMethod("ii");
 			verifyZeroInteractions(testRuntime);
 		});
 	}

@@ -2,7 +2,7 @@ package hu.advancedweb.scott;
 
 import org.junit.Test;
 
-import hu.advancedweb.scott.helper.CustomClassLoader;
+import hu.advancedweb.scott.helper.InstrumentedObject;
 import hu.advancedweb.scott.helper.TestScottRuntime;
 import hu.advancedweb.scott.helper.TestScottRuntimeVerifier;
 import hu.advancedweb.scott.instrumentation.transformation.config.Configuration;
@@ -21,22 +21,19 @@ public class MinimumMethodLocTest {
 		Configuration configuration = new Configuration.Builder()
 				.setTrackerClass(TestScottRuntime.class.getCanonicalName()).build();
 
-		Class<?> clazz = CustomClassLoader
-				.loadAndTransform("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
+		InstrumentedObject instrumentedObject = InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
 
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Object obj = clazz.getDeclaredConstructor().newInstance();
-
-			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBodyInlineDeclaration");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
-			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBody");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith3LineBody");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith9LineBody");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}
@@ -46,22 +43,19 @@ public class MinimumMethodLocTest {
 		Configuration configuration = new Configuration.Builder()
 				.setTrackerClass(TestScottRuntime.class.getCanonicalName()).setMinimumMethodLoc(1).build();
 
-		Class<?> clazz = CustomClassLoader
-				.loadAndTransform("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
+		InstrumentedObject instrumentedObject = InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
 
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Object obj = clazz.getDeclaredConstructor().newInstance();
-
-			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBodyInlineDeclaration");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
-			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBody");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith3LineBody");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith9LineBody");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}
@@ -71,22 +65,19 @@ public class MinimumMethodLocTest {
 		Configuration configuration = new Configuration.Builder()
 				.setTrackerClass(TestScottRuntime.class.getCanonicalName()).setMinimumMethodLoc(2).build();
 
-		Class<?> clazz = CustomClassLoader
-				.loadAndTransform("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
+		InstrumentedObject instrumentedObject = InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
 
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Object obj = clazz.getDeclaredConstructor().newInstance();
-
-			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBodyInlineDeclaration");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
-			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBody");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith3LineBody");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith9LineBody");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}
@@ -96,22 +87,19 @@ public class MinimumMethodLocTest {
 		Configuration configuration = new Configuration.Builder()
 				.setTrackerClass(TestScottRuntime.class.getCanonicalName()).setMinimumMethodLoc(3).build();
 
-		Class<?> clazz = CustomClassLoader
-				.loadAndTransform("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
+		InstrumentedObject instrumentedObject = InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
 
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Object obj = clazz.getDeclaredConstructor().newInstance();
-
-			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBodyInlineDeclaration");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
-			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBody");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith3LineBody");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith9LineBody");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}
@@ -121,22 +109,19 @@ public class MinimumMethodLocTest {
 		Configuration configuration = new Configuration.Builder()
 				.setTrackerClass(TestScottRuntime.class.getCanonicalName()).setMinimumMethodLoc(4).build();
 
-		Class<?> clazz = CustomClassLoader
-				.loadAndTransform("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
+		InstrumentedObject instrumentedObject = InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
 
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Object obj = clazz.getDeclaredConstructor().newInstance();
-
-			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBodyInlineDeclaration");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
-			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBody");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith3LineBody");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith9LineBody");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}
@@ -146,22 +131,19 @@ public class MinimumMethodLocTest {
 		Configuration configuration = new Configuration.Builder()
 				.setTrackerClass(TestScottRuntime.class.getCanonicalName()).setMinimumMethodLoc(9).build();
 
-		Class<?> clazz = CustomClassLoader
-				.loadAndTransform("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
+		InstrumentedObject instrumentedObject = InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
 
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Object obj = clazz.getDeclaredConstructor().newInstance();
-
-			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBodyInlineDeclaration");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
-			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBody");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith3LineBody");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith9LineBody");
 			verify(testRuntime, times(1)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}
@@ -171,22 +153,19 @@ public class MinimumMethodLocTest {
 		Configuration configuration = new Configuration.Builder()
 				.setTrackerClass(TestScottRuntime.class.getCanonicalName()).setMinimumMethodLoc(10).build();
 
-		Class<?> clazz = CustomClassLoader
-				.loadAndTransform("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
+		InstrumentedObject instrumentedObject = InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithVaryingMethodSizes", configuration);
 
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Object obj = clazz.getDeclaredConstructor().newInstance();
-
-			clazz.getDeclaredMethod("methodWith1LineBodyInlineDeclaration").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBodyInlineDeclaration");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBodyInlineDeclaration"), any());
 
-			clazz.getDeclaredMethod("methodWith1LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith1LineBody");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith1LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith3LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith3LineBody");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith3LineBody"), any());
 
-			clazz.getDeclaredMethod("methodWith9LineBody").invoke(obj);
+			instrumentedObject.invokeMethod("methodWith9LineBody");
 			verify(testRuntime, times(0)).trackMethodStart(anyInt(), eq("methodWith9LineBody"), any());
 		});
 	}

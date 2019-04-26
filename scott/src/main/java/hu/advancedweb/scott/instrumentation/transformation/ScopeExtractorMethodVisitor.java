@@ -39,9 +39,10 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 	
 	private Integer methodStartLineNumber;
 
-	private Map<Integer, Integer> lineNumberToFirstOccurrenceOfVariables;
-	private Map<Integer, List<Label>> varAccesses;
-
+	private Map<VarAndStoreOpcode, Integer> lineNumberToFirstOccurrenceOfVariables;
+	
+	private Map<VarAndStoreOpcode, List<Label>> varAccesses;
+	
 	ScopeExtractorMethodVisitor(StateTrackingMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
 		super(Opcodes.ASM7, access, name, desc, signature, exceptions);
 		this.next = next;
@@ -88,12 +89,12 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 	@Override
 	public void visitVarInsn(int opcode, int var) {
 		if (VariableType.isStoreOperation(opcode)) {
-			putIfAbsent(lineNumberToFirstOccurrenceOfVariables, var, this.lineNumber);
-			putIfAbsent(varAccesses, var, new ArrayList<Label>());
+			putIfAbsent(lineNumberToFirstOccurrenceOfVariables, new VarAndStoreOpcode(var, opcode), this.lineNumber);
+			putIfAbsent(varAccesses, new VarAndStoreOpcode(var, opcode), new ArrayList<Label>());
 			
 			// In some cases a single visitVarInsn happens before the first visitLabel. See Issue #57.
 			if (!this.labels.isEmpty()) {
-				varAccesses.get(var).add(this.labels.get(this.labels.size() - 1));
+				varAccesses.get(new VarAndStoreOpcode(var, opcode)).add(this.labels.get(this.labels.size() - 1));
 			}
 		}
 		super.visitVarInsn(opcode, var);
@@ -106,9 +107,9 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
     }
 
 	@Override
-	public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
-		super.visitLocalVariable(name, desc, signature, start, end, index);
-		scopes.add(new LocalVariableScopeData(index, name, desc, new LocalVariableScopeData.Labels(start, end)));
+	public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int var) {
+		super.visitLocalVariable(name, desc, signature, start, end, var);
+		scopes.add(new LocalVariableScopeData(var, name, desc, new LocalVariableScopeData.Labels(start, end)));
 	}
 
 	@Override
@@ -184,15 +185,15 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 			startLine = endLine;
 			endLine = tmp;
 		}
-
-		if (lineNumberToFirstOccurrenceOfVariables.containsKey(scope.var) && startLine < lineNumberToFirstOccurrenceOfVariables.get(scope.var)) {
+		VarAndStoreOpcode varAndStoreOpcode = new VarAndStoreOpcode(scope.var, VariableType.getByDesc(scope.desc).storeOpcode);
+		if (lineNumberToFirstOccurrenceOfVariables.containsKey(varAndStoreOpcode) && startLine < lineNumberToFirstOccurrenceOfVariables.get(varAndStoreOpcode)) {
 			/*
 			 * For variables in nested scopes the start Label sometimes
 			 * points to an earlier line, e.g. to the start of the method.
 			 * In these cases the start line of the scope has to be
 			 * corrected.
 			 */
-			startLine = lineNumberToFirstOccurrenceOfVariables.get(scope.var);
+			startLine = lineNumberToFirstOccurrenceOfVariables.get(varAndStoreOpcode);
 		}
 		
 		return new LocalVariableScopeData.LineNumbers(startLine, endLine);
@@ -222,7 +223,8 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 			if (label == scope.labels.start) {
 				break;
 			}
-			if (varAccesses.get(scope.var).contains(label)) {
+			
+			if (varAccesses.get(new VarAndStoreOpcode(scope.var, VariableType.getByDesc(scope.desc).storeOpcode)).contains(label)) {
 				prev.add(getIndex(label));
 			}
 		}
@@ -314,6 +316,41 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 		TryCatchBlockLabels(Label start, Label handler) {
 			this.start = start;
 			this.handler = handler;
+		}
+	}
+	
+	private static class VarAndStoreOpcode {
+		final int var;
+		final int storeOp;
+		
+		public VarAndStoreOpcode(int var, int storeOp) {
+			this.var = var;
+			this.storeOp = storeOp;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + storeOp;
+			result = prime * result + var;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			VarAndStoreOpcode other = (VarAndStoreOpcode) obj;
+			if (storeOp != other.storeOp)
+				return false;
+			if (var != other.var)
+				return false;
+			return true;
 		}
 	}
 

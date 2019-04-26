@@ -9,18 +9,21 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 
-import hu.advancedweb.scott.helper.CustomClassLoader;
+import hu.advancedweb.scott.helper.InstrumentedObject;
 import hu.advancedweb.scott.helper.TestScottRuntime;
 import hu.advancedweb.scott.helper.TestScottRuntimeVerifier;
 import hu.advancedweb.scott.instrumentation.transformation.config.Configuration;
 
 public class ReturnRecordingTest {
 	
+	Configuration config = new Configuration.Builder()
+			.setTrackerClass(TestScottRuntime.class.getCanonicalName())
+			.build();
+	
 	@Test
 	public void recordReturnFromLambda() throws Exception {
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Class<?> clazz = instrumentExampleClass();
-			callInstanceMethod(clazz, "simpleReturn");
+			InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithLambdas", config).invokeMethod("simpleReturn");
 			
 			// Simple tracking happens in the lambda, and in the containing method as well.
 			verify(testRuntime, times(2)).trackReturn(anyInt(), any(), any());
@@ -30,9 +33,7 @@ public class ReturnRecordingTest {
 	@Test
 	public void recordReturnPrimitiveTrueFromLambda() throws Exception {
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Class<?> clazz = instrumentExampleClass();
-			callInstanceMethod(clazz, "primitiveBooleanTrue");
-			
+			InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithLambdas", config).invokeMethod("primitiveBooleanTrue");
 			verify(testRuntime, times(1)).trackReturn(eq(true), anyInt(), any(), any());
 		});
 	}
@@ -40,9 +41,7 @@ public class ReturnRecordingTest {
 	@Test
 	public void recordReturnPrimitiveFalseFromLambda() throws Exception {
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Class<?> clazz = instrumentExampleClass();
-			callInstanceMethod(clazz, "primitiveBooleanFalse");
-			
+			InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithLambdas", config).invokeMethod("primitiveBooleanFalse");
 			verify(testRuntime, times(1)).trackReturn(eq(false), anyInt(), any(), any());
 		});
 	}
@@ -50,9 +49,7 @@ public class ReturnRecordingTest {
 	@Test
 	public void recordReturnPrimitiveIntLambda() throws Exception {
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Class<?> clazz = instrumentExampleClass();
-			callInstanceMethod(clazz, "primitiveInt");
-			
+			InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithLambdas", config).invokeMethod("primitiveInt");
 			verify(testRuntime, times(1)).trackReturn(eq(2147483647), anyInt(), any(), any());
 		});
 	}
@@ -60,9 +57,7 @@ public class ReturnRecordingTest {
 	@Test
 	public void recordReturnPrimitiveDoubleLambda() throws Exception {
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Class<?> clazz = instrumentExampleClass();
-			callInstanceMethod(clazz, "primitiveDouble");
-			
+			InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithLambdas", config).invokeMethod("primitiveDouble");
 			verify(testRuntime, times(1)).trackReturn(eq(1.7976931348623157E308D), anyInt(), any(), any());
 		});
 	}
@@ -70,9 +65,7 @@ public class ReturnRecordingTest {
 	@Test
 	public void recordReturnPrimitiveLongLambda() throws Exception {
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Class<?> clazz = instrumentExampleClass();
-			callInstanceMethod(clazz, "primitiveLong");
-			
+			InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithLambdas", config).invokeMethod("primitiveLong");
 			verify(testRuntime, times(1)).trackReturn(eq(9223372036854775807L), anyInt(), any(), any());
 		});
 	}
@@ -80,25 +73,9 @@ public class ReturnRecordingTest {
 	@Test
 	public void recordReturnObjectLambda() throws Exception {
 		TestScottRuntime.verify(mock(TestScottRuntimeVerifier.class), testRuntime -> {
-			Class<?> clazz = instrumentExampleClass();
-			callInstanceMethod(clazz, "object");
-			
+			InstrumentedObject.create("hu.advancedweb.scott.examples.ClassWithLambdas", config).invokeMethod("object");
 			verify(testRuntime, times(1)).trackReturn(eq("Hello world"), anyInt(), any(), any());
 		});
-	}
-	
-	private Class<?> instrumentExampleClass() {
-		Configuration config = new Configuration.Builder()
-				.setTrackerClass(TestScottRuntime.class.getCanonicalName())
-				.build();
-		
-		Class<?> clazz = CustomClassLoader.loadAndTransform("hu.advancedweb.scott.examples.ClassWithLambdas", config);
-		return clazz;
-	}
-	
-	private void callInstanceMethod(Class<?> clazz, String methodName) throws Exception{
-		Object obj = clazz.getDeclaredConstructor().newInstance();
-		clazz.getDeclaredMethod(methodName).invoke(obj);
 	}
 	
 }
