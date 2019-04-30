@@ -20,19 +20,7 @@ import java.util.List;
  */
 public class SourcePathResolver {
 	
-	/*
-	 * This resolver is optimized for failing test cases. Because runners tend to execute test cases
-	 * by test classes rather than in any other order, it's enough to cache the previously resolved path.
-	 */
-
-	private String cacheKey = null;
-	private String cacheValue = null;
-	
 	public String getSourcePath(final String fqn) throws IOException {
-		if (fqn.equals(cacheKey)) {
-			return cacheValue;
-		}
-		
 		final String currentDir = System.getProperty("user.dir").replace("\\", "/");
 		final String relativeFilePath = fqn.replace(".", "/") + ".java";
 		
@@ -58,9 +46,7 @@ public class SourcePathResolver {
 		if (result.isEmpty()) {
 			return null;
 		} else {
-			cacheKey = fqn;
-			cacheValue = result.get(0);
-			return cacheValue;
+			return result.get(0);
 		}
 	}
 	
