@@ -119,5 +119,7 @@ task instrument(type: JavaExec) {
 
 compileJava.doLast {
 	tasks.instrument.execute()
+	// The line above works for Gradle 4. If you are using Gradle 5, use the following instead:
+	// tasks.instrument.exec()
 }
 ```
