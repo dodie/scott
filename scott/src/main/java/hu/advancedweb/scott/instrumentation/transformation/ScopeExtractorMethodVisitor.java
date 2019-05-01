@@ -185,7 +185,9 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 			startLine = endLine;
 			endLine = tmp;
 		}
+		
 		VarAndStoreOpcode varAndStoreOpcode = new VarAndStoreOpcode(scope.var, VariableType.getByDesc(scope.desc).storeOpcode);
+		// the lookup in lineNumberToFirstOccurrenceOfVariables has to be null-safe, because in some cases a single visitVarInsn happens before the first visitLabel. See Issue #57.
 		if (lineNumberToFirstOccurrenceOfVariables.containsKey(varAndStoreOpcode) && startLine < lineNumberToFirstOccurrenceOfVariables.get(varAndStoreOpcode)) {
 			/*
 			 * For variables in nested scopes the start Label sometimes
@@ -224,7 +226,9 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 				break;
 			}
 			
-			if (varAccesses.get(new VarAndStoreOpcode(scope.var, VariableType.getByDesc(scope.desc).storeOpcode)).contains(label)) {
+			VarAndStoreOpcode varAndStoreOpcode = new VarAndStoreOpcode(scope.var, VariableType.getByDesc(scope.desc).storeOpcode);
+			// the lookup in varAccesses has to be null-safe, because in some cases a single visitVarInsn happens before the first visitLabel. See Issue #57.
+			if (varAccesses.containsKey(varAndStoreOpcode) && varAccesses.get(varAndStoreOpcode).contains(label)) {
 				prev.add(getIndex(label));
 			}
 		}
