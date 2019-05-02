@@ -21,6 +21,7 @@ public class ScottConfigurer {
 						new String[] { "org.junit.jupiter.api.Test", "org.junit.jupiter.api.TestFactory" }))
 				.setTrackReturn(false)
 				.setTrackUnhandledException(false)
+				.setVerboseLogging("true".equalsIgnoreCase(System.getenv("scottDebug")))
 				.build();
 	}
 

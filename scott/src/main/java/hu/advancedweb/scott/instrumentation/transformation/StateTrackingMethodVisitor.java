@@ -41,12 +41,16 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	private String className;
 	
 	private String desc;
+	
+	private Logger logger;
 
 
 	StateTrackingMethodVisitor(MethodVisitor mv, InstrumentationActions instrumentationActions, String className, String methodName, String desc) {
 		super(Opcodes.ASM7, mv);
 		
-		Logger.log("Visiting: " + className + "." + methodName);
+		this.logger = new Logger(instrumentationActions.verboseLogging);
+		
+		logger.log("Visiting: " + className + "." + methodName);
 
 		this.instrumentationActions = instrumentationActions;
 		this.className = className;
@@ -237,7 +241,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	}
 
 	private void instrumentToTrackMethodStart() {
-		Logger.log(" - instrumentToTrackMethodStart");
+		logger.log(" - instrumentToTrackMethodStart");
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(methodName);
 		super.visitLdcInsn(Type.getType("L" + className + ";"));
@@ -245,7 +249,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	}
 	
 	private void instrumentToTrackEndOfArgumentsAtMethodStart() {
-		Logger.log(" - instrumentToTrackEndOfArgumentsAtMethodStart");
+		logger.log(" - instrumentToTrackEndOfArgumentsAtMethodStart");
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(methodName);
 		super.visitLdcInsn(Type.getType("L" + className + ";"));
@@ -253,7 +257,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	}
 	
 	private void instrumentToTrackLambdaDefinition(String handleName, int lineNumber) {
-		Logger.log(" - instrumentToTrackLambdaDefinition of " + handleName + " at " + lineNumber);
+		logger.log(" - instrumentToTrackLambdaDefinition of " + handleName + " at " + lineNumber);
 		super.visitLdcInsn(lineNumber);
 		super.visitLdcInsn(handleName);
 		super.visitLdcInsn(Type.getType("L" + className + ";"));
@@ -261,7 +265,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	}
 	
 	private void instrumentToTrackVariableState(LocalVariableScope localVariableScope, int lineNumber) {
-		Logger.log(" - instrumentToTrackVariableState of variable at " + getLineNumberBoundedByScope(lineNumber, localVariableScope) + ": " + localVariableScope);
+		logger.log(" - instrumentToTrackVariableState of variable at " + getLineNumberBoundedByScope(lineNumber, localVariableScope) + ": " + localVariableScope);
 		super.visitVarInsn(localVariableScope.variableType.loadOpcode, localVariableScope.var);
 		super.visitLdcInsn(localVariableScope.name);
 		super.visitLdcInsn(getLineNumberBoundedByScope(lineNumber, localVariableScope));
@@ -287,7 +291,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 			return;
 		}
 		
-		Logger.log(" - instrumentToTrackFieldState at " + lineNumber + ": " + accessedField);
+		logger.log(" - instrumentToTrackFieldState at " + lineNumber + ": " + accessedField);
 		
 		/*
 		 * Put owner to the stack.
@@ -326,7 +330,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	}
 
 	private void instrumentToTrackStaticFieldState(AccessedField accessedField, int lineNumber) {
-		Logger.log(" - instrumentToTrackFieldState (static) at " + lineNumber + ": " + accessedField);
+		logger.log(" - instrumentToTrackFieldState (static) at " + lineNumber + ": " + accessedField);
 		
 		// Put field value to the stack
 		super.visitFieldInsn(Opcodes.GETSTATIC, accessedField.owner, accessedField.name, accessedField.desc);
@@ -344,13 +348,13 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 	}
 	
 	private void instrumentToAddOpeningLabelForEnclosingTry() {
-		Logger.log(" - instrumentToAddOpeningLabelForEnclosingTry");
+		logger.log(" - instrumentToAddOpeningLabelForEnclosingTry");
 		super.visitLabel(startFinally);
 	}
 	
 	private void instrumentToTrackUnhandledExceptions() {
 		// Based on: http://modularity.info/conference/2007/program/industry/I5-UsingASMFramework.pdf
-		Logger.log(" - instrumentToTrackUnhandledExceptions");
+		logger.log(" - instrumentToTrackUnhandledExceptions");
 
 		Label endFinally = new Label();
 		super.visitTryCatchBlock(startFinally, endFinally, endFinally, "java/lang/Throwable");

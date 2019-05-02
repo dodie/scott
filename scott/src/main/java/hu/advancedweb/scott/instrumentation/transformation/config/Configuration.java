@@ -121,6 +121,11 @@ public class Configuration {
 	 * When empty, the extension is not injected to the class.
 	 */
 	private final List<String> injectJUnit5ExtensionWhenAnnotationFound;
+	
+	/*
+	 * Debug
+	 */
+	private final boolean verboseLogging;
 
 	Configuration(
 			List<String> include,
@@ -141,7 +146,8 @@ public class Configuration {
 			boolean trackFieldAssignments,
 			boolean trackFieldsAfterEveryMethodCall,
 			List<String> injectJUnit4RuleWhenAnnotationFound,
-			List<String> injectJUnit5ExtensionWhenAnnotationFound) {
+			List<String> injectJUnit5ExtensionWhenAnnotationFound,
+			boolean verboseLogging) {
 		this.include = include;
 		this.exclude = exclude;
 		this.includeByAnnotation = includeByAnnotation;
@@ -161,6 +167,7 @@ public class Configuration {
 		this.trackFieldsAfterEveryMethodCall = trackFieldsAfterEveryMethodCall;
 		this.injectJUnit4RuleWhenAnnotationFound = injectJUnit4RuleWhenAnnotationFound;
 		this.injectJUnit5ExtensionWhenAnnotationFound = injectJUnit5ExtensionWhenAnnotationFound;
+		this.verboseLogging = verboseLogging;
 	}
 
 	public boolean isClassInstrumentationAllowed(String classFqn, List<String> classAnnotations) {
@@ -264,6 +271,10 @@ public class Configuration {
 	public boolean isTrackFieldsAfterEveryMethodCall() {
 		return trackFieldsAfterEveryMethodCall;
 	}
+	
+	public boolean isVerboseLoggingEnabled() {
+		return verboseLogging;
+	}
 
 
 	public static class Builder {
@@ -287,6 +298,7 @@ public class Configuration {
 		boolean trackFieldsAfterEveryMethodCall = true;
 		List<String> injectJUnit4RuleWhenAnnotationFound = new ArrayList<String>();
 		List<String> injectJUnit5ExtensionWhenAnnotationFound = new ArrayList<String>();
+		boolean verboseLogging = false;
 
 		public Configuration build() {
 			if (trackerClass == null) {
@@ -312,7 +324,8 @@ public class Configuration {
 					trackFieldAssignments,
 					trackFieldsAfterEveryMethodCall,
 					injectJUnit4RuleWhenAnnotationFound,
-					injectJUnit5ExtensionWhenAnnotationFound);
+					injectJUnit5ExtensionWhenAnnotationFound,
+					verboseLogging);
 		}
 
 		public Builder setInclude(List<String> include) {
@@ -400,7 +413,7 @@ public class Configuration {
 			this.trackFieldsAfterEveryMethodCall = trackFieldsAfterEveryMethodCall;
 			return this;
 		}
-
+		
 		public Builder setInjectJUnit4RuleWhenAnnotationFound(List<String> injectJUnit4RuleWhenAnnotationFound) {
 			this.injectJUnit4RuleWhenAnnotationFound = injectJUnit4RuleWhenAnnotationFound;
 			return this;
@@ -409,6 +422,11 @@ public class Configuration {
 		public Builder setInjectJUnit5ExtensionWhenAnnotationFound(
 				List<String> injectJUnit5ExtensionWhenAnnotationFound) {
 			this.injectJUnit5ExtensionWhenAnnotationFound = injectJUnit5ExtensionWhenAnnotationFound;
+			return this;
+		}
+		
+		public Builder setVerboseLogging(boolean verboseLogging) {
+			this.verboseLogging = verboseLogging;
 			return this;
 		}
 	}

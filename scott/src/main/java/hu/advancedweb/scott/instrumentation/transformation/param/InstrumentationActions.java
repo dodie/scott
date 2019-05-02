@@ -28,6 +28,7 @@ public class InstrumentationActions {
 	public final boolean trackLocalVariablesAfterEveryMethodCall;
 	public final boolean trackFieldAssignments;
 	public final boolean trackFieldsAfterEveryMethodCall;
+	public final boolean verboseLogging;
 
 	public boolean isMethodTrackingRequired(String methodName, String methodDesc, String methodSignature) {
 		return trackTheseMethods.contains(encode(methodName, methodDesc, methodSignature)) ||
@@ -52,7 +53,8 @@ public class InstrumentationActions {
 			boolean trackLocalVariableIncrements,
 			boolean trackLocalVariablesAfterEveryMethodCall,
 			boolean trackFieldAssignments,
-			boolean trackFieldsAfterEveryMethodCall) {
+			boolean trackFieldsAfterEveryMethodCall,
+			boolean verboseLogging) {
 		this.trackerClass = trackerClass;
 		this.includeClass = includeClass;
 		this.isJUnit4RuleInjectionRequired = isJUnit4RuleInjectionRequired;
@@ -67,6 +69,7 @@ public class InstrumentationActions {
 		this.trackLocalVariablesAfterEveryMethodCall = trackLocalVariablesAfterEveryMethodCall;
 		this.trackFieldAssignments = trackFieldAssignments;
 		this.trackFieldsAfterEveryMethodCall = trackFieldsAfterEveryMethodCall;
+		this.verboseLogging = verboseLogging;
 	}
 
 	public static final class Builder {
@@ -84,6 +87,7 @@ public class InstrumentationActions {
 		private boolean trackLocalVariablesAfterEveryMethodCall;
 		private boolean trackFieldAssignments;
 		private boolean trackFieldsAfterEveryMethodCall;
+		private boolean verboseLogging;
 
 		public InstrumentationActions build() {
 			return new InstrumentationActions(
@@ -100,7 +104,8 @@ public class InstrumentationActions {
 					trackLocalVariableIncrements,
 					trackLocalVariablesAfterEveryMethodCall,
 					trackFieldAssignments,
-					trackFieldsAfterEveryMethodCall);
+					trackFieldsAfterEveryMethodCall,
+					verboseLogging);
 		}
 
 		void setTrackerClass(String trackerClass) {
@@ -165,6 +170,10 @@ public class InstrumentationActions {
 		
 		void trackFieldsAfterEveryMethodCall(boolean trackFieldsAfterEveryMethodCall) {
 			this.trackFieldsAfterEveryMethodCall = trackFieldsAfterEveryMethodCall;
+		}
+
+		public void verboseLogging(boolean verboseLogging) {
+			this.verboseLogging = verboseLogging;
 		}
 
 	}
