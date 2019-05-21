@@ -88,11 +88,12 @@ public class InstrumentationActions {
 		private boolean trackFieldAssignments;
 		private boolean trackFieldsAfterEveryMethodCall;
 		private boolean verboseLogging;
+		private boolean alreadyInstrumented;
 
 		public InstrumentationActions build() {
 			return new InstrumentationActions(
 					trackerClass,
-					includeClass,
+					alreadyInstrumented ? false : includeClass,
 					Collections.unmodifiableList(trackTheseMethods),
 					Collections.unmodifiableList(trackTheseLambdas),
 					isJUnit4RuleInjectionRequired,
@@ -174,6 +175,10 @@ public class InstrumentationActions {
 
 		public void verboseLogging(boolean verboseLogging) {
 			this.verboseLogging = verboseLogging;
+		}
+		
+		public void alreadyInstrumented(boolean alreadyInstrumented) {
+			this.alreadyInstrumented = alreadyInstrumented;
 		}
 
 	}

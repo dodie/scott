@@ -19,7 +19,7 @@ import org.objectweb.asm.Type;
  */
 public class DiscoveryMethodVisitor extends MethodVisitor {
 
-	private InstrumentationActions.Builder transformationParameters;
+	private InstrumentationActions.Builder instrumentationActions;
 	private Configuration configuration;
 	private String methodName;
 	private String methodDesc;
@@ -29,10 +29,10 @@ public class DiscoveryMethodVisitor extends MethodVisitor {
 	private List<String> classAnnotationFqns;
 	private Set<Integer> lineNumbers = new HashSet<Integer>();
 
-	DiscoveryMethodVisitor(MethodVisitor mv, InstrumentationActions.Builder transformationParameters, Configuration
-			configuration, String name, String desc, String signature, List<String> classAnnotationFqns) {
+	DiscoveryMethodVisitor(MethodVisitor mv, InstrumentationActions.Builder instrumentationActions,
+			Configuration configuration, String name, String desc, String signature, List<String> classAnnotationFqns) {
 		super(Opcodes.ASM7, mv);
-		this.transformationParameters = transformationParameters;
+		this.instrumentationActions = instrumentationActions;
 		this.configuration = configuration;
 		this.methodName = name;
 		this.methodDesc = desc;
@@ -53,22 +53,36 @@ public class DiscoveryMethodVisitor extends MethodVisitor {
 	}
 	
 	@Override
+	public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
+		if (isScottInstrumentedTrackMethodInst(opcode, owner, name)) {
+			instrumentationActions.alreadyInstrumented(true);
+		}
+		super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+	}
+
+	private boolean isScottInstrumentedTrackMethodInst(int opcode, String owner, String name) {
+		return Opcodes.INVOKESTATIC == opcode && 
+				configuration.getTrackerClass().replace('.', '/').equals(owner) &&
+				name.startsWith("track");
+	}
+	
+	@Override
 	public void visitEnd() {
 		boolean isLambda = methodName.startsWith("lambda$");
 		if (isLambda) {
 			if (configuration.isLambdaInstrumentationAllowed(getMethodLoc())) {
-				transformationParameters.markLambdaForTracking(methodName, methodDesc, methodSignature);
+				instrumentationActions.markLambdaForTracking(methodName, methodDesc, methodSignature);
 			}
 		} else if (configuration.isMethodInstrumentationAllowed(methodName, getMethodLoc(), methodAnnotationFqns, classAnnotationFqns)) {
-			transformationParameters.markMethodForTracking(methodName, methodDesc, methodSignature);
+			instrumentationActions.markMethodForTracking(methodName, methodDesc, methodSignature);
 		}
 
 		if (configuration.isJUnit4RuleInjectionRequired(methodAnnotationFqns)) {
-			transformationParameters.markClassForJUnit4RuleInjection();
+			instrumentationActions.markClassForJUnit4RuleInjection();
 		}
 
 		if (configuration.isJUnit5ExtensionInjectionRequired(methodAnnotationFqns)) {
-			transformationParameters.markClassForJUnit5ExtensionInjection();
+			instrumentationActions.markClassForJUnit5ExtensionInjection();
 		}
 
 		super.visitEnd();

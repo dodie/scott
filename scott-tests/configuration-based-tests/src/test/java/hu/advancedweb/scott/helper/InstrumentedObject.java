@@ -58,7 +58,7 @@ public class InstrumentedObject {
 		}
 	}
 
-	private static byte[] getBytes(String name) throws IOException {
+	public static byte[] getBytes(String name) throws IOException {
 		String relativeClassFilePath = name.replaceAll("\\.", File.separator) + ".class";
 		return Files.readAllBytes(Paths.get(BASE_PATH + relativeClassFilePath));
 	}
