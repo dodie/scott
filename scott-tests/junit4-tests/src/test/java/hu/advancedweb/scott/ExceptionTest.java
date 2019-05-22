@@ -17,7 +17,7 @@ public class ExceptionTest {
 			o.length();
 		} catch (Exception e) {
 			o = "fallback";
-			assertThat(TestHelper.getLastRecordedStateForVariable("e"), equalTo(e.toString()));
+			assertThat(TestHelper.getLastRecordedStateForVariable("e"), equalTo(e.toString() + "!"));
 			assertThat(TestHelper.getLastRecordedStateForVariable("o"), equalTo(wrapped(o)));
 		}
 	}
