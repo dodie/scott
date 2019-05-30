@@ -15,8 +15,19 @@ steps:
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.12'
+    jdkVersionOption: '1.11'
     jdkArchitectureOption: 'x64'
     publishJUnitResults: false
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
+- task: Gradle@2
+  inputs:
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    jdkArchitectureOption: 'x64'
+    gradleWrapperFile: 'gradlew'
+    workingDirectory: scott-gradle-plugin
+    tasks: 'build'
+    publishJUnitResults: false
+    testResultsFiles: '**/TEST-*.xml'
+
