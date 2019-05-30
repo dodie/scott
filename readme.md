@@ -1,5 +1,6 @@
 [![License](https://img.shields.io/github/license/dodie/scott.svg)](https://github.com/dodie/scott/blob/master/LICENSE)
 [![Maven Central](https://img.shields.io/maven-central/v/hu.advancedweb/scott.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22hu.advancedweb%22%20AND%20a%3A%22scott%22)
+[![Build Status](https://dev.azure.com/dodiehun/scott/_apis/build/status/dodie.scott?branchName=master)](https://dev.azure.com/dodiehun/scott/_build/latest?definitionId=2&branchName=master)
 
 
 Scott Test Reporter
