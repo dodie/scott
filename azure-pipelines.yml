@@ -25,7 +25,6 @@ steps:
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
     jdkArchitectureOption: 'x64'
-    gradleWrapperFile: 'gradlew'
     workingDirectory: scott-gradle-plugin
     tasks: 'build'
     publishJUnitResults: false
