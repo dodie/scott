@@ -126,6 +126,12 @@ Configuration
 In case you are not satisfied with the default tracking behavior, the Scott Maven Plugin and Gradle Plugin provides [configuration options](https://github.com/dodie/scott/blob/master/docs/configuration.md) to fine-tune its behaviour.
 
 
+Using Scott as an instrumentation library
+-----------------------------------------
+Scott's instrumentation module can be invoked programmatically with fine-tuned instrumentation rules so you can
+build your own solution on top of Scott. For more information, check the [user guide](https://github.com/dodie/scott/blob/master/docs/scott_as_a_library.md).
+
+
 Changelog
 ---------
 See [Releases](https://github.com/dodie/scott/releases).
