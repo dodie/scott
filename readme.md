@@ -57,7 +57,7 @@ or modify your existing tests to make it work.
 Add [hu.advanceweb.scott-gradle-plugin](https://plugins.gradle.org/plugin/hu.advancedweb.scott-gradle-plugin) to your [build.gradle](https://github.com/dodie/scott/blob/master/scott-examples/junit4/build.gradle):
 ```groovy
 plugins {
-  id "hu.advanceweb.scott-gradle-plugin" version "3.4.1"
+  id "hu.advanceweb.scott-gradle-plugin" version "3.5.0"
 }
 ```
 
@@ -76,7 +76,7 @@ Add the following to your [pom.xml](https://github.com/dodie/scott/blob/master/s
 		<plugin>
 			<groupId>hu.advancedweb</groupId>
 			<artifactId>scott-maven-plugin</artifactId>
-			<version>3.4.1</version>
+			<version>3.5.0</version>
 			<executions>
 				<execution>
 					<goals>
@@ -92,7 +92,7 @@ Add the following to your [pom.xml](https://github.com/dodie/scott/blob/master/s
 	<dependency>
 		<groupId>hu.advancedweb</groupId>
 		<artifactId>scott</artifactId>
-		<version>3.4.1</version>
+		<version>3.5.0</version>
 		<scope>test</scope>
 	</dependency>
 </dependencies>
