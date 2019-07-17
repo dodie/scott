@@ -106,7 +106,7 @@ import hu.advancedweb.scott.instrumentation.ScottClassFileTransformer
 
 buildscript {
 	dependencies {
-		classpath "hu.advancedweb:scott:3.4.1"
+		classpath "hu.advancedweb:scott:3.5.0"
 	}
 }
 
