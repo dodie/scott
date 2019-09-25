@@ -10,6 +10,11 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud'
+    organization: 'dodie'
+    scannerMode: 'Other'
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
@@ -20,11 +25,13 @@ steps:
     publishJUnitResults: false
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
+    sonarQubeRunAnalysis: true
 - script: |
     cd scott-gradle-plugin
     chmod +x ./gradlew
     ./gradlew build
   displayName: 'Gradle Plugin'
-- script: |
-    mvn sonar:sonar -Dsonar.projectKey=dodie_scott -Dsonar.organization=dodie -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$(sonar-login-id)
-  displayName: 'Sonar'
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+
