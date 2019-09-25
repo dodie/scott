@@ -25,4 +25,6 @@ steps:
     chmod +x ./gradlew
     ./gradlew build
   displayName: 'Gradle Plugin'
-
+- script: |
+    mvn sonar:sonar -Dsonar.projectKey=dodie_scott -Dsonar.organization=dodie -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$(sonar-login-id)
+  displayName: 'Sonar'
