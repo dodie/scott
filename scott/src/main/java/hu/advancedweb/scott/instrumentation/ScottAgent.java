@@ -15,6 +15,7 @@ import hu.advancedweb.scott.instrumentation.transformation.ScottClassTransformer
 public class ScottAgent {
 	
 	public static void premain(String agentArgument, Instrumentation instrumentation) {
+		String unused_variable = null;
 		instrumentation.addTransformer(new ClassFileTransformer() {
 			@Override
 			public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
