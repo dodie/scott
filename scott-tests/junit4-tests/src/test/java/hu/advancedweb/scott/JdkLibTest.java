@@ -21,7 +21,7 @@ public class JdkLibTest {
 	 */
 	
 	@Test
-	public void stream_test() throws Exception {
+	public void using_streams_dont_crash() throws Exception {
 		List<String> strings = Arrays.asList("abc", "bc", "", "xyz", "abc");
 		
 		List<String> recollectedStrings = strings.stream().collect(Collectors.toList());
@@ -60,7 +60,7 @@ public class JdkLibTest {
 	}
 	
 	@Test
-	public void binary_operatior_test() throws Exception {
+	public void using_binary_operatior_dont_crash() throws Exception {
 		BinaryOperator.maxBy(new Comparator<String>() {
 			@Override
 			public int compare(String o1, String o2) {
