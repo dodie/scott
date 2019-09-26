@@ -1,6 +1,5 @@
 package hu.advancedweb.scott.runtime;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,27 +31,10 @@ public class ScottCucumberIoFormatter implements Formatter {
 				results.add(errorString);
 				
 				if (event.result.is(Result.Type.FAILED)) {
-					setExceptionMessage(event.result.getError(), concat(results, "\n"));
+					ExceptionUtil.setExceptionMessage(event.result.getError(), concat(results, "\n"));
 				}
 			}
 		});
-	}
-	
-	private static void setExceptionMessage(Object object, Object fieldValue) {
-		final String fieldName = "detailMessage";
-		Class<?> clazz = object.getClass();
-		while (clazz != null) {
-			try {
-				Field field = clazz.getDeclaredField(fieldName);
-				field.setAccessible(true);
-				field.set(object, fieldValue);
-				return;
-			} catch (NoSuchFieldException e) {
-				clazz = clazz.getSuperclass();
-			} catch (Exception e) {
-				throw new IllegalStateException(e);
-			}
-		}
 	}
 	
 	private static String concat(Iterable<String> strings, String separator) {
