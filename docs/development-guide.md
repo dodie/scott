@@ -1,3 +1,13 @@
+# Table of Contents
+
+<!--ts-->
+   * [Required software for development](#required-software-for-development)
+   * [How it works](#how-it-works)
+   * [Project Layout and Building from Source](#project-layout-and-building-from-source)
+   * [Recommended Tools](#recommended-tools)
+   * [Tips for Development](#tips-for-development)
+<!--te-->
+
 # Required software for development
 
 - *Java 8* to compile the core package, and *Java 11* to run the whole test suite
