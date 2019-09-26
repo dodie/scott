@@ -4,6 +4,10 @@ import java.lang.reflect.Field;
 
 class ExceptionUtil {
 	
+	private ExceptionUtil() {
+		// Utility class, use static methods.
+	}
+	
 	static void setExceptionMessage(Object object, Object fieldValue) {
 		final String fieldName = "detailMessage";
 		Class<?> clazz = object.getClass();

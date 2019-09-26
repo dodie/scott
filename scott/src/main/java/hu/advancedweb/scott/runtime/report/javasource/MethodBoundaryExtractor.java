@@ -46,7 +46,7 @@ class MethodBoundaryExtractor extends VoidVisitorAdapter<Bounderies> {
 		return containingClassName.equals(className);
 	}
 
-	public final static class Bounderies {
+	public static final class Bounderies {
 		int beginLine;
 		int endLine;
 	}
