@@ -16,50 +16,55 @@ import java.util.Map;
  */
 public class StateRegistry {
 	
+	private StateRegistry() {
+		// The instrumented code calls the static methods in this class directly,
+		// without instantiating the class.
+	}
+	
 	/*
 	 * Variable data recording and method start line recording is based on the fact that
 	 * in a single test case there can be multiple lambdas, thus multiple methods.
 	 */
 	
-	private static List<StateData> LOCAL_VARIABLE_STATES = new ArrayList<StateData>();
+	private static List<StateData> localVariableStates = new ArrayList<StateData>();
 	
-	private static List<StateData> FIELD_STATES = new ArrayList<StateData>();
+	private static List<StateData> fieldStates = new ArrayList<StateData>();
 	
-	private static String METHOD_NAME;
+	private static String trackedMethodName;
 
-	private static String CLASS_NAME;
+	private static String trackedClassName;
 	
-	private static Map<String, Integer> METHOD_START_LINES = new HashMap<String, Integer>();
+	private static Map<String, Integer> methodStartLines = new HashMap<String, Integer>();
 	
 	private static boolean argumentAndInitialStateTracking;
 	
 	public static List<StateData> getLocalVariableStates() {
-		return Collections.unmodifiableList(LOCAL_VARIABLE_STATES);
+		return Collections.unmodifiableList(localVariableStates);
 	}
 	
 	public static List<StateData> getFieldStates() {
-		return Collections.unmodifiableList(FIELD_STATES);
+		return Collections.unmodifiableList(fieldStates);
 	}
 	
 	public static String getTestClassType() {
-		return CLASS_NAME;
+		return trackedClassName;
 	}
 	
 	public static String getTestMethodName() {
-		return METHOD_NAME;
+		return trackedMethodName;
 	}
 	
 	public static Map<String, Integer> getMethodStartLine() {
-		return METHOD_START_LINES;
+		return methodStartLines;
 	}
 	
 	public static void trackMethodStart(int lineNumber, String methodName, Class<?> clazz) {
-		CLASS_NAME = classToTypeName(clazz);
-		METHOD_NAME = methodName;
+		trackedClassName = classToTypeName(clazz);
+		trackedMethodName = methodName;
 
 		if (!methodName.startsWith("lambda$")) {
-			LOCAL_VARIABLE_STATES.clear();
-			FIELD_STATES.clear();
+			localVariableStates.clear();
+			fieldStates.clear();
 		}
 		argumentAndInitialStateTracking = true;
 	}
@@ -69,47 +74,47 @@ public class StateRegistry {
 	}
 	
 	public static void trackLambdaDefinition(int lineNumber, String methodName, Class<?> clazz) {
-		METHOD_START_LINES.put(methodName, lineNumber);
+		methodStartLines.put(methodName, lineNumber);
 	}
 	
 	public static void trackFieldState(byte value, String name, int lineNumber, String methodName, Class<?> clazz, boolean isStatic, String owner) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		FIELD_STATES.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Byte.toString(value)));
+		fieldStates.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Byte.toString(value)));
 	}
 	
 	public static void trackFieldState(short value, String name, int lineNumber, String methodName, Class<?> clazz, boolean isStatic, String owner) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		FIELD_STATES.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Short.toString(value)));
+		fieldStates.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Short.toString(value)));
 	}
 	
 	public static void trackFieldState(int value, String name, int lineNumber, String methodName, Class<?> clazz, boolean isStatic, String owner) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		FIELD_STATES.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Integer.toString(value)));
+		fieldStates.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Integer.toString(value)));
 	}
 	
 	public static void trackFieldState(long value, String name, int lineNumber, String methodName, Class<?> clazz, boolean isStatic, String owner) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		FIELD_STATES.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Long.toString(value)));
+		fieldStates.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Long.toString(value)));
 	}
 	
 	public static void trackFieldState(float value, String name, int lineNumber, String methodName, Class<?> clazz, boolean isStatic, String owner) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		FIELD_STATES.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Float.toString(value)));
+		fieldStates.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Float.toString(value)));
 	}
 	
 	public static void trackFieldState(double value, String name, int lineNumber, String methodName, Class<?> clazz, boolean isStatic, String owner) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		FIELD_STATES.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Double.toString(value)));
+		fieldStates.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Double.toString(value)));
 	}
 	
 	public static void trackFieldState(boolean value, String name, int lineNumber, String methodName, Class<?> clazz, boolean isStatic, String owner) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		FIELD_STATES.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Boolean.toString(value)));
+		fieldStates.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Boolean.toString(value)));
 	}
 	
 	public static void trackFieldState(char value, String name, int lineNumber, String methodName, Class<?> clazz, boolean isStatic, String owner) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		FIELD_STATES.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Character.toString(value)));
+		fieldStates.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), Character.toString(value)));
 	}
 	
 	public static void trackFieldState(Object value, String name, int lineNumber, String methodName, Class<?> clazz, boolean isStatic, String owner) {
@@ -117,22 +122,22 @@ public class StateRegistry {
 		String stringValue = objectToStringIgnoreMockitoExceptions(value);
 		
 		if (stringValue != null) {
-			FIELD_STATES.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), stringValue));
+			fieldStates.add(new StateData(lineNumber, methodName, niceFieldName(name, isStatic, owner, clazz), stringValue));
 		}
 	}
 	
 	private static String niceFieldName(String name, boolean isStatic, String owner, Class<?> clazz) {
 		final String key;
 		if (isStatic) {
-			key = owner.substring(owner.lastIndexOf("/") + 1) + "." + name;
+			key = owner.substring(owner.lastIndexOf('/') + 1) + "." + name;
 		} else {
 			final String prefix;
 			if (classToTypeName(clazz).equals(owner)) {
 				prefix = "this.";
 			} else if (owner.contains("$")) {
-				prefix = "(in enclosing " + owner.substring(owner.lastIndexOf("$") + 1) + ") ";
+				prefix = "(in enclosing " + owner.substring(owner.lastIndexOf('$') + 1) + ") ";
 			} else if (owner.contains("/")) {
-				prefix = "(in enclosing " + owner.substring(owner.lastIndexOf("/") + 1) + ") ";
+				prefix = "(in enclosing " + owner.substring(owner.lastIndexOf('/') + 1) + ") ";
 			} else {
 				prefix = "(in enclosing " + owner + ") ";
 			}
@@ -144,42 +149,42 @@ public class StateRegistry {
 	
 	public static void trackLocalVariableState(byte value, String name, int lineNumber, String methodName, Class<?> clazz) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, methodName, name, Byte.toString(value)));
+		localVariableStates.add(new StateData(lineNumber, methodName, name, Byte.toString(value)));
 	}
 
 	public static void trackLocalVariableState(short value, String name, int lineNumber, String methodName, Class<?> clazz) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, methodName, name, Short.toString(value)));
+		localVariableStates.add(new StateData(lineNumber, methodName, name, Short.toString(value)));
 	}
 
 	public static void trackLocalVariableState(int value, String name, int lineNumber, String methodName, Class<?> clazz) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, methodName, name, Integer.toString(value)));
+		localVariableStates.add(new StateData(lineNumber, methodName, name, Integer.toString(value)));
 	}
 
 	public static void trackLocalVariableState(long value, String name, int lineNumber, String methodName, Class<?> clazz) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, methodName, name, Long.toString(value)));
+		localVariableStates.add(new StateData(lineNumber, methodName, name, Long.toString(value)));
 	}
 
 	public static void trackLocalVariableState(float value, String name, int lineNumber, String methodName, Class<?> clazz) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, methodName, name, Float.toString(value)));
+		localVariableStates.add(new StateData(lineNumber, methodName, name, Float.toString(value)));
 	}
 
 	public static void trackLocalVariableState(double value, String name, int lineNumber, String methodName, Class<?> clazz) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, methodName, name, Double.toString(value)));
+		localVariableStates.add(new StateData(lineNumber, methodName, name, Double.toString(value)));
 	}
 
 	public static void trackLocalVariableState(boolean value, String name, int lineNumber, String methodName, Class<?> clazz) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, methodName, name, Boolean.toString(value)));
+		localVariableStates.add(new StateData(lineNumber, methodName, name, Boolean.toString(value)));
 	}
 
 	public static void trackLocalVariableState(char value, String name, int lineNumber, String methodName, Class<?> clazz) {
 		if (argumentAndInitialStateTracking) lineNumber = 0;
-		LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, methodName, name, Character.toString(value)));
+		localVariableStates.add(new StateData(lineNumber, methodName, name, Character.toString(value)));
 	}
 	
 	public static void trackLocalVariableState(Object value, String name, int lineNumber, String methodName, Class<?> clazz) {
@@ -187,7 +192,7 @@ public class StateRegistry {
 		String stringValue = objectToStringIgnoreMockitoExceptions(value);
 		
 		if (stringValue != null) {
-			LOCAL_VARIABLE_STATES.add(new StateData(lineNumber, methodName, name, stringValue));
+			localVariableStates.add(new StateData(lineNumber, methodName, name, stringValue));
 		}
 	}
 	

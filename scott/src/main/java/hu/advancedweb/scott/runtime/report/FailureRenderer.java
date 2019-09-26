@@ -15,6 +15,10 @@ import hu.advancedweb.scott.runtime.track.StateRegistry;
  * @author David Csakvari
  */
 public class FailureRenderer {
+	
+	private FailureRenderer() {
+		// Utility class, use static methods instead of instantiating this class.
+	}
 
 	public static String render(String testClassName, String testMethodName, Throwable throwable) {
 		MethodSource methodSource = getTestMethodSource(testClassName, testMethodName);

@@ -182,11 +182,7 @@ public class Configuration {
 		}
 
 		boolean allowedByExcludeAnnotation = !ClassMatcher.anyMatchesAsClassOrPackage(classAnnotations, excludeByAnnotation);
-		if (!allowedByExcludeAnnotation) {
-			return false;
-		}
-
-		return true;
+		return allowedByExcludeAnnotation;
 	}
 
 	public boolean isMethodInstrumentationAllowed(String methodName, int methodLoc, List<String> methodAnnotations, List<String> classAnnotations) {
@@ -208,11 +204,7 @@ public class Configuration {
 		}
 
 		boolean allowedByExcludeMethodAnnotation = !ClassMatcher.anyMatchesAsClassOrPackage(methodAnnotations, excludeByAnnotation);
-		if (!allowedByExcludeMethodAnnotation) {
-			return false;
-		}
-
-		return true;
+		return allowedByExcludeMethodAnnotation;
 	}
 
 	public boolean isLambdaInstrumentationAllowed(int methodLoc) {

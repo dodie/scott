@@ -304,7 +304,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 		
 		String currentNestedClassName = className;
 		while(!currentNestedClassName.equals(accessedField.owner)) {
-			String enclosingClassName = currentNestedClassName.substring(0, currentNestedClassName.lastIndexOf("$"));
+			String enclosingClassName = currentNestedClassName.substring(0, currentNestedClassName.lastIndexOf('$'));
 			int nestingLevel = currentNestedClassName.length() - currentNestedClassName.replace("$", "").length() - 1;
 			super.visitFieldInsn(Opcodes.GETFIELD, currentNestedClassName, "this$" + nestingLevel, "L" + enclosingClassName + ";");
 			currentNestedClassName = enclosingClassName;

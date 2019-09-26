@@ -4,6 +4,10 @@ import java.util.List;
 
 class ClassMatcher {
 	
+	private ClassMatcher() {
+		// Utility class, use static methods instead of instantiating this class.
+	}
+	
 	static boolean anyMatchesAsClassOrPackage(List<String> classFqns, List<String> fqns) {
 		for (String classFqn : classFqns) {
 			if (matchesAsClass(classFqn, fqns) || matchesAsInnerClass(classFqn, fqns) || matchesAsPackage(classFqn, fqns)) {

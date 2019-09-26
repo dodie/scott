@@ -10,9 +10,14 @@ import hu.advancedweb.scott.instrumentation.transformation.ScottClassTransformer
 /**
  * Scott's Java Agent that instruments classes at class-load time.
  * 
+ * @see https://docs.oracle.com/en/java/javase/11/docs/api/java.instrument/java/lang/instrument/package-summary.html
  * @author David Csakvari
  */
 public class ScottAgent {
+	
+	private ScottAgent() {
+		// Intended to be used as an agent and not to be instantiated directly.
+	}
 	
 	public static void premain(String agentArgument, Instrumentation instrumentation) {
 		instrumentation.addTransformer(new ClassFileTransformer() {

@@ -39,7 +39,7 @@ class ScottCucumberEnricher {
 		PrintWriter printWriter = new PrintWriter(stringWriter);
 		error.printStackTrace(printWriter);
 		String msg = stringWriter.getBuffer().toString();
-		msg = msg.substring(msg.indexOf("\n"));
+		msg = msg.substring(msg.indexOf('\n'));
 		return msg;
 	}
 

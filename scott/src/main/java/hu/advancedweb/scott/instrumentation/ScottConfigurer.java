@@ -7,6 +7,10 @@ import hu.advancedweb.scott.instrumentation.transformation.config.Configuration;
 
 public class ScottConfigurer {
 	
+	private ScottConfigurer() {
+		// Utility class, use static methods instead of instantiating this class.
+	}
+	
 	public static Configuration getConfiguration() {
 		return new Configuration.Builder()
 				.setTrackerClass("hu.advancedweb.scott.runtime.track.StateRegistry")

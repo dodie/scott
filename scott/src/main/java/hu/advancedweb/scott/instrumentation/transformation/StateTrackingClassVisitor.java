@@ -41,16 +41,13 @@ public class StateTrackingClassVisitor extends ClassVisitor {
 
 		if (name.equals("<init>")) {
 			if (instrumentationActions.isJUnit4RuleInjectionRequired) {
-				MethodVisitor constructorTransformerMethodVisitor = new ConstructorTransformerMethodVisitor(methodVisitor, access, name, desc, signature, exceptions, className);
-				return constructorTransformerMethodVisitor;
+				return new ConstructorTransformerMethodVisitor(methodVisitor, access, name, desc, signature, exceptions, className);
 			} else {
 				return methodVisitor;
 			}
 		} else if (instrumentationActions.isMethodTrackingRequired(name, desc, signature)) {
-		    StateTrackingMethodVisitor variableMutationEventEmitter = new StateTrackingMethodVisitor(methodVisitor,
-					instrumentationActions, className, name, desc);
-		    MethodVisitor variableExtractor = new ScopeExtractorMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions);
-		    return variableExtractor;
+		    StateTrackingMethodVisitor variableMutationEventEmitter = new StateTrackingMethodVisitor(methodVisitor, instrumentationActions, className, name, desc);
+		    return new ScopeExtractorMethodVisitor(variableMutationEventEmitter, access, name, desc, signature, exceptions);
 		} else {
 			return methodVisitor;
 		}

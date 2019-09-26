@@ -36,14 +36,14 @@ public class MethodSource {
 		
 		final String containerClassFileName;
 		if (className.contains("$")) {
-			containerClassFileName = className.substring(0, className.indexOf("$"));
+			containerClassFileName = className.substring(0, className.indexOf('$'));
 		} else {
 			containerClassFileName = className;
 		}
 		
 		final String scopedClassName;
 		if (className.contains(".")) {
-			scopedClassName = className.substring(className.lastIndexOf(".") + 1);
+			scopedClassName = className.substring(className.lastIndexOf('.') + 1);
 		} else {
 			scopedClassName = className;
 		}
@@ -73,11 +73,12 @@ public class MethodSource {
 			in = new FileInputStream(new File(testSourcePath));
 			cu = JavaParser.parse(in);
 		} catch (ParseException e) {
-			e.printStackTrace();
 			throw new IOException(e);
 		} finally {
 			try {
-				in.close();
+				if (in != null) {
+					in.close();
+				}
 			} catch (IOException e) {
 				// Ignore.
 			}
