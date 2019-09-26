@@ -104,12 +104,18 @@ repositories {
   the easiest way to check the contents of a class file.
 
 
-# Tips for Bug Hunting
+# Tips for Development
 
 ## Tests
 
 Always create a failing test that reproduces the problematic use-case. Try to create a minimal test case that still exhibits the bug.
 
+
+## Debug in IDE
+
+1. Build Scott: `mvn clean install`
+2. Find Scott's JAR file: `scott/target/scott-<VERSION>.jar
+3. Launch a [test](https://github.com/dodie/scott/tree/master/scott-tests) from your IDE with `-javaagent:<SCOTT-PROJECT-PATH>/scott/target/scott-<VERSION>.jar`
 
 ## Debug logging
 
