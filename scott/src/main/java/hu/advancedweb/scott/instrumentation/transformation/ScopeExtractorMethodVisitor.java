@@ -1,13 +1,14 @@
 package hu.advancedweb.scott.instrumentation.transformation;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 import java.util.TreeMap;
 
 import org.objectweb.asm.AnnotationVisitor;
@@ -245,7 +246,7 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 	}
 
 	private TryCatchBlockLabels getEnclosingTry(LocalVariableScopeData scope) {
-		Stack<TryCatchBlockLabels> tryCatchBlockScopes = new Stack<>();
+		Deque<TryCatchBlockLabels> tryCatchBlockScopes = new LinkedList<>();
 		for (int i = 0; i < labels.size(); i++) {
 			Label label = labels.get(i);
 
@@ -256,7 +257,7 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 				 * If a variable declaration happens right before a try block,
 				 * they will be under the same label.
 				 */
-				if (tryCatchBlockScopes.empty()) {
+				if (tryCatchBlockScopes.isEmpty()) {
 					return null;
 				} else {
 					return tryCatchBlockScopes.peek();
