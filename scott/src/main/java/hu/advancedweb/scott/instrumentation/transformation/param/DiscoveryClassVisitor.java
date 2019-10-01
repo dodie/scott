@@ -23,7 +23,7 @@ public class DiscoveryClassVisitor extends ClassVisitor {
 	private InstrumentationActions.Builder transformationParameters;
 
 	private String classFqn;
-	private List<String> annotationFqns = new ArrayList<String>();
+	private List<String> annotationFqns = new ArrayList<>();
 
 
 	public DiscoveryClassVisitor(Configuration configuration) {

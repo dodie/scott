@@ -25,9 +25,9 @@ public class DiscoveryMethodVisitor extends MethodVisitor {
 	private String methodDesc;
 	private String methodSignature;
 
-	private List<String> methodAnnotationFqns = new ArrayList<String>();
+	private List<String> methodAnnotationFqns = new ArrayList<>();
 	private List<String> classAnnotationFqns;
-	private Set<Integer> lineNumbers = new HashSet<Integer>();
+	private Set<Integer> lineNumbers = new HashSet<>();
 
 	DiscoveryMethodVisitor(MethodVisitor mv, InstrumentationActions.Builder instrumentationActions,
 			Configuration configuration, String name, String desc, String signature, List<String> classAnnotationFqns) {

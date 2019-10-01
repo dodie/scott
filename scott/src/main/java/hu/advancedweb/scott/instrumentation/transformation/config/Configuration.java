@@ -271,11 +271,11 @@ public class Configuration {
 
 	public static class Builder {
 
-		List<String> include = new ArrayList<String>();
-		List<String> exclude = new ArrayList<String>();
-		List<String> includeByAnnotation = new ArrayList<String>();
-		List<String> excludeByAnnotation = new ArrayList<String>();
-		List<String> excludeMethodsByName = new ArrayList<String>();
+		List<String> include = new ArrayList<>();
+		List<String> exclude = new ArrayList<>();
+		List<String> includeByAnnotation = new ArrayList<>();
+		List<String> excludeByAnnotation = new ArrayList<>();
+		List<String> excludeMethodsByName = new ArrayList<>();
 		boolean includeLambdas = true;
 		boolean includeLambdasOnlyWhenOtherInstrumentationIsInPlace = false;
 		int minimumMethodLoc = 0;
@@ -288,8 +288,8 @@ public class Configuration {
 		boolean trackLocalVariablesAfterEveryMethodCall = true;
 		boolean trackFieldAssignments = true;
 		boolean trackFieldsAfterEveryMethodCall = true;
-		List<String> injectJUnit4RuleWhenAnnotationFound = new ArrayList<String>();
-		List<String> injectJUnit5ExtensionWhenAnnotationFound = new ArrayList<String>();
+		List<String> injectJUnit4RuleWhenAnnotationFound = new ArrayList<>();
+		List<String> injectJUnit5ExtensionWhenAnnotationFound = new ArrayList<>();
 		boolean verboseLogging = false;
 
 		public Configuration build() {

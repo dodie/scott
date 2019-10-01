@@ -26,7 +26,7 @@ public class MethodSource {
 	private final String path;
 	private final String methodName;
 	private int beginLine;
-	private List<String> reportLines = new ArrayList<String>();
+	private List<String> reportLines = new ArrayList<>();
 	private String className;
 
 	public MethodSource(String className, String methodName) throws IOException {
@@ -67,24 +67,11 @@ public class MethodSource {
 	}
 	
 	private CompilationUnit getCompilationUnit(String testSourcePath) throws IOException {
-		InputStream in = null;
-		CompilationUnit cu = null;
-		try {
-			in = new FileInputStream(new File(testSourcePath));
-			cu = JavaParser.parse(in);
+		try(InputStream in = new FileInputStream(new File(testSourcePath))) {
+			return  JavaParser.parse(in);
 		} catch (ParseException e) {
 			throw new IOException(e);
-		} finally {
-			try {
-				if (in != null) {
-					in.close();
-				}
-			} catch (IOException e) {
-				// Ignore.
-			}
 		}
-		
-		return cu;
 	}
 	
 	public String getPath() {

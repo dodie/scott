@@ -33,8 +33,7 @@ enum VariableType {
 	}
 	
 	static boolean isStoreOperation(final int opcode) {
-		for (int i = 0; i < VariableType.values().length; i++) {
-			VariableType variableType = VariableType.values()[i];
+		for (VariableType variableType : VariableType.values()) {
 			if (variableType.storeOpcode == opcode) {
 				return true;
 			}
@@ -43,8 +42,7 @@ enum VariableType {
 	}
 	
 	static boolean isReturnOperation(final int opcode) {
-		for (int i = 0; i < VariableType.values().length; i++) {
-			VariableType variableType = VariableType.values()[i];
+		for (VariableType variableType : VariableType.values()) {
 			if (variableType.returnOpcode == opcode) {
 				return true;
 			}
@@ -53,8 +51,7 @@ enum VariableType {
 	}
 	
 	static VariableType getByReturnOpCode(final int opcode) {
-		for (int i = 0; i < VariableType.values().length; i++) {
-			VariableType variableType = VariableType.values()[i];
+		for (VariableType variableType : VariableType.values()) {
 			if (variableType.returnOpcode == opcode) {
 				return variableType;
 			}
@@ -70,8 +67,7 @@ enum VariableType {
 		if (desc.startsWith("L") || desc.startsWith("[")) {
 			return VariableType.REFERENCE;
 		} else {
-			for (int i = 0; i < VariableType.values().length; i++) {
-				VariableType variableType = VariableType.values()[i];
+			for (VariableType variableType : VariableType.values()) {
 				if (variableType.desc.equals(desc)) {
 					return variableType;
 				}
