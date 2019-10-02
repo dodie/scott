@@ -247,9 +247,7 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 
 	private TryCatchBlockLabels getEnclosingTry(LocalVariableScopeData scope) {
 		Deque<TryCatchBlockLabels> tryCatchBlockScopes = new LinkedList<>();
-		for (int i = 0; i < labels.size(); i++) {
-			Label label = labels.get(i);
-
+		for (Label label : labels) {
 			if (label == scope.labels.start) {
 				/*
 				 * This check must be done first.

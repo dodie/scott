@@ -26,15 +26,15 @@ public class StateRegistry {
 	 * in a single test case there can be multiple lambdas, thus multiple methods.
 	 */
 	
-	private static List<StateData> localVariableStates = new ArrayList<StateData>();
+	private static List<StateData> localVariableStates = new ArrayList<>();
 	
-	private static List<StateData> fieldStates = new ArrayList<StateData>();
+	private static List<StateData> fieldStates = new ArrayList<>();
 	
 	private static String trackedMethodName;
 
 	private static String trackedClassName;
 	
-	private static Map<String, Integer> methodStartLines = new HashMap<String, Integer>();
+	private static Map<String, Integer> methodStartLines = new HashMap<>();
 	
 	private static boolean argumentAndInitialStateTracking;
 	
