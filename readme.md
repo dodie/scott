@@ -39,7 +39,7 @@ Besides the usual assertion error, Scott reports the changes and assignments rel
 Supports [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4),
 [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5),
 and [Cucumber Java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber)
-on Java 7+ (up to Java 12).
+on Java 7+ (up to Java 13).
 
 
 How to use
