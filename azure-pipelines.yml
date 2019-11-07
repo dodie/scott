@@ -26,6 +26,9 @@ steps:
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
     sonarQubeRunAnalysis: true
+- script: |
+    pwd
+  displayName: 'pwd'
 - task: Docker@2
   displayName: 'Build and test on Java 13'
   inputs:
