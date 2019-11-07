@@ -11,7 +11,7 @@ as well for another bunch of failing tests that demonstrates the detailed failur
 
 Usage
 -----
-Run ``` mvn install ``` to see the tests failing.
+Run ``` mvn install ``` to see the tests failing. For a Docker-based setup, see the [development guide](https://github.com/dodie/scott/blob/master/docs/development-guide.md).
 
 
 Demo
