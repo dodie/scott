@@ -15,7 +15,7 @@ This feature provides valuable information if a test fails in a CI environment, 
 
 Usage
 -----
-Run ``` mvn install ``` to see the tests failing.
+Run ``` mvn install ``` to see the tests failing. For a Docker-based setup, see the [development guide](https://github.com/dodie/scott/blob/master/docs/development-guide.md).
 
 
 Demo
