@@ -8,3 +8,4 @@ Build
 -----
 ``` mvn install ```
 
+For a Docker-based setup, see the [development guide](https://github.com/dodie/scott/blob/master/docs/development-guide.md).
