@@ -20,7 +20,7 @@
 
 # Required software for development
 
-- *Java 8* to compile the core package, and *Java 11* to run the whole test suite
+- *Java 8* to compile the core package, and *Java 13* to run the whole test suite
 - *Maven 3.0.5*
 - *Gradle 4.10.2*
 
