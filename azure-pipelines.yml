@@ -33,7 +33,7 @@ steps:
   displayName: 'Build and test on Java 13'
   inputs:
     command: run
-    arguments: -t --rm -v "$(pwd)":/usr/src/mymaven -v "$HOME/.m2":/root/.m2 -v "$PWD/target:/usr/src/mymaven/target" -w /usr/src/mymaven maven:3.6.2-jdk-13 mvn install
+    arguments: -t --rm -v "$AGENT_WORKFOLDER":/usr/src/mymaven -v "$HOME/.m2":/root/.m2 -v "$PWD/target:/usr/src/mymaven/target" -w /usr/src/mymaven maven:3.6.2-jdk-13 mvn install
 - script: |
     cd scott-gradle-plugin
     chmod +x ./gradlew
