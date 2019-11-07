@@ -24,6 +24,38 @@
 - *Maven 3.0.5*
 - *Gradle 4.10.2*
 
+OR
+
+- *Docker*
+
+# Build
+
+```bash
+# build scott and run all tests
+mvn clean install
+
+# run junit4-based showcase (fails intentionally, shows error reports)
+cd <scott-root>/scott-examples/junit4
+mvn clean install
+
+# run junit5-based showcase (fails intentionally, shows error reports)
+cd <scott-root>/scott-examples/junit5
+mvn clean install
+```
+
+OR
+
+```bash
+# build scott and run all tests
+docker run -t --rm -v "$PWD":/usr/src/mymaven -v "$HOME/.m2":/root/.m2 -v "$PWD/target:/usr/src/mymaven/target" -w /usr/src/mymaven maven:3.6.2-jdk-13 mvn install
+
+# run junit4-based showcase (fails intentionally, shows error reports)
+docker run -it --rm -v "$PWD":/usr/src/mymaven -v "$HOME/.m2":/root/.m2 -v "$PWD/target:/usr/src/mymaven/target" -w /usr/src/mymaven maven:3.6.2-jdk-13 mvn package -f scott-examples/junit4/pom.xm
+
+# run junit5-based showcase (fails intentionally, shows error reports)
+docker run -it --rm -v "$PWD":/usr/src/mymaven -v "$HOME/.m2":/root/.m2 -v "$PWD/target:/usr/src/mymaven/target" -w /usr/src/mymaven maven:3.6.2-jdk-13 mvn package -f scott-examples/junit5/pom.xm
+```
+
 
 # Development
 
@@ -31,10 +63,6 @@ The core module where you can find all the instrumentation and rendering parts i
 while the related tests are in the [scott-tests](https://github.com/dodie/scott/tree/master/scott-tests) project. These two are submodules of the root pom,
 which is provided for convenience. The tests are in a separate module, because the suite exercises
 the complete artifact much like a real project would use it.
-
-```
-mvn clean install
-```
 
 While [scott-tests](https://github.com/dodie/scott/tree/master/scott-tests) is responsible for making Scott crash-free and correct, it does not verifies the actual look of the final reports. The correct rendering can be ensured by running the example test suites in the [scott-examples](https://github.com/dodie/scott/tree/master/scott-examples) directory,
 and examining their outputs manually. These projects also serve as an example about using Scott with various tools
