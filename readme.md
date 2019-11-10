@@ -98,6 +98,18 @@ Add the following to your [pom.xml](https://github.com/dodie/scott/blob/master/s
 </dependencies>
 ```
 
+The `scott-maven-plugin` automatically configures `maven-surefire-plugin` and `maven-failsafe-plugin` to use Scott via the `argLine` project property. If you wish to further customize the `argLine` property for these plugins, you have to pass the managed `argLine` as well to ensure Scott works properly. For an example, check the following snippet that configures the surefire plugin to enable preview language features for Java:
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <configuration>
+        <argLine>${argLine} --enable-preview</argLine>
+    </configuration>
+</plugin>
+```
+
 Example projects:
 - [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4)
 - [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5)
