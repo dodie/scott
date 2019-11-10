@@ -3,8 +3,6 @@ package hu.advancedweb.scott;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import java.util.function.Function;
-
 
 public class VarTest {
 
@@ -19,5 +17,4 @@ public class VarTest {
 				() -> "Incorrect message.");
 	}
 	
-
 }
