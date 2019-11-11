@@ -20,4 +20,26 @@ public class Java13Test {
 		assertEquals("line1\nline2", textBlock);
 	}
 	
+	@Test
+	public void testWithSwitchExpression() {
+		Day day = Day.WEDNESDAY;
+		int j = switch (day) {
+			case MONDAY -> 0;
+			case TUESDAY -> 1;
+			default -> {
+				int k = day.toString().length();
+				assertEquals(Integer.toString(k), TestHelper.getLastRecordedStateForVariable("k"));
+				assertEquals(9, k);
+				yield k;
+			}
+		};
+		
+		assertEquals(Integer.toString(j), TestHelper.getLastRecordedStateForVariable("j"));
+		assertEquals(9, j);
+	}
+	
+	private enum Day {
+		MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+	}
+	
 }

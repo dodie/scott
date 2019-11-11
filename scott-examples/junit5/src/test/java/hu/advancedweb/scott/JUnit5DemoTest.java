@@ -17,6 +17,7 @@ import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+
 @SuppressWarnings("unused")
 @DisplayName("Test with JUnit 5 assertions")
 public class JUnit5DemoTest {
@@ -84,5 +85,24 @@ public class JUnit5DemoTest {
               """;
 
 		assertEquals("Is this a text block?", textBlock);
+	}
+	
+	@Test
+	public void testWithSwitchExpression() {
+		Day day = Day.WEDNESDAY;
+		int j = switch (day) {
+			case MONDAY -> 0;
+			case TUESDAY -> 1;
+			default -> {
+				int k = day.toString().length();
+				yield k;
+			}
+		};
+		
+		assertEquals(0, j);
+	}
+	
+	private enum Day {
+		MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
 	}
 }
