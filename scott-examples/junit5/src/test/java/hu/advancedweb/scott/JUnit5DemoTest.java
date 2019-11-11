@@ -75,4 +75,14 @@ public class JUnit5DemoTest {
 		});
 		assertEquals("no result", actualResult);
 	}
+	
+	@Test
+	public void testWithTextBlock() {
+		String textBlock = """
+              Hello,
+              this is a multi-line text block.
+              """;
+
+		assertEquals("Is this a text block?", textBlock);
+	}
 }
