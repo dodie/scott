@@ -226,7 +226,6 @@ public class FailureRenderer {
 			}
 			
 			if (!scottReport.getInitialSnapshots(lineNumber).isEmpty()) {
-//				sb.append("\n");
 				initialAdded = true;
 			}
 		}
