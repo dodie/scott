@@ -131,12 +131,12 @@ public class FailureRenderer {
 			
 			if (firstLineWithBraketAppended && initialReportAppended == false) {
 				initialReportAppended = true;
-				initialAdded = renderInitialSnapshot(scottReport, sb, lineText, 0);
+				initialAdded = initialAdded || renderInitialSnapshot(scottReport, sb, lineText, 0);
 			}
 			
-			initialAdded = renderInitialSnapshot(scottReport, sb, lineText, lineNumber - 1);
+			initialAdded = initialAdded || renderInitialSnapshot(scottReport, sb, lineText, lineNumber - 1);
 			if (lineNumber == lastLineNumber) {
-				initialAdded = renderInitialSnapshot(scottReport, sb, lineText, lineNumber);
+				initialAdded = initialAdded || renderInitialSnapshot(scottReport, sb, lineText, lineNumber);
 			}
 			
 			if (initialAdded) {
@@ -226,7 +226,7 @@ public class FailureRenderer {
 			}
 			
 			if (!scottReport.getInitialSnapshots(lineNumber).isEmpty()) {
-				sb.append("\n");
+//				sb.append("\n");
 				initialAdded = true;
 			}
 		}
