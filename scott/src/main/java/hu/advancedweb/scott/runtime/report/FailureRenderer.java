@@ -120,64 +120,27 @@ public class FailureRenderer {
 		boolean firstLineWithBraketAppended = false;
 		boolean initialReportAppended = false;
 		
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append("\n");
 		
-		int lastLineNumber = scottReport.getSourceLines().lastKey();
+		final int lastLineNumber = scottReport.getSourceLines().lastKey();
 		for (Map.Entry<Integer, String> line : scottReport.getSourceLines().entrySet()) {
-			int lineNumber = line.getKey();
-			String lineText = line.getValue().replaceAll("\t", "    ");
+			final int lineNumber = line.getKey();
+			final String lineText = line.getValue().replaceAll("\t", "    ");
 			boolean initialAdded = false;
 			
 			if (firstLineWithBraketAppended && initialReportAppended == false) {
 				initialReportAppended = true;
-				if (!scottReport.getInitialSnapshots(0).isEmpty()) {
-					String blankLine = lineText.replaceFirst("[^\\s].*$", "");
-					for (Snapshot snapshot : scottReport.getInitialSnapshots(0)) {
-						sb.append("    ");
-						sb.append("|  ");
-						sb.append(blankLine);
-						sb.append("//    => ");
-						sb.append(snapshot.name + "=" + snapshot.value.trim());
-						sb.append("\n");
-						initialAdded = true;
-					}
-				}
+				initialAdded = renderInitialSnapshot(scottReport, sb, lineText, 0);
 			}
 			
-			if (!scottReport.getInitialSnapshots(lineNumber - 1).isEmpty()) {
-				String blankLine = lineText.replaceFirst("[^\\s].*$", "");
-				for (Snapshot snapshot : scottReport.getInitialSnapshots(lineNumber - 1)) {
-					sb.append("    ");
-					sb.append("|  ");
-					sb.append(blankLine);
-					sb.append("//    => ");
-					sb.append(snapshot.name + "=" + snapshot.value.trim());
-					sb.append("\n");
-					initialAdded = true;
-				}
-			}
-			
+			initialAdded = renderInitialSnapshot(scottReport, sb, lineText, lineNumber - 1);
 			if (lineNumber == lastLineNumber) {
-				if (!scottReport.getInitialSnapshots(lineNumber).isEmpty()) {
-					String blankLine = lineText.replaceFirst("[^\\s].*$", "");
-					for (Snapshot snapshot : scottReport.getInitialSnapshots(lineNumber)) {
-						sb.append("    ");
-						sb.append("|  ");
-						sb.append(blankLine);
-						sb.append("//    => ");
-						sb.append(snapshot.name + "=" + snapshot.value.trim());
-						sb.append("\n");
-						initialAdded = true;
-					}
-				}
+				initialAdded = renderInitialSnapshot(scottReport, sb, lineText, lineNumber);
 			}
 			
 			if (initialAdded) {
-				String blankLine = lineText.replaceFirst("[^\\s].*$", "");
-				sb.append("    ");
-				sb.append("|  ");
-				sb.append(blankLine);
+				sb.append(addBlankLineRemovingContent(lineText));
 				sb.append("\n");
 			}
 			
@@ -193,7 +156,7 @@ public class FailureRenderer {
 			boolean isFirstCommentInThisLine = true;
 
 			int size = 3;
-			for (Map.Entry<String, List<Snapshot>> entry : scottReport.getVariableMapSnapshot(lineNumber).entrySet()){
+			for (Map.Entry<String, List<Snapshot>> entry : scottReport.getVariableMapSnapshot(lineNumber).entrySet()) {
 				String variableSnapshotText = entry.getKey();
 
 				if (!entry.getValue().isEmpty()) {
@@ -202,11 +165,11 @@ public class FailureRenderer {
 					int lowerLimit = size;
 					int upperLimit = all - size;
 					int lastItem = all - 1;
-					boolean hide = all > (size*2);
+					boolean hide = all > (size * 2);
 					int counter = 0;
 					for (Snapshot snapshot : entry.getValue()) {
 						if (hide) {
-							if(counter>lowerLimit && counter<upperLimit) {
+							if(counter > lowerLimit && counter < upperLimit) {
 								counter++;
 								continue;
 							} else if (counter==lowerLimit) {
@@ -220,7 +183,7 @@ public class FailureRenderer {
 						}
 
 						if (counter>1 && counter==lastItem) {
-							variableSnapshotText += "["+snapshot.value.trim()+"]";
+							variableSnapshotText += "[" + snapshot.value.trim() + "]";
 						} else {
 							variableSnapshotText += snapshot.value.trim();
 						}
@@ -228,21 +191,17 @@ public class FailureRenderer {
 					}
 
 					if (hide) {
-						variableSnapshotText += " =>"+all;
+						variableSnapshotText += " =>" + all;
 					}
 				}
-				renderComment(sb, lineText, variableSnapshotText, isFirstCommentInThisLine);
+				
+				renderMultilineComment(sb, lineText, variableSnapshotText, !isFirstCommentInThisLine);
 				isFirstCommentInThisLine = false;
-
 			}
 
 			if (scottReport.getExceptionLineNumber() == lineNumber) {
-				String[] exceptionMessageLines = getExceptionComment(scottReport);
-				
-				for (String comment : exceptionMessageLines) {
-					renderComment(sb, lineText, comment, isFirstCommentInThisLine);
-					isFirstCommentInThisLine = false;
-				}
+				renderMultilineComment(sb, lineText, getExceptionMessage(scottReport), !isFirstCommentInThisLine);
+				isFirstCommentInThisLine = false;
 			}
 			sb.append("\n");
 			
@@ -252,33 +211,70 @@ public class FailureRenderer {
 		return sb.toString();
 	}
 
-	private static String[] getExceptionComment(ScottReport scottReport) {
-		final String exceptionMessage;
+	private static boolean renderInitialSnapshot(ScottReport scottReport, final StringBuilder sb, final String lineText, final int lineNumber) {
+		boolean initialAdded = false;
+		if (!scottReport.getInitialSnapshots(lineNumber).isEmpty()) {
+			for (Snapshot snapshot : scottReport.getInitialSnapshots(lineNumber)) {
+				String comment = "    => " + snapshot.name + "=" + snapshot.value.trim();
+				String[] commentLines = comment.split("\\n");
+				for (String commentLine : commentLines) {
+					sb.append(addBlankLineRemovingContent(lineText));
+					sb.append("//");
+					sb.append(commentLine);
+					sb.append("\n");
+				}
+			}
+			
+			if (!scottReport.getInitialSnapshots(lineNumber).isEmpty()) {
+				sb.append("\n");
+				initialAdded = true;
+			}
+		}
+		return initialAdded;
+	}
+
+	private static String getExceptionMessage(ScottReport scottReport) {
 		if (scottReport.getExceptionMessage() != null) {
-			exceptionMessage = scottReport.getExceptionClassName() + ": " + scottReport.getExceptionMessage().trim();
+			return scottReport.getExceptionClassName() + ": " + scottReport.getExceptionMessage().trim();
 		} else {
-			exceptionMessage = scottReport.getExceptionClassName();
+			return scottReport.getExceptionClassName();
 		}
-		
-		String[] exceptionMessageLines = exceptionMessage.split("\\n");
-		return exceptionMessageLines;
+	}
+	
+	private static void renderMultilineComment(StringBuilder sb, String lineText, String comment, boolean startInNewLine) {
+		String[] commentLines = comment.split("\\n");
+		for (String commentLine : commentLines) {
+			if (startInNewLine) {
+				sb.append("\n");
+				sb.append(blankLine(lineText));
+			}
+			
+			sb.append("  // ");
+			sb.append(commentLine);
+			startInNewLine = true;
+		}
 	}
 
-	private static void renderComment(StringBuilder sb, String lineText, String comment, boolean isFirstCommentInThisLine) {
-		if (!isFirstCommentInThisLine) {
-			addBlankLine(sb, lineText);
-		}
-		
-		sb.append("  // ");
-		sb.append(comment);
-		isFirstCommentInThisLine = false;
+	/**
+	 * Adds a blank line, where new content can be added right after the old content.
+	 * E.g, given the following line:
+  	 *    |          String dot = ".";
+  	 * It produces the following comment line:
+  	 * 	  |                             //
+	 */
+	private static String blankLine(String lineText) {
+		return "    " + "|  " + lineText.replaceAll(".", " ");
 	}
-
-	private static void addBlankLine(StringBuilder sb, String lineText) {
-		sb.append("\n");
-		sb.append("    ");
-		sb.append("|  ");
-		sb.append(lineText.replaceAll(".", " "));
+	
+	/**
+	 * Adds a blank line, where new content can be added at the place of the old content
+	 * 	 * E.g, given the following line:
+  	 *    |          String dot = ".";
+  	 * It produces the following comment line:
+  	 * 	  |          //
+	 */
+	private static String addBlankLineRemovingContent(String lineText) {
+		return "    " + "|  " + lineText.replaceFirst("[^\\s].*$", "");
 	}
 
 }
