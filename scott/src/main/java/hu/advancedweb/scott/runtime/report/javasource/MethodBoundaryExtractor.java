@@ -1,5 +1,8 @@
 package hu.advancedweb.scott.runtime.report.javasource;
 
+import java.util.Optional;
+
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -24,9 +27,12 @@ class MethodBoundaryExtractor extends VoidVisitorAdapter<Bounderies> {
 	
 	@Override
 	public void visit(MethodDeclaration methodDeclaration, Bounderies boundaries) {
-		if (methodDeclaration.getName().equals(methodName) && isInTheCorrectClass(methodDeclaration)) {
-			boundaries.beginLine = methodDeclaration.getRange().begin.line;
-			boundaries.endLine = methodDeclaration.getRange().end.line;
+		if (methodDeclaration.getName().getIdentifier().equals(methodName) && isInTheCorrectClass(methodDeclaration)) {
+			Optional<Range> range = methodDeclaration.getRange();
+			if (range.isPresent()) {
+				boundaries.beginLine = range.get().begin.line;
+				boundaries.endLine = range.get().end.line;
+			}
 		}
 	}
 	
@@ -39,7 +45,12 @@ class MethodBoundaryExtractor extends VoidVisitorAdapter<Bounderies> {
 				ClassOrInterfaceDeclaration c = (ClassOrInterfaceDeclaration) n;
 				containingClassName = c.getName() + "$" + containingClassName;
 			}
-			n = n.getParentNode();
+			Optional<Node> no = n.getParentNode();
+			if (no.isEmpty()) {
+				n = null;
+			} else {
+				n = no.get();
+			}
 		}
 		
 		containingClassName = containingClassName.substring(0, containingClassName.length() - 1);

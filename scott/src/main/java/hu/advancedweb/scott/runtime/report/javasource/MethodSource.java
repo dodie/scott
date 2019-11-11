@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 
 import hu.advancedweb.scott.runtime.report.javasource.MethodBoundaryExtractor.Bounderies;
@@ -68,9 +67,7 @@ public class MethodSource {
 	
 	private CompilationUnit getCompilationUnit(String testSourcePath) throws IOException {
 		try(InputStream in = new FileInputStream(new File(testSourcePath))) {
-			return  JavaParser.parse(in);
-		} catch (ParseException e) {
-			throw new IOException(e);
+			return new JavaParser().parse(in).getResult().get();
 		}
 	}
 	
