@@ -151,7 +151,7 @@ See [Releases](https://github.com/dodie/scott/releases).
 
 **Highlights from the latest releases:**
 
-- Java 12 support
+- Java 13 support
 - [Gradle Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
 - [Maven Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
 - Scott Cucumber Java now records [whole scenarios](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber), supports [io.cucumber:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber) and [info.cukes:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-info-cukes)
