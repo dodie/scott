@@ -6,39 +6,20 @@
 Scott Test Reporter
 ===================
 
-Scott provides failure messages containing **all state changes** for tests written in Java to get meaningful errors even **without assertion libraries**. All information is **presented on the source code of the test method** as comments.
+Get extremely detailed failure messages for your tests without assertion libraries, additional configuration or changes on existing tests.
 
-```java
-myTest(hu.advancedweb.example.ListTest) Time elapsed: 0.028 sec  <<< FAILURE!
-java.lang.AssertionError: 
+![Scott in Action](https://github.com/dodie/scott/blob/master/docs/scott-in-action.png)
 
-  22|      @Test
-  23|      public void myTest() {
-  24|          Integer[] myArray = new Integer[] { 1, 4, 2, 4 };  // myArray=[1, 4, 2, 4]
-  25|          List<Integer> myList = Arrays.asList(myArray);  // myList=[1, 4, 2, 4]
-  26|
-  27|          Set<Integer> mySet = new HashSet<>(myList);  // mySet=[1, 2, 4]
-  28|          mySet.remove(4);  // mySet=[1, 2]
-  29|
-  30|*         assertTrue(mySet.contains(4));  // AssertionError
-  31|      }
-  
-        at hu.advancedweb.example.ListTest.myTest(ListTest.java:25)
-```
+As you can see, besides the usual assertion error, Scott reports the state changes and assignments in the test cases, nicely
+visualized on the source code of the test method.
 
-Scott automatically tracks the internal state of the tests to provide important details for a failing scenario. 
+Works well with other testing tools and frameworks, for example:
+- [JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5)
+- [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4)
+- [Cucumber Java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber)
+- Mockito
 
-Although it plays nicely with other testing tools and frameworks, all information is present in the report even without using sophisticated assertions.
-
-Besides the usual assertion error, Scott reports the changes and assignments related to
-- local variables
-- input parameters
-- fields that the test accesses
-
-Supports [JUnit 4](https://github.com/dodie/scott/tree/master/scott-examples/junit4),
-[JUnit 5](https://github.com/dodie/scott/tree/master/scott-examples/junit5),
-and [Cucumber Java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber)
-on Java 7+ (up to Java 13).
+Supports Java 7+ (up to Java 13).
 
 
 How to use
