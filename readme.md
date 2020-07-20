@@ -3,8 +3,8 @@
 [![Build Status](https://dev.azure.com/dodiehun/scott/_apis/build/status/dodie.scott?branchName=master)](https://dev.azure.com/dodiehun/scott/_build/latest?definitionId=2&branchName=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=hu.advancedweb%3Ascott&metric=alert_status)](https://sonarcloud.io/dashboard?id=hu.advancedweb%3Ascott)
 
-Scott Test Reporter
-===================
+Scott Test Reporter for Maven and Gradle
+========================================
 
 Get extremely detailed failure messages for your tests without assertion libraries, additional configuration or changes on existing tests.
 
