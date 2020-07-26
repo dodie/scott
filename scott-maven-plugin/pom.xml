@@ -4,7 +4,7 @@
 
 	<groupId>hu.advancedweb</groupId>
 	<artifactId>scott-maven-plugin</artifactId>
-	<version>3.6.0</version>
+	<version>3.7.0</version>
 	<url>https://github.com/dodie/scott</url>
 	<packaging>maven-plugin</packaging>
 

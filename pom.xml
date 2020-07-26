@@ -5,7 +5,7 @@
 
 	<groupId>hu.advancedweb</groupId>
 	<artifactId>scott-parent</artifactId>
-	<version>3.6.0</version>
+	<version>3.7.0</version>
 	<packaging>pom</packaging>
 
 	<name>Scott Test Reporter - POM</name>
