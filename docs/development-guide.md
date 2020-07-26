@@ -20,7 +20,7 @@
 
 # Required software for development
 
-- *Java 8* to compile the core package, and *Java 13* to run the whole test suite
+- *Java 8* to compile the core package, and *Java 14* to run the whole test suite
 - *Maven 3.0.5*
 - *Gradle 4.10.2*
 
@@ -29,6 +29,8 @@ OR
 - *Docker*
 
 # Build
+
+With Maven and Java installed:
 
 ```bash
 # build scott and run all tests
@@ -43,17 +45,17 @@ cd <scott-root>/scott-examples/junit5
 mvn clean install
 ```
 
-OR
+With Docker:
 
 ```bash
 # build scott and run all tests
-docker run -t --rm -v "$PWD":/usr/src/mymaven -v "$HOME/.m2":/root/.m2 -v "$PWD/target:/usr/src/mymaven/target" -w /usr/src/mymaven maven:3.6.2-jdk-13 mvn install
+docker run -t --rm -v "$PWD":/usr/src/mymaven -v "$HOME/.m2":/root/.m2 -v "$PWD/target:/usr/src/mymaven/target" -w /usr/src/mymaven maven:3.6.3-jdk-14 mvn install
 
-# run junit4-based showcase (fails intentionally, shows error reports)
-docker run -it --rm -v "$PWD":/usr/src/mymaven -v "$HOME/.m2":/root/.m2 -v "$PWD/target:/usr/src/mymaven/target" -w /usr/src/mymaven maven:3.6.2-jdk-13 mvn package -f scott-examples/junit4/pom.xm
+# run junit4-based showcase (fails intentionally, shows an example error report)
+docker run -it --rm -v "$PWD/scott-examples/junit4":/usr/src/mymaven -v "$HOME/.m2":/root/.m2 -v "$PWD/target:/usr/src/mymaven/target" -w /usr/src/mymaven maven:3.6.3-jdk-14 mvn install
 
-# run junit5-based showcase (fails intentionally, shows error reports)
-docker run -it --rm -v "$PWD":/usr/src/mymaven -v "$HOME/.m2":/root/.m2 -v "$PWD/target:/usr/src/mymaven/target" -w /usr/src/mymaven maven:3.6.2-jdk-13 mvn package -f scott-examples/junit5/pom.xm
+# run junit5-based showcase (fails intentionally, shows an example error report)
+docker run -it --rm -v "$PWD/scott-examples/junit5":/usr/src/mymaven -v "$HOME/.m2":/root/.m2 -v "$PWD/target:/usr/src/mymaven/target" -w /usr/src/mymaven maven:3.6.3-jdk-14 mvn install
 ```
 
 

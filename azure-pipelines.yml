@@ -27,10 +27,10 @@ steps:
     goals: 'package'
     sonarQubeRunAnalysis: true
 - task: Docker@2
-  displayName: 'Build and test on Java 13'
+  displayName: 'Build and test on Java 14'
   inputs:
     command: run
-    arguments: -t --rm -v "$(Build.SourcesDirectory)":/usr/src/mymaven -v "$(Agent.HomeDirectory)/.m2":/root/.m2 -v "$(Build.SourcesDirectory)/target:/usr/src/mymaven/target" -w /usr/src/mymaven maven:3.6.2-jdk-13 mvn install
+    arguments: -t --rm -v "$(Build.SourcesDirectory)":/usr/src/mymaven -v "$(Agent.HomeDirectory)/.m2":/root/.m2 -v "$(Build.SourcesDirectory)/target:/usr/src/mymaven/target" -w /usr/src/mymaven maven:3.6.3-jdk-14 mvn install
 - script: |
     cd scott-gradle-plugin
     chmod +x ./gradlew

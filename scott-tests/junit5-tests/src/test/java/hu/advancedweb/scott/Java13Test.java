@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import hu.advancedweb.scott.helper.TestHelper;
 import org.junit.jupiter.api.Test;
-import java.util.function.Function;
 
 
 public class Java13Test {
