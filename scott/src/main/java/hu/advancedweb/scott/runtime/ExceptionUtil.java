@@ -10,7 +10,6 @@ class ExceptionUtil {
 	private String instanceUnused = "unused";
 	private String instancePassword = "1234";
 	
-	
 	private ExceptionUtil() {
 		// Utility class, use static methods.
 	}
