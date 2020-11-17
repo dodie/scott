@@ -4,11 +4,18 @@ import java.lang.reflect.Field;
 
 class ExceptionUtil {
 	
-	private String unused = "unused";
-	private String password = "1234";
+	private static String unused = "unused";
+	private static String password = "1234";
+	
+	private String instanceUnused = "unused";
+	private String instancePassword = "1234";
 	
 	private ExceptionUtil() {
 		// Utility class, use static methods.
+	}
+	
+	public void example() {
+		System.out.println(instancePassword);
 	}
 	
 	static void setExceptionMessage(Object object, Object fieldValue) {
