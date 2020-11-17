@@ -8,6 +8,8 @@ import org.junit.Test;
 
 public class RecordMutationTest {
 	
+	String unused2 = "hello";
+	
 	String unused = "hello";
 	String password = "1234";
 	
