@@ -24,6 +24,9 @@ public class RecordMutationTest {
 		
 		i = 15;
 		assertThat(TestHelper.getLastRecordedStateForVariable("i"), equalTo(Integer.toString(i)));
+		
+		String s = null;
+		s.length();
 	}
 	
 	@Test
