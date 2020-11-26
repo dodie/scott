@@ -8,12 +8,8 @@ import org.junit.Test;
 
 public class RecordMutationTest {
 	
-	String unused = "hello";
-	String password = "1234";
-	
 	@Test
 	public void simpleMutation() throws Exception {
-		System.out.println(password);
 		int i = 5;
 		assertThat(TestHelper.getLastRecordedStateForVariable("i"), equalTo(Integer.toString(i)));
 		
