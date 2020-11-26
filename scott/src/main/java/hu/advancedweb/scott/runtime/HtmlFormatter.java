@@ -63,8 +63,6 @@ import java.util.Map;
  */
 @SuppressWarnings("all")
 class HTMLFormatter implements Formatter, Reporter {
-	private String unused = "unused";
-	public String password = "12345";
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final String JS_FORMATTER_VAR = "formatter";
     private static final String JS_REPORT_FILENAME = "report.js";
@@ -88,7 +86,6 @@ class HTMLFormatter implements Formatter, Reporter {
 
     public HTMLFormatter(URL htmlReportDir) {
         this.htmlReportDir = htmlReportDir;
-	    System.out.println(password);
     }
 
     @Override
