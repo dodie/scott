@@ -11,3 +11,7 @@ queries:
     uses: security-and-quality
   - name: codeql repo
     uses: github/codeql/java/ql/src/codeql-suites/java-code-scanning.qls@v1.24.0
+
+paths-ignore: 
+  - scott-tests
+  - scott-examples
