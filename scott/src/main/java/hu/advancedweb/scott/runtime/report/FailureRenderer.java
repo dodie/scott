@@ -101,7 +101,7 @@ public class FailureRenderer {
 	}
 	
 	private static void fillException(ScottReport scottReport, MethodSource methodSource, Throwable throwable) {
-		Integer lineNumber = scottReport.getBeginLineNumber();
+		int lineNumber = scottReport.getBeginLineNumber();
 		
 		if (methodSource != null) {
 			for (StackTraceElement stackTraceElement : throwable.getStackTrace()) {
