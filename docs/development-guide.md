@@ -21,7 +21,7 @@
 # Required software for development
 
 - *Java 8* to compile the core package, and *Java 14* to run the whole test suite
-- *Maven 3.0.5*
+- *Maven 3.6.3*
 - *Gradle 4.10.2*
 
 OR
