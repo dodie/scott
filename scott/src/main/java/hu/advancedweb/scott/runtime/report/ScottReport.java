@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
@@ -14,9 +15,9 @@ import java.util.TreeMap;
  */
 class ScottReport {
 	
-	private TreeMap<Integer, String> sourceForLineNumbers = new TreeMap<>();
-	private Map<Integer, List<Snapshot>> initialSnapshots = new TreeMap<>();
-	private Map<Integer, List<Snapshot>> snapshotsForLineNumbers = new TreeMap<>();
+	private final TreeMap<Integer, String> sourceForLineNumbers = new TreeMap<>();
+	private final Map<Integer, List<Snapshot>> initialSnapshots = new TreeMap<>();
+	private final Map<Integer, List<Snapshot>> snapshotsForLineNumbers = new TreeMap<>();
 	private int beginLineNumber;
 	private int exceptionLineNumber;
 	private String exceptionMessage;
@@ -51,7 +52,7 @@ class ScottReport {
 		this.exceptionMessage = exceptionMessage;
 	}
 	
-	public TreeMap<Integer, String> getSourceLines() {
+	public SortedMap<Integer, String> getSourceLines() {
 		return sourceForLineNumbers;
 	}
 	
