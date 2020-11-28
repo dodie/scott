@@ -129,7 +129,7 @@ public class FailureRenderer {
 			final String lineText = line.getValue().replaceAll("\t", "    ");
 			boolean initialAdded = false;
 			
-			if (firstLineWithBraketAppended && initialReportAppended == false) {
+			if (firstLineWithBraketAppended && !initialReportAppended) {
 				initialReportAppended = true;
 				initialAdded = initialAdded || renderInitialSnapshot(scottReport, sb, lineText, 0);
 			}
