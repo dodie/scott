@@ -41,6 +41,7 @@ public class ScottAgentMojo extends AbstractMojo {
     @Parameter(property = "scott.inject_junit5_extension.method_annotation")
     List<String> junit5RuleMethodAnnotations;
 
+    @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         final Properties projectProperties = this.project.getProperties();
         final File agentJarFile = pluginArtifactMap.get(SCOTT_ARTIFACT_NAME).getFile();
