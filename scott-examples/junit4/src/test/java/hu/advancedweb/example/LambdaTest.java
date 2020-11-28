@@ -1,7 +1,7 @@
 package hu.advancedweb.example;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.function.Function;
 
