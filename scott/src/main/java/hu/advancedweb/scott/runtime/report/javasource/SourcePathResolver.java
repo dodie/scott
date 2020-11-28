@@ -25,7 +25,7 @@ public class SourcePathResolver {
 		final String relativeFilePath = fqn.replace(".", "/") + ".java";
 		
 		final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + currentDir + "/**/" + relativeFilePath);
-		final List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<>();
 		Files.walkFileTree(Paths.get(currentDir), new SimpleFileVisitor<Path>() {
 			@Override
 			public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
