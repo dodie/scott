@@ -15,7 +15,7 @@ You can fine tune the tracking rules with various configuration options.
 This guide helps gettngs started to build your own solution on top of Scott.
 
 
-## Instrument class a class file
+## Instrumentation alternatives
 
 ### Post compilation
 
