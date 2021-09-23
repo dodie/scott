@@ -104,9 +104,8 @@ This feature provides valuable information if a test fails in a CI environment, 
 
 ![HTML](https://github.com/dodie/scott-showcase/blob/master/cucumber_html_main.jpeg "HTML")
 
-Example projects with Cucumber tests:
-- [io.cucumber:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber)
-- [info-cukes:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-info-cukes)
+For more info, check the [example project](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber)
+using `io.cucumber:cucumber-java`.
 
 
 ### Wire it up manually
@@ -132,10 +131,10 @@ See [Releases](https://github.com/dodie/scott/releases).
 
 **Highlights from the latest releases:**
 
-- Java 13 support
+- Java 17 support
 - [Gradle Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
 - [Maven Plugin](https://github.com/dodie/scott/blob/master/readme.md#how-to-use)
-- Scott Cucumber Java now records [whole scenarios](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber), supports [io.cucumber:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber) and [info.cukes:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-info-cukes)
+- [Support for io.cucumber:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber)
 - [Customizable tracking behavior](https://github.com/dodie/scott/blob/master/docs/configuration.md#configuring-the-automatic-tracking-behavior-with-the-maven-plugin)
 
 
