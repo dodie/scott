@@ -1,11 +1,11 @@
 plugins {
     id 'groovy'
     id 'java-gradle-plugin'
-    id 'com.gradle.plugin-publish' version '0.10.0'
+    id 'com.gradle.plugin-publish' version '0.16.0'
 }
 
 group 'hu.advanceweb'
-version '3.7.0'
+version '4.0.0'
 
 sourceCompatibility = 1.8
 
