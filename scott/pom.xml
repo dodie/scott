@@ -4,7 +4,7 @@
 	
 	<groupId>hu.advancedweb</groupId>
 	<artifactId>scott</artifactId>
-	<version>3.7.0</version>
+	<version>4.0.0</version>
 	<url>https://github.com/dodie/scott</url>
 
 	<properties>
