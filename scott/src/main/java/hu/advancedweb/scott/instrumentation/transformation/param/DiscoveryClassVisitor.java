@@ -27,7 +27,7 @@ public class DiscoveryClassVisitor extends ClassVisitor {
 
 
 	public DiscoveryClassVisitor(Configuration configuration) {
-		super(Opcodes.ASM7);
+		super(Opcodes.ASM9);
 		this.configuration = configuration;
 		this.transformationParameters = new InstrumentationActions.Builder();
 	}

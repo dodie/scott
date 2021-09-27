@@ -31,7 +31,7 @@ public class DiscoveryMethodVisitor extends MethodVisitor {
 
 	DiscoveryMethodVisitor(MethodVisitor mv, InstrumentationActions.Builder instrumentationActions,
 			Configuration configuration, String name, String desc, String signature, List<String> classAnnotationFqns) {
-		super(Opcodes.ASM7, mv);
+		super(Opcodes.ASM9, mv);
 		this.instrumentationActions = instrumentationActions;
 		this.configuration = configuration;
 		this.methodName = name;

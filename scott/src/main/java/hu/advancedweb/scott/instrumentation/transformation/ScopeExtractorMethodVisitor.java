@@ -45,7 +45,7 @@ public class ScopeExtractorMethodVisitor extends MethodNode {
 	private Map<VarAndStoreOpcode, List<Label>> varAccesses;
 	
 	ScopeExtractorMethodVisitor(StateTrackingMethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions) {
-		super(Opcodes.ASM7, access, name, desc, signature, exceptions);
+		super(Opcodes.ASM9, access, name, desc, signature, exceptions);
 		this.next = next;
 		lineNumberToFirstOccurrenceOfVariables = new HashMap<>();
 		varAccesses = new HashMap<>();

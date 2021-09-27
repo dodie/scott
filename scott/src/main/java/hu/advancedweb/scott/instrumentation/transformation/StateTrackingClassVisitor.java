@@ -25,7 +25,7 @@ public class StateTrackingClassVisitor extends ClassVisitor {
 	private InstrumentationActions instrumentationActions;
 	
 	public StateTrackingClassVisitor(ClassVisitor cv, InstrumentationActions instrumentationActions) {
-		super(Opcodes.ASM7, cv);
+		super(Opcodes.ASM9, cv);
 		this.instrumentationActions = instrumentationActions;
 	}
 	

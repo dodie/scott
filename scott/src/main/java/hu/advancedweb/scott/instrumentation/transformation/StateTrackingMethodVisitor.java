@@ -46,7 +46,7 @@ public class StateTrackingMethodVisitor extends MethodVisitor {
 
 
 	StateTrackingMethodVisitor(MethodVisitor mv, InstrumentationActions instrumentationActions, String className, String methodName, String desc) {
-		super(Opcodes.ASM7, mv);
+		super(Opcodes.ASM9, mv);
 		
 		this.logger = new Logger(instrumentationActions.verboseLogging);
 		

@@ -20,7 +20,7 @@ public class ConstructorTransformerMethodVisitor extends MethodNode {
 	private MethodVisitor next;
 
 	public ConstructorTransformerMethodVisitor(MethodVisitor next, final int access, final String name, final String desc, final String signature, final String[] exceptions, String className) {
-		super(Opcodes.ASM7, access, name, desc, signature, exceptions);
+		super(Opcodes.ASM9, access, name, desc, signature, exceptions);
 		this.next = next;
 		this.className = className;
 	}
