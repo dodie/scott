@@ -25,11 +25,11 @@ Supports Java 7+ (up to Java 17).
 How to use
 ----------
 
-Just drop it into your project, and Scott will automatically enhance your test reports. You don't have to use its API
+Just drop it into your project, and Scott will automatically enhance your test reports. You don't have to use any special APIs
 or modify your existing tests to make it work.
 
 > **Scott**: All systems automated and ready. A chimpanzee and two trainees could run her.
-
+> 
 > **Kirk**: Thank you, Mr. Scott. I'll try not to take that personally.
 
 
@@ -104,13 +104,14 @@ This feature provides valuable information if a test fails in a CI environment, 
 
 ![HTML](https://github.com/dodie/scott-showcase/blob/master/cucumber_html_main.jpeg "HTML")
 
-For more info, check the [example project](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber)
-using `io.cucumber:cucumber-java`.
+Example project:
+- [io.cucumber:cucumber-java](https://github.com/dodie/scott/tree/master/scott-examples/cucumber-io-cucumber)
 
 
 ### Wire it up manually
 
-If you can't use the Gradle or Maven Plugin for some reason, you can do the necessary steps [manually](https://github.com/dodie/scott/blob/master/docs/manual_setup.md).
+If you can't use the Gradle or Maven Plugin for some reason, you can do the necessary integration steps
+[manually](https://github.com/dodie/scott/blob/master/docs/manual_setup.md).
 
 
 Configuration
@@ -121,7 +122,8 @@ In case you are not satisfied with the default tracking behavior, the Scott Mave
 Using Scott as an instrumentation library
 -----------------------------------------
 Scott's instrumentation module can be invoked programmatically with fine-tuned instrumentation rules so you can
-build your own solution on top of Scott. For more information, check the [user guide](https://github.com/dodie/scott/blob/master/docs/scott_as_a_library.md).
+build your own solution on top of Scott. For more information, check the [user guide](https://github.com/dodie/scott/blob/master/docs/scott_as_a_library.md),
+and for an actual example, see [GhostWriter](https://github.com/GoodGrind/ghostwriter).
 
 
 Changelog
