@@ -14,7 +14,7 @@
 			<plugin>
 				<groupId>hu.advancedweb</groupId>
 				<artifactId>scott-maven-plugin</artifactId>
-				<version>4.0.0</version>
+				<version>4.0.1</version>
 				<executions>
 					<execution>
 						<goals>
@@ -86,7 +86,7 @@
 		<dependency>
 			<groupId>hu.advancedweb</groupId>
 			<artifactId>scott</artifactId>
-			<version>4.0.0</version>
+			<version>4.0.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
