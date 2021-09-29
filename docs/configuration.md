@@ -45,12 +45,12 @@ With Gradle you can provide these configuration to the plugin by adding an exten
 
 ```groovy
 scott {
-    toolVersion ='3.4.1'
+    toolVersion ='4.0.1'
     trackMethodAnnotations = ['org.junit.Test', 'cucumber.api.java.*']
 }
 ```
 
-Here, we override the scoot version using the `toolVersion` property and also set the `trackMethodAnnotations` parameter describe above. 
+Here, we override the Scott version using the `toolVersion` property and also set the `trackMethodAnnotations` parameter describe above. 
 
 ## Configuring the automatic tracking behavior with command line arguments
 The automatic tracking behavior can also be customized by supplying the following configuration parameters:
